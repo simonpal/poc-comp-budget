@@ -8,7 +8,6 @@ import React, {
 import { GoogleProfile } from '../types';
 import { useSessionStorage } from './customHooks';
 import { checkIsAdmin, getGoogleProfile } from '../api';
-import { useNavigate } from 'react-router-dom';
 // import { Expense, User } from '../../types';
 
 export enum UserContextActionTypes {

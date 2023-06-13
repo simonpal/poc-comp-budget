@@ -156,8 +156,8 @@ export const TabItem = ({
   children,
   visible = false,
   eventKey,
-  title,
-}: TabItemProps) => {
+}: // title,
+TabItemProps) => {
   if (!visible) {
     return null;
   }

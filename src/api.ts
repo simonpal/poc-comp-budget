@@ -13,7 +13,7 @@ export const getUser = (id: string): Promise<User> =>
   });
 
 export const getAllUsers = (): Promise<User[]> =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve, _) => {
     setTimeout(() => resolve(users), 500);
   });
 
@@ -29,7 +29,7 @@ export const getExpenses = (id: string): Promise<Expense[]> =>
   });
 
 export const getAllExpenses = (): Promise<Expense[]> =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve, _) => {
     // const expenses = myExpenses.filter((u) => u.userId === id);
 
     // if (!expenses) {
@@ -40,7 +40,7 @@ export const getAllExpenses = (): Promise<Expense[]> =>
   });
 
 export const getCategories = (): Promise<Category[]> =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve, _) => {
     // const expenses = myExpenses.filter((u) => u.userId === id);
 
     // if (!expenses) {
@@ -51,7 +51,8 @@ export const getCategories = (): Promise<Category[]> =>
   });
 
 export const checkIsAdmin = (token: string): Promise<boolean> =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve, _) => {
+    console.log(token);
     // const expenses = myExpenses.filter((u) => u.userId === id);
 
     // if (!expenses) {
