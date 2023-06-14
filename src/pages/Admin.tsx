@@ -9,7 +9,6 @@ import {
 import { Divider } from '../components/Divider';
 import { Column } from '../components/Column';
 import { Grid } from '../components/Grid';
-import { Select } from '../components/Select';
 import { users } from '../mockData';
 import { UserCard } from '../components/UserCard';
 import { Modal } from '../components/Modal';
@@ -18,6 +17,7 @@ import { UserProfile } from '../components/UserProfile';
 import { Button } from '../components/Button';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../utils/UserContext';
+import { ComboBox } from '../components/ComboBox';
 
 const Admin = () => {
   const {
@@ -62,7 +62,29 @@ const Admin = () => {
     <div>
       <Grid spacing="l">
         <Column lg="6" md="6" sm="6" xs="12">
-          <Select
+          <ComboBox
+            fullWidth
+            label="Select user"
+            data={users.map((user) => ({
+              id: user.id,
+              title: user.name,
+            }))}
+            handleChange={(val) => switchUser(val?.id || '')}
+          />
+          {/* <FormControl fullWidth>
+            <Label>Select user</Label>
+            <Dropdown
+              options={users.map((user) => ({
+                key: user.id,
+                value: user.id,
+                text: user.name,
+              }))}
+              placeholder="Select user"
+              handleChange={(val) => switchUser(val?.value || '')}
+              search
+            />
+          </FormControl> */}
+          {/* <Select
             label="Select user"
             onChange={(e) => switchUser(e.currentTarget.value)}
           >
@@ -72,7 +94,7 @@ const Admin = () => {
                 {user.name}
               </option>
             ))}
-          </Select>
+          </Select> */}
           <Divider spacing="l" />
           <Button
             priority="outline"

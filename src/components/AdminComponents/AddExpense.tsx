@@ -18,6 +18,7 @@ import { Category } from '../../types';
 import { getCategories } from '../../api';
 import { Spinner } from '../Spinner';
 import { Modal } from '../Modal';
+import { ComboBox } from '../ComboBox';
 
 const expenseTypes = ['time', 'money'];
 
@@ -148,14 +149,24 @@ export const AddExpense = () => {
             {categories ? (
               <Grid spacing="s">
                 <Column lg="9" md="9" sm="9" xs="12">
-                  <Select label="Category" required disabled={!user}>
+                  <ComboBox
+                    fullWidth
+                    label="Select category"
+                    disabled={!user}
+                    data={categories.map((cat) => ({
+                      id: cat.id,
+                      title: cat.title,
+                    }))}
+                    handleChange={(val) => console.log(val?.id || '')}
+                  />
+                  {/* <Select label="Category" required disabled={!user}>
                     <option>- Select category -</option>
                     {categories.map((c) => (
                       <option value={c.title} key={c.id}>
                         {c.title}
                       </option>
                     ))}
-                  </Select>
+                  </Select> */}
                 </Column>
                 <Column lg="3" md="3" sm="3" xs="12">
                   <Box topSpacing="m" alignItems="stretch">
