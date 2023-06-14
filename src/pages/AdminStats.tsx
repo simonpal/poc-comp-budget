@@ -1,17 +1,17 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { Divider } from '../components/Divider';
 import { Category, Expense, User } from '../types';
 import { getAllExpenses, getAllUsers, getCategories } from '../api';
-import { Bar } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
+// import { Bar } from 'react-chartjs-2';
+// import {
+//   Chart as ChartJS,
+//   CategoryScale,
+//   LinearScale,
+//   BarElement,
+//   Title,
+//   Tooltip,
+//   Legend,
+// } from 'chart.js';
 import { barColors } from '../utils/helpers';
 import { Grid } from '../components/Grid';
 import { Column } from '../components/Column';
@@ -24,6 +24,9 @@ import { Button } from '../components/Button';
 import { ArrowLeftIcon } from '../components/Icons/ArrowLeftIcon';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../utils/UserContext';
+import React from 'react';
+
+const BarChart = React.lazy(() => import('../components/BarChart'));
 
 const StatsTitle = styled.h2`
   align-items: center;
@@ -34,14 +37,14 @@ const StatsTitle = styled.h2`
   }
 `;
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+// ChartJS.register(
+//   CategoryScale,
+//   LinearScale,
+//   BarElement,
+//   Title,
+//   Tooltip,
+//   Legend
+// );
 
 const options = {
   responsive: true,
@@ -194,31 +197,35 @@ const AdminStats = () => {
       <Divider spacing="s" color="transparent" />
       <h4>Type: time</h4>
       <Divider spacing="s" color="transparent" />
-      <Bar
-        options={{
-          ...options,
-          plugins: {
-            ...options.plugins,
-            title: { display: false, text: 'Categories used by type Time' },
-          },
-        }}
-        data={barTimeData}
-        id="catByExp"
-      />
+      <Suspense fallback={<p>Loading chart...</p>}>
+        <BarChart
+          options={{
+            ...options,
+            plugins: {
+              ...options.plugins,
+              title: { display: false, text: 'Categories used by type Time' },
+            },
+          }}
+          barData={barTimeData}
+          id="catByExp"
+        />
+      </Suspense>
       <Divider spacing="l" />
       <h4>Type: money</h4>
       <Divider spacing="s" color="transparent" />
-      <Bar
-        options={{
-          ...options,
-          plugins: {
-            ...options.plugins,
-            title: { display: false, text: 'Categories used by type Money' },
-          },
-        }}
-        data={barMoneyData}
-        id="catByExpMoney"
-      />
+      <Suspense fallback={<p>Loading chart...</p>}>
+        <BarChart
+          options={{
+            ...options,
+            plugins: {
+              ...options.plugins,
+              title: { display: false, text: 'Categories used by type Money' },
+            },
+          }}
+          barData={barMoneyData}
+          id="catByExpMoney"
+        />
+      </Suspense>
     </div>
   );
 };
