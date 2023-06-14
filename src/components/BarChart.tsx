@@ -18,16 +18,37 @@ ChartJS.register(
   Legend
 );
 
-const BarChart = ({ barData, options, id }: any) => {
+type BarChartProps = {
+  barData: {
+    labels: string[];
+    datasets: {
+      label: string;
+      data: number[];
+      backgroundColor: string[];
+      borderWidth: number;
+    }[];
+  };
+  options: {
+    responsive: boolean;
+    plugins: {
+      legend: {
+        position: 'top';
+      };
+      title: {
+        display: boolean;
+        text: string;
+      };
+    };
+  };
+  id: string;
+};
+
+const BarChart = ({ barData, options, id }: BarChartProps) => {
   if (!barData) return null;
   return (
     <Bar
       options={{
         ...options,
-        plugins: {
-          ...options.plugins,
-          title: { display: false, text: 'Categories used by type Money' },
-        },
       }}
       data={barData}
       id={id}

@@ -222,7 +222,7 @@ const AdminStats = () => {
               title: { display: false, text: 'Categories used by type Money' },
             },
           }}
-          data={barMoneyData}
+          barData={barMoneyData}
           id="catByExpMoney"
         />
       </Suspense>
