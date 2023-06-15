@@ -18,6 +18,18 @@ import { Button } from '../components/Button';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../utils/UserContext';
 import { ComboBox } from '../components/ComboBox';
+import styled from 'styled-components';
+
+const NoUser = styled.div`
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-weight: bold;
+  font-size: 2rem;
+`;
 
 const Admin = () => {
   const {
@@ -109,17 +121,21 @@ const Admin = () => {
         </Column>
       </Grid>
       <Divider spacing="2xl" />
-      <Tabs spaceEvenly>
-        <TabItem eventKey="expense" title="Add expense">
-          <AddExpense />
-        </TabItem>
-        <TabItem eventKey="updateuser" title="Update user">
-          <UpdateUser />
-        </TabItem>
-        {/* <TabItem eventKey="adduser" title="Add user">
+      {user ? (
+        <Tabs spaceEvenly>
+          <TabItem eventKey="expense" title="Add expense">
+            <AddExpense />
+          </TabItem>
+          <TabItem eventKey="updateuser" title="Update user">
+            <UpdateUser />
+          </TabItem>
+          {/* <TabItem eventKey="adduser" title="Add user">
           <UpdateUser />
         </TabItem> */}
-      </Tabs>
+        </Tabs>
+      ) : (
+        <NoUser>Please select a user.</NoUser>
+      )}
       <Modal
         onClose={() =>
           dispatch({
