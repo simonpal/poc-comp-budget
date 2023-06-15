@@ -43,7 +43,7 @@ const StyledToggleSwitch = styled.div`
       padding: 0;
       line-height: 34px;
       font-size: 14px;
-      color: rgba(0, 0, 0, 0.5); // TODO: set as variable
+      color: ${({ theme }) => theme.colors.text}; // TODO: set as variable
       font-weight: bold;
       box-sizing: border-box;
     }
@@ -68,8 +68,9 @@ const StyledToggleSwitch = styled.div`
     content: attr(data-no);
     text-transform: uppercase;
     padding-right: 10px;
-    background-color: rgba(0, 0, 0, 0.1);
-    color: #000;
+    background-color: ${({ theme }) =>
+      theme.isDark ? theme.colors.inputBg : '#EEE'};
+    color: ${({ theme }) => theme.colors.text};
     text-align: right;
   }
   .toggle-switch-switch {

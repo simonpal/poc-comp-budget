@@ -15,7 +15,10 @@ const StyledImage = styled.img<StyledImageProps>`
   border-radius: 50%;
   width: ${({ $size }) => `${$size}px`};
   height: ${({ $size }) => `${$size}px`};
-  border: ${({ theme }) => `2px solid ${theme.colors.secondary}`};
+  border: ${({ theme }) =>
+    `2px solid ${
+      theme.isDark ? theme.colors.primary : theme.colors.secondary
+    }`};
 `;
 
 export const UserImage: React.FunctionComponent<UserImageProps> = ({

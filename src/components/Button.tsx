@@ -21,21 +21,23 @@ type StyledButtonProps = {
 
 const StyledButton = styled.button<StyledButtonProps>`
   --button-font-size: 16px;
-  --color-button-primary-background: #000;
-  --color-button-primary-color: #fff;
-  --color-button-primary-hover: #010101;
+  --color-button-primary-background: ${({ theme }) =>
+    theme.colors.primaryButtonBg};
+  --color-button-primary-color: ${({ theme }) =>
+    theme.colors.primaryButtonColor};
+  --color-button-primary-hover: ${({ theme }) => theme.colors.primaryButtonBg};
   --color-button-secondary-background: #eee;
   --color-button-secondary-color: #000;
   --color-button-secondary-hover: #ddd;
   --color-button-tertiary-background: transparent;
-  --color-button-tertiary-color: #000;
+  --color-button-tertiary-color: ${({ theme }) => theme.colors.primaryButtonBg};
   --color-button-tertiary-hover: transparent;
   --size-button-default: 3rem;
   --button-radius: 1.5rem;
   --ripple-background: #010101;
   --color-button-outline-background: transparent;
-  --color-button-outline-color: #000;
-  --color-button-outline-border: #000;
+  --color-button-outline-color: ${({ theme }) => theme.colors.primaryButtonBg};
+  --color-button-outline-border: ${({ theme }) => theme.colors.primaryButtonBg};
   font-family: inherit;
   background-color: var(--color-button-primary-background);
   color: var(--color-button-primary-color);

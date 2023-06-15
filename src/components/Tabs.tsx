@@ -30,7 +30,7 @@ const TabHeaders = styled.ul<StyledTabProps>`
     span {
       border: 0;
 
-      color: #444;
+      color: ${({ theme }) => theme.colors.text};
       background-color: transparent;
       padding: var(--spacing-xs);
       position: relative;

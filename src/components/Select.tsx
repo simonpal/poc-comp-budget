@@ -17,7 +17,7 @@ const SelectWrapper = styled.div`
   /* min-width: 15ch;
   max-width: 30ch; */
 
-  border: 1px solid var(--select-border);
+  border: 1px solid var(--input-background);
   border-radius: 0.25rem;
   height: var(--size-input-default);
   align-items: center;
@@ -26,7 +26,7 @@ const SelectWrapper = styled.div`
   font-size: 1.25rem;
   cursor: pointer;
   line-height: 1.1;
-  background-color: #fff;
+  background-color: var(--input-background);
   /* background-image: linear-gradient(to top, #f9f9f9, #fff 33%); */
 
   select,

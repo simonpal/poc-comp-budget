@@ -1,6 +1,37 @@
 import { categories, myExpenses, users } from './mockData';
 import { Category, Expense, User } from './types';
 
+const baseUrl = import.meta.env.VITE_API_URL;
+const userUrl = `${baseUrl}/user`;
+const categoryUrl = `${baseUrl}/categories`;
+console.log(baseUrl);
+
+/*
+  Real api
+*/
+export const getApiUser = (id: string) => {
+  return fetch(`${userUrl}?id=${id}`).then((res) => res.json());
+};
+export const updateApiUser = (user: User) => {
+  return fetch(`${userUrl}`, {
+    method: 'PUT',
+    body: JSON.stringify(user),
+  });
+};
+export const getApiCategories = () => {
+  return fetch(`${categoryUrl}`).then((res) => res.json());
+};
+export const addApiCategory = (name: string) => {
+  return fetch(`${categoryUrl}`, {
+    method: 'POST',
+    body: JSON.stringify(name),
+  });
+};
+
+/*
+  End - Real api
+*/
+
 export const getUser = (id: string): Promise<User> =>
   new Promise((resolve, reject) => {
     const user = users.find((u) => u.id === id);

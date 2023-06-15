@@ -12,6 +12,7 @@ import { Box } from '../Box';
 import { Button } from '../Button';
 import styled from 'styled-components';
 import { useAdminContext } from './AdminContext';
+import { Textarea } from '../Textarea';
 
 const UpdateUserWrapper = styled.div`
   h4 {
@@ -103,14 +104,13 @@ export const UpdateUser = () => {
             fullWidth
           />
           <Divider spacing="m" />
-          <Divider spacing="m" />
           <FormControl fullWidth>
             <Label>Comment</Label>
-            <textarea
+            <Textarea
               name="comment"
               defaultValue={user?.comment}
               disabled={!user}
-            ></textarea>
+            ></Textarea>
           </FormControl>
           <Box topSpacing="l" alignItems="flex-end">
             <Button type="submit" disabled={!user}>

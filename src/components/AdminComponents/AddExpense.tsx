@@ -19,6 +19,7 @@ import { getCategories } from '../../api';
 import { Spinner } from '../Spinner';
 import { Modal } from '../Modal';
 import { ComboBox } from '../ComboBox';
+import { Textarea } from '../Textarea';
 
 const expenseTypes = ['time', 'money'];
 
@@ -187,7 +188,7 @@ export const AddExpense = () => {
         <Divider spacing="m" />
         <FormControl fullWidth>
           <Label>Comment</Label>
-          <textarea name="comment" disabled={!user}></textarea>
+          <Textarea name="comment" disabled={!user}></Textarea>
         </FormControl>
         <Box topSpacing="l" alignItems="flex-end">
           <Button type="submit" disabled={!user}>

@@ -16,7 +16,7 @@ type StyledDividerProps = {
 };
 
 const StyledDivider = styled.div<StyledDividerProps>`
-  --divider-color: #eee;
+  --divider-color: ${({ theme }) => theme.colors.silver};
   height: 1px;
   margin: ${({ $spacing }) => `var(--spacing-${$spacing}) 0`};
   background-color: var(--divider-color);

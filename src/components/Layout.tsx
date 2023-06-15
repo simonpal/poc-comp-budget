@@ -9,9 +9,16 @@ import { Button } from './Button';
 import { UserContextActionTypes, useUserContext } from '../utils/UserContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserImage } from './UserImage';
-import { useIsLoggedInUser, useSessionStorage } from '../utils/customHooks';
+import {
+  useIsLoggedInUser,
+  usePreferedTheme,
+  useSessionStorage,
+} from '../utils/customHooks';
 import { useEffect } from 'react';
 import { BREAKPOINTS } from '../theme';
+import { DropMenuButton } from './DropMenuButton';
+import { ToggleSwitch } from './ToggleSwitch';
+import { Label } from './FormControl/Label';
 
 const PageWrapper = styled.div`
   width: 1024px;
@@ -19,6 +26,19 @@ const PageWrapper = styled.div`
   margin: 0 auto;
   border-left: ${({ theme }) => `1px solid ${theme.colors.silver}`};
   border-right: ${({ theme }) => `1px solid ${theme.colors.silver}`};
+`;
+
+const ListSwitch = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: var(--spacing-xs) 0;
+`;
+
+const UserButton = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 `;
 
 const Header = styled.header`
@@ -66,6 +86,7 @@ const ProfileWrapper = styled.div`
 const UserName = styled.span`
   display: inline-block;
   margin-right: 0.5rem;
+  font-weight: bold;
 `;
 
 const Content = styled.div`
@@ -83,6 +104,7 @@ export const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
   } = useUserContext();
 
   const isLoggedIn = useIsLoggedInUser();
+  const { preferedTheme, switchTheme } = usePreferedTheme();
 
   const [, setValue] = useSessionStorage('cb-token', undefined);
 
@@ -118,21 +140,42 @@ export const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
           </Column>
           <Column lg="6" md="6" sm="6" xs="12" alignItems="flex-end">
             <ProfileWrapper>
-              {isAdmin && (
-                <Button onClick={() => navigate('/admin')}>Admin</Button>
-              )}
-              <Button priority="outline" onClick={logOut}>
-                Log out
-              </Button>
               {loggedInProfile && (
-                <div>
-                  <UserName>{loggedInProfile.profile.name}</UserName>
-                  <UserImage
-                    url={loggedInProfile.profile.picture}
-                    size={50}
-                    alt={loggedInProfile.profile.name}
-                  />
-                </div>
+                <DropMenuButton
+                  fromRight
+                  id="user-menu"
+                  label={
+                    <UserButton>
+                      <UserName>{loggedInProfile.profile.name}</UserName>
+                      <UserImage
+                        url={loggedInProfile.profile.picture}
+                        size={50}
+                        alt={loggedInProfile.profile.name}
+                      />
+                    </UserButton>
+                  }
+                >
+                  <ListSwitch>
+                    <Label htmlFor="is-darkmode">Darkmode</Label>
+                    <ToggleSwitch
+                      id="is-darkmode"
+                      name="is-darkmode"
+                      checked={preferedTheme?.isDark}
+                      onChange={() => switchTheme()}
+                    />
+                  </ListSwitch>
+                  {isAdmin && (
+                    <Button
+                      priority="tertiary"
+                      onClick={() => navigate('/admin')}
+                    >
+                      Admin
+                    </Button>
+                  )}
+                  <Button priority="tertiary" onClick={logOut}>
+                    Log out
+                  </Button>
+                </DropMenuButton>
               )}
             </ProfileWrapper>
           </Column>

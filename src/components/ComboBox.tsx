@@ -11,7 +11,7 @@ const ComboBoxWrapper = styled.div`
   max-width: 100%;
   flex-grow: 1;
   transition: all 0.2s ease;
-  color: #000;
+  color: ${({ theme }) => theme.colors.text};
   border-radius: var(--input-radius);
   border: 1px solid #000;
   height: var(--size-input-default);
@@ -24,6 +24,7 @@ const ComboBoxWrapper = styled.div`
     width: 100%;
     height: 100%;
     border: 0;
+    background-color: var(--input-background);
     /* &:disabled {
       opacity: 0.5;
     } */
@@ -56,7 +57,7 @@ const ComboBoxWrapper = styled.div`
     position: absolute;
     top: 100%;
     left: 0;
-    background-color: #fff;
+    background-color: var(--input-background);
     list-style-type: none;
     padding: 0;
     z-index: 100;

@@ -6,6 +6,7 @@ import {
   useState,
 } from 'react';
 import { useUserContext } from './UserContext';
+import { Theme, darkTheme, theme as lightTheme } from '../theme';
 
 export const useIsLoggedInUser = () => {
   const {
@@ -75,4 +76,65 @@ export const useRoveFocus = (
   }, [handleKeyDown]);
 
   return [currentFocus, setCurrentFocus];
+};
+
+export const usePreferedTheme = () => {
+  const keyName = 'darktheme';
+  const defaultValue = false;
+  const [preferedTheme, setPreferedTheme] = useState<Theme>(lightTheme);
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    try {
+      const value = window.localStorage.getItem(keyName);
+
+      if (value) {
+        return JSON.parse(value);
+      } else {
+        window.localStorage.setItem(keyName, JSON.stringify(defaultValue));
+        return defaultValue;
+      }
+    } catch (err) {
+      return defaultValue;
+    }
+  });
+
+  const getSavedValue = () => {
+    try {
+      const value = window.localStorage.getItem(keyName);
+      if (value) {
+        return JSON.parse(value);
+      } else {
+        return undefined;
+      }
+    } catch (err) {
+      return undefined;
+    }
+  };
+
+  const switchTheme = () => {
+    try {
+      window.localStorage.setItem(keyName, JSON.stringify(!isDark));
+    } catch (err) {
+      console.error(err);
+    }
+    setPreferedTheme(isDark ? lightTheme : darkTheme);
+    setIsDark(!isDark);
+  };
+
+  useEffect(() => {
+    const savedDark = getSavedValue();
+    const prefersDark = window.matchMedia(
+      '(prefers-color-scheme: dark)'
+    ).matches;
+    if (typeof savedDark !== 'undefined') {
+      setPreferedTheme(savedDark ? darkTheme : lightTheme);
+    } else if (prefersDark) {
+      setPreferedTheme(darkTheme);
+    }
+  }, []);
+
+  // useEffect(() => {
+  //   console.log(preferedTheme);
+  // }, [preferedTheme]);
+
+  return { preferedTheme, switchTheme, isDark };
 };

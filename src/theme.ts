@@ -6,6 +6,7 @@ type Breakpoints = {
 };
 
 export type Theme = {
+  isDark: boolean;
   colors: {
     primary: string;
     secondary: string;
@@ -14,6 +15,7 @@ export type Theme = {
     pageBg: string;
     text: string;
     silver: string;
+    inputBg: string;
   };
   breakpoints: Breakpoints;
 };
@@ -26,6 +28,7 @@ export const BREAKPOINTS: Breakpoints = {
 };
 
 export const theme = {
+  isDark: false,
   colors: {
     primary: '#1d2e8c',
     secondary: '#04C866',
@@ -34,8 +37,24 @@ export const theme = {
     pageBg: '#FFF',
     text: '#04060c',
     silver: '#eff2f6',
+    inputBg: '#fff',
   },
   breakpoints: {
     ...BREAKPOINTS,
+  },
+};
+
+export const darkTheme = {
+  ...theme,
+  isDark: true,
+  colors: {
+    ...theme.colors,
+    primary: '#04C866',
+    secondary: '#1d2e8c',
+    pageBg: '#082032',
+    text: '#FFF',
+    silver: 'rgba(255,255,255,0.1)',
+    primaryButtonBg: '#04C866',
+    inputBg: '#213747',
   },
 };

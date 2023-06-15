@@ -10,11 +10,12 @@ const StyledInput = styled.input`
   max-width: 100%;
   flex-grow: 1;
   transition: all 0.2s ease;
-  color: #000;
+  color: ${({ theme }) => theme.colors.text};
   border-radius: var(--input-radius);
   border: 1px solid #000;
   height: var(--size-input-default);
   padding: 0 var(--spacing-s);
+  background-color: var(--input-background);
   &:focus {
     border-color: blue;
   }

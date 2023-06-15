@@ -15,6 +15,7 @@ export enum UserContextActionTypes {
   SetLoggedInProfile = 'SET_LOGGED_IN_PROFILE',
   SetIsAdmin = 'SET_IS_ADMIN',
   ResetUser = 'RESET_USER',
+  // SetTheme = 'SET_THEME',
 }
 
 type UserContextPayload = {
@@ -24,6 +25,7 @@ type UserContextPayload = {
     | undefined;
   [UserContextActionTypes.SetIsAdmin]: boolean;
   [UserContextActionTypes.ResetUser]: boolean;
+  // [UserContextActionTypes.SetTheme]: undefined;
   // [Types.Delete]: {
   //   id: number;
   // }

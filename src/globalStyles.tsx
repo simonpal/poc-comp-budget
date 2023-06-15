@@ -21,6 +21,7 @@ export const GlobalStyles = createGlobalStyle<GlobalStyleProps>`
         --spacing-5xl: 4rem;
         --spacing-6xl: 4.5rem;
         --spacing-7xl: 5rem;
+        --input-background: ${({ theme }) => theme.colors.inputBg};
     }
   *, *::before, *::after {
     box-sizing: border-box;
