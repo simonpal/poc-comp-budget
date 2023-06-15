@@ -12,6 +12,7 @@ import { AdminContextProvider } from './components/AdminComponents/AdminContext'
 import AdminStats from './pages/AdminStats';
 import { usePreferedTheme } from './utils/customHooks';
 import { useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
 
 const router = createBrowserRouter([
   {
@@ -63,6 +64,7 @@ function App() {
     <ThemeProvider theme={preferedTheme}>
       <GlobalStyles />
       <RouterProvider router={router} />
+      <Toaster position="top-center" reverseOrder={false} />
     </ThemeProvider>
   );
 }

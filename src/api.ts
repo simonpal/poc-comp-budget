@@ -1,30 +1,104 @@
+import toast from 'react-hot-toast';
 import { categories, myExpenses, users } from './mockData';
 import { Category, Expense, User } from './types';
+import { getErrorMessage } from './utils/helpers';
 
 const baseUrl = import.meta.env.VITE_API_URL;
 const userUrl = `${baseUrl}/user`;
 const categoryUrl = `${baseUrl}/categories`;
+const expensesUrl = `${baseUrl}/categories`;
 console.log(baseUrl);
+
+const getStoredToken = () => {
+  try {
+    const value = window.localStorage.getItem('cb-token');
+    if (value) {
+      return JSON.parse(value);
+    } else {
+      return undefined;
+    }
+  } catch (err) {
+    return undefined;
+  }
+};
+
+export const apiFetch = async (
+  url: string,
+  options: any = { headers: {} }
+): Promise<any> => {
+  // if (process.env.IS_TEST) {
+  //   return fetch(url, options).then(d => d.json());
+  // }
+
+  const token = getStoredToken();
+
+  const _options = {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      ...options.headers,
+    },
+  };
+  return fetch(url, _options)
+    .then(async (response) => {
+      if (response.status !== 200) {
+        const text = await response.text();
+        toast.error(getErrorMessage(response.status, text), { duration: 6000 });
+        throw new Error(getErrorMessage(response.status, text));
+      }
+      return response;
+    })
+    .then((d) => d.json());
+};
 
 /*
   Real api
 */
+
+/*
+  Users
+*/
 export const getApiUser = (id: string) => {
-  return fetch(`${userUrl}?id=${id}`).then((res) => res.json());
+  return apiFetch(`${userUrl}?id=${id}`);
 };
 export const updateApiUser = (user: User) => {
-  return fetch(`${userUrl}`, {
+  return apiFetch(`${userUrl}`, {
     method: 'PUT',
     body: JSON.stringify(user),
   });
 };
+
+/*
+  Categories
+*/
 export const getApiCategories = () => {
-  return fetch(`${categoryUrl}`).then((res) => res.json());
+  return apiFetch(`${categoryUrl}`);
 };
 export const addApiCategory = (name: string) => {
-  return fetch(`${categoryUrl}`, {
+  return apiFetch(`${categoryUrl}`, {
     method: 'POST',
     body: JSON.stringify(name),
+  });
+};
+
+/*
+  Expenses
+*/
+
+export const getApiExpenses = () => {
+  return apiFetch(`${expensesUrl}`);
+};
+export const addApiExpense = (exp: Expense) => {
+  return apiFetch(`${expensesUrl}`, {
+    method: 'POST',
+    body: JSON.stringify(exp),
+  });
+};
+export const updateApiExpense = (exp: Expense) => {
+  return apiFetch(`${expensesUrl}`, {
+    method: 'PUT',
+    body: JSON.stringify(exp),
   });
 };
 

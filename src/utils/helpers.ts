@@ -55,3 +55,18 @@ export const barColors = [
   '#99E6E6',
   '#6666FF',
 ];
+
+export const getErrorMessage = (status: number, text = '') => {
+  switch (status) {
+    case 204:
+      return `The server responded with empty content, ${status} (${text})`;
+    case 401:
+      return `An error occured while trying to fetch data: Unauthorized request, ${status} (${text})`;
+    case 403:
+      return `An error occured while trying to fetch data: Forbidden request, ${status} (${text})`;
+    case 500:
+      return `An error occured while trying to fetch data: Internal server error, ${status} (${text})`;
+    default:
+      return 'Something went wrong';
+  }
+};
