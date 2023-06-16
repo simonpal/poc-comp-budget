@@ -41,7 +41,8 @@ const StyledSpinner = styled.div<SpinnerProps>`
     border-top-color: rgba(255, 255, 255, 0.2);
     border-bottom-color: rgba(255, 255, 255, 0.2);
     border-right-color: rgba(255, 255, 255, 0.2);
-    border-left-color: var(--spinner-color, #000);
+    border-left-color: ${({ theme }) =>
+      `var(--spinner-color, ${theme.colors.text})`};
     border-width: var(--spinner-width, 0.25rem);
   }
 `;

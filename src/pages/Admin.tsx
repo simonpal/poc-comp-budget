@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { TabItem, Tabs } from '../components/Tabs';
 import { AddExpense } from '../components/AdminComponents/AddExpense';
 import { UpdateUser } from '../components/AdminComponents/UpdateUser';
@@ -9,16 +9,17 @@ import {
 import { Divider } from '../components/Divider';
 import { Column } from '../components/Column';
 import { Grid } from '../components/Grid';
-import { users } from '../mockData';
+// import { users } from '../mockData';
 import { UserCard } from '../components/UserCard';
 import { Modal } from '../components/Modal';
-import { getExpenses } from '../api';
+import { getExpenses, useGetExpenses, useGetUsers } from '../api';
 import { UserProfile } from '../components/UserProfile';
 import { Button } from '../components/Button';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../utils/UserContext';
 import { ComboBox } from '../components/ComboBox';
 import styled from 'styled-components';
+import { Spinner } from '../components/Spinner';
 
 const NoUser = styled.div`
   padding: var(--spacing-xl);
@@ -41,29 +42,41 @@ const Admin = () => {
     state: { isAdmin },
   } = useUserContext();
 
+  const { users, isLoading: loadingUsers } = useGetUsers();
+
+  const { expenses } = useGetExpenses(user?.id || '', {
+    enabled: typeof user !== 'undefined',
+  });
+
   // const [showModal, setShowModal] = useState(false);
 
   const navigate = useNavigate();
 
   // console.log(user);
 
-  const switchUser = (id: string) => {
-    const selectedUser = users.find((u) => u.id === id);
-    if (selectedUser) {
-      dispatch({
-        type: AdminContextActionTypes.SetUser,
-        payload: selectedUser,
-      });
-      getExpenses(id)
-        .then((data) => {
+  const switchUser = useCallback(
+    (id: string) => {
+      if (users && Array.isArray(users)) {
+        const selectedUser = users.find((u) => u.id === id);
+        if (selectedUser) {
           dispatch({
-            type: AdminContextActionTypes.SetUserExpenses,
-            payload: data,
+            type: AdminContextActionTypes.SetUser,
+            payload: selectedUser,
           });
-        })
-        .catch(console.error);
+        }
+      }
+    },
+    [users, dispatch]
+  );
+
+  useEffect(() => {
+    if (expenses) {
+      dispatch({
+        type: AdminContextActionTypes.SetUserExpenses,
+        payload: expenses,
+      });
     }
-  };
+  }, [expenses, dispatch]);
 
   useEffect(() => {
     if (!isAdmin) {
@@ -74,15 +87,18 @@ const Admin = () => {
     <div>
       <Grid spacing="l">
         <Column lg="6" md="6" sm="6" xs="12">
-          <ComboBox
-            fullWidth
-            label="Select user"
-            data={users.map((user) => ({
-              id: user.id,
-              title: user.name,
-            }))}
-            handleChange={(val) => switchUser(val?.id || '')}
-          />
+          {loadingUsers && <Spinner size="sm" />}
+          {users && Array.isArray(users) && (
+            <ComboBox
+              fullWidth
+              label="Select user"
+              data={users.map((user) => ({
+                id: user.id,
+                title: user.name,
+              }))}
+              handleChange={(val) => switchUser(val?.id || '')}
+            />
+          )}
           {/* <FormControl fullWidth>
             <Label>Select user</Label>
             <Dropdown

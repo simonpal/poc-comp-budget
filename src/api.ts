@@ -2,11 +2,17 @@ import toast from 'react-hot-toast';
 import { categories, myExpenses, users } from './mockData';
 import { Category, Expense, User } from './types';
 import { getErrorMessage } from './utils/helpers';
+import {
+  UseQueryOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from 'react-query';
 
 const baseUrl = import.meta.env.VITE_API_URL;
-const userUrl = `${baseUrl}/user`;
+const userUrl = `${baseUrl}/users`;
 const categoryUrl = `${baseUrl}/categories`;
-const expensesUrl = `${baseUrl}/categories`;
+const expensesUrl = `${baseUrl}/expenses`;
 console.log(baseUrl);
 
 const getStoredToken = () => {
@@ -22,10 +28,10 @@ const getStoredToken = () => {
   }
 };
 
-export const apiFetch = async (
+export const apiFetch = async <T>(
   url: string,
   options: any = { headers: {} }
-): Promise<any> => {
+): Promise<T> => {
   // if (process.env.IS_TEST) {
   //   return fetch(url, options).then(d => d.json());
   // }
@@ -59,9 +65,28 @@ export const apiFetch = async (
 /*
   Users
 */
-export const getApiUser = (id: string) => {
-  return apiFetch(`${userUrl}?id=${id}`);
+// export const getApiAllUsers = (id: string) => {
+//   return apiFetch(`${baseUrl}/allUsers`);
+// };
+export const useGetUsers = (id?: string) => {
+  const {
+    data: users,
+    isFetching,
+    isLoading,
+    isError,
+  } = useQuery(
+    ['users', id],
+    () => apiFetch<User | User[]>(`${userUrl}${id ? `?id=${id}` : ''}`),
+    {
+      staleTime: Infinity,
+    }
+  );
+
+  return { users, isLoading, isFetching, isError };
 };
+// export const getApiUser = (id: string) => {
+//   return apiFetch(`${userUrl}?id=${id}`);
+// };
 export const updateApiUser = (user: User) => {
   return apiFetch(`${userUrl}`, {
     method: 'PUT',
@@ -69,26 +94,81 @@ export const updateApiUser = (user: User) => {
   });
 };
 
+export const getApiIsAdmin = (id: string) => {
+  return apiFetch(`${userUrl}?id=${id}`);
+};
+
 /*
   Categories
 */
-export const getApiCategories = () => {
-  return apiFetch(`${categoryUrl}`);
-};
-export const addApiCategory = (name: string) => {
-  return apiFetch(`${categoryUrl}`, {
-    method: 'POST',
-    body: JSON.stringify(name),
+// export const getApiCategories = (): Category[] => {
+//   return apiFetch(`${categoryUrl}`);
+// };
+// export const addApiCategory = (name: string) => {
+//   return apiFetch(`${categoryUrl}`, {
+//     method: 'POST',
+//     body: JSON.stringify(name),
+//   });
+// };
+
+export const useGetCategories = () => {
+  const {
+    data: categories,
+    isFetching,
+    isLoading,
+    isError,
+  } = useQuery(['categories'], () => apiFetch<Category[]>(`${categoryUrl}`), {
+    staleTime: Infinity,
   });
+
+  return { categories, isLoading, isFetching, isError };
+};
+
+export const useCreateCategory = (mutationOptions?: any) => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation(
+    (categoryName: string) =>
+      apiFetch<Category>(`${categoryUrl}`, {
+        method: 'POST',
+        body: JSON.stringify({ name: categoryName }),
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['categories']);
+        toast.success('Category successfully created!');
+      },
+      onError(error) {
+        toast.error(`Could not create category. ${(error as Error)?.message}`);
+      },
+      ...mutationOptions,
+    }
+  );
+  return mutation;
 };
 
 /*
   Expenses
 */
+export const useGetExpenses = (userId: string, queryOptions?: any) => {
+  const {
+    data: expenses,
+    isFetching,
+    isLoading,
+    isError,
+  } = useQuery(
+    ['expenses', userId],
+    () => apiFetch<Expense[]>(`${expensesUrl}?userId=${userId}`),
+    {
+      staleTime: Infinity,
+      ...queryOptions,
+    }
+  );
 
-export const getApiExpenses = () => {
-  return apiFetch(`${expensesUrl}`);
+  return { expenses, isLoading, isFetching, isError };
 };
+// export const getApiExpenses = () => {
+//   return apiFetch(`${expensesUrl}`);
+// };
 export const addApiExpense = (exp: Expense) => {
   return apiFetch(`${expensesUrl}`, {
     method: 'POST',
@@ -99,6 +179,12 @@ export const updateApiExpense = (exp: Expense) => {
   return apiFetch(`${expensesUrl}`, {
     method: 'PUT',
     body: JSON.stringify(exp),
+  });
+};
+
+export const deleteApiExpense = (id: string | number) => {
+  return apiFetch(`${expensesUrl}?id=${id}`, {
+    method: 'DELETE',
   });
 };
 

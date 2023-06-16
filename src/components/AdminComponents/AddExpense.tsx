@@ -5,7 +5,7 @@ import { Grid } from '../Grid';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.min.css';
 import { Select } from '../Select';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Divider } from '../Divider';
 import { TextField } from '../Textfield';
 import { ToggleSwitch } from '../ToggleSwitch';
@@ -14,12 +14,12 @@ import { Button } from '../Button';
 import { DatepickerWrapper } from '../DatepickerWrapper';
 import format from 'date-fns/format';
 import { useAdminContext } from './AdminContext';
-import { Category } from '../../types';
-import { getCategories } from '../../api';
+import { useCreateCategory, useGetCategories } from '../../api';
 import { Spinner } from '../Spinner';
 import { Modal } from '../Modal';
 import { ComboBox } from '../ComboBox';
 import { Textarea } from '../Textarea';
+// import toast from 'react-hot-toast';
 
 const expenseTypes = ['time', 'money'];
 
@@ -30,9 +30,11 @@ export const AddExpense = () => {
   const [expenseDate, setExpenseDate] = useState(new Date());
   const [isHardware, setIsHardware] = useState(false);
   const [expenseType, setExpenseType] = useState<string | undefined>();
-  const [categories, setCategories] = useState<Category[]>();
+  // const [categories, setCategories] = useState<Category[]>();
   const [showAddCategory, setShowAddCategory] = useState(false);
 
+  const { categories } = useGetCategories();
+  const { mutate: addCategory } = useCreateCategory();
   const onHardwarechange = (val: boolean) => setIsHardware(val);
 
   interface formDataType {
@@ -63,14 +65,10 @@ export const AddExpense = () => {
     formData.forEach((value, property: string) => {
       postBody[property] = value;
     });
-    console.log(JSON.stringify(postBody));
+    console.log(postBody);
+    addCategory(postBody.categoryName as string);
+    setShowAddCategory(false);
   };
-
-  useEffect(() => {
-    if (!categories) {
-      getCategories().then(setCategories).catch(console.error);
-    }
-  }, [categories]);
 
   return (
     <div>
@@ -156,7 +154,7 @@ export const AddExpense = () => {
                     disabled={!user}
                     data={categories.map((cat) => ({
                       id: cat.id,
-                      title: cat.title,
+                      title: cat.name,
                     }))}
                     handleChange={(val) => console.log(val?.id || '')}
                   />
