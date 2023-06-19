@@ -12,7 +12,7 @@ import { Grid } from '../components/Grid';
 // import { users } from '../mockData';
 import { UserCard } from '../components/UserCard';
 import { Modal } from '../components/Modal';
-import { getExpenses, useGetExpenses, useGetUsers } from '../api';
+import { useGetExpenses, useGetUsers } from '../api';
 import { UserProfile } from '../components/UserProfile';
 import { Button } from '../components/Button';
 import { useNavigate } from 'react-router-dom';

@@ -105,7 +105,7 @@ const AdminStats = () => {
   const getCategoryByExpenseType = useCallback(
     (expenseArr: Expense[]) => {
       const numOfInstances = categories?.map(
-        (c) => expenseArr?.filter((exp) => exp.category === c.title).length
+        (c) => expenseArr?.filter((exp) => exp.category === c.name).length
       );
       return numOfInstances;
     },
@@ -114,7 +114,7 @@ const AdminStats = () => {
 
   const barTimeData = useMemo(() => {
     return {
-      labels: categories?.map((c) => c.title) || [],
+      labels: categories?.map((c) => c.name) || [],
       datasets: [
         {
           label: 'Time expenses by category',
@@ -127,7 +127,7 @@ const AdminStats = () => {
   }, [categories, getCategoryByExpenseType, timeExpenses]);
   const barMoneyData = useMemo(() => {
     return {
-      labels: categories?.map((c) => c.title) || [],
+      labels: categories?.map((c) => c.name) || [],
       datasets: [
         {
           label: 'Money expenses by category',

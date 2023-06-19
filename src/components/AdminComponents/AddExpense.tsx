@@ -15,7 +15,7 @@ import { DatepickerWrapper } from '../DatepickerWrapper';
 import { useAdminContext } from './AdminContext';
 import {
   useCreateCategory,
-  useCreateExpense,
+  // useCreateExpense,
   useGetCategories,
 } from '../../api';
 import { Spinner } from '../Spinner';
@@ -41,7 +41,7 @@ export const AddExpense = () => {
   const { mutate: addCategory } = useCreateCategory();
   const onHardwarechange = (val: boolean) => setIsHardware(val);
 
-  const { mutate: createExpense } = useCreateExpense('create');
+  // const { mutate: createExpense } = useCreateExpense('create');
 
   interface formDataType {
     [key: string]: FormDataEntryValue;

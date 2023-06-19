@@ -79,7 +79,7 @@ export const DropMenuButton: React.FunctionComponent<
   const [dropMaxHeight, setDropMaxHeight] = useState<number>(MAX_HEIGHT);
 
   const dropMenuRef = useRef<HTMLUListElement>(null);
-  const buttonRef = useRef<HTMLButtonElement | HTMLDivElement>(null);
+  const buttonRef = useRef<any>(null);
 
   const handleClickOutside = (e: any) => {
     if (dropMenuRef.current && !dropMenuRef.current.contains(e.target)) {
