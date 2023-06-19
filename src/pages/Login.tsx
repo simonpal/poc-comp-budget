@@ -77,8 +77,10 @@ const Login = () => {
             });
             updateItem(credentialResponse.credential, {
               expires: exp,
-              secure: true,
+              path: '/',
+              // secure: true,
             });
+            navigate('/mybudget');
           }
         }}
         onError={() => {

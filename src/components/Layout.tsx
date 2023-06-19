@@ -10,15 +10,17 @@ import { UserContextActionTypes, useUserContext } from '../utils/UserContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserImage } from './UserImage';
 import {
+  useCookie,
   useIsLoggedInUser,
   usePreferedTheme,
-  useSessionStorage,
 } from '../utils/customHooks';
 import { useEffect } from 'react';
 import { BREAKPOINTS } from '../theme';
 import { DropMenuButton } from './DropMenuButton';
 import { ToggleSwitch } from './ToggleSwitch';
 import { Label } from './FormControl/Label';
+import { TOKEN_COOKIE } from '../utils/constants';
+import addDays from 'date-fns/addDays';
 
 const PageWrapper = styled.div`
   width: 1024px;
@@ -106,13 +108,15 @@ export const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
   const isLoggedIn = useIsLoggedInUser();
   const { preferedTheme, switchTheme } = usePreferedTheme();
 
-  const [, setValue] = useSessionStorage('cb-token', undefined);
+  const [_, updateItem] = useCookie(TOKEN_COOKIE, '');
+
+  // const [, setValue] = useSessionStorage('cb-token', undefined);
 
   const navigate = useNavigate();
 
   const logOut = () => {
     googleLogout();
-    setValue(undefined);
+    updateItem('', { expires: addDays(new Date(), -1) });
     dispatch({
       type: UserContextActionTypes.ResetUser,
       payload: true,

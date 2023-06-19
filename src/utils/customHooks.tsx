@@ -18,7 +18,7 @@ export const useIsLoggedInUser = () => {
   // console.log(token, loggedInProfile);
   // return typeof token !== 'undefined' && !!loggedInProfile?.profile;
   const [item] = useCookie(TOKEN_COOKIE, '');
-  return typeof item !== 'undefined' && item.length > 5;
+  return typeof item !== 'undefined' && item.length > 0;
 };
 
 export const useSessionStorage = (keyName: string, defaultValue: unknown) => {
@@ -162,13 +162,13 @@ export const setCookie = (name: string, value: any, options: CookieOptions) => {
     ...options,
   };
 
-  const expires = new Date(
-    Date.now() + optionsWithDefaults.days * 864e5
-  ).toUTCString();
+  const expires =
+    options?.expires ||
+    new Date(Date.now() + optionsWithDefaults.days * 864e5).toUTCString();
 
-  document.cookie = `${name}=${encodeURIComponent(
-    value
-  )}; expires=${expires}; path=${optionsWithDefaults.path}`;
+  document.cookie = `${name}=${encodeURIComponent(value)}${
+    options?.secure ? ';secure' : ''
+  }; expires=${expires}; path=${optionsWithDefaults.path}`;
 };
 
 export const getCookie = (name: string, initialValue = '') => {
