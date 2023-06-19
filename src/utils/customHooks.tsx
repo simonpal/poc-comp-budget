@@ -163,9 +163,9 @@ export const setCookie = (name: string, value: any, options: CookieOptions) => {
   };
 
   const expires = options?.expires
-    ? new Date(options.expires).toUTCString()
+    ? new Date(options.expires).toString()
     : new Date(Date.now() + optionsWithDefaults.days * 864e5).toUTCString();
-  console.log(expires);
+  // console.log(expires);
 
   document.cookie = `${name}=${encodeURIComponent(value)}${
     options?.secure ? ';secure' : ''
