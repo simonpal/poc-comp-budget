@@ -5,17 +5,20 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { useUserContext } from './UserContext';
+// import { useUserContext } from './UserContext';
 import { Theme, darkTheme, theme as lightTheme } from '../theme';
+import { TOKEN_COOKIE } from './constants';
 
 export const useIsLoggedInUser = () => {
-  const {
-    state: { loggedInProfile },
-  } = useUserContext();
+  // const {
+  //   state: { loggedInProfile },
+  // } = useUserContext();
 
-  const [token] = useSessionStorage('cb-token', undefined);
-  console.log(token, loggedInProfile);
-  return typeof token !== 'undefined' && !!loggedInProfile?.profile;
+  // const [token] = useSessionStorage('cb-token', undefined);
+  // console.log(token, loggedInProfile);
+  // return typeof token !== 'undefined' && !!loggedInProfile?.profile;
+  const [item] = useCookie(TOKEN_COOKIE, '');
+  return typeof item !== 'undefined' && item.length > 5;
 };
 
 export const useSessionStorage = (keyName: string, defaultValue: unknown) => {
@@ -137,4 +140,60 @@ export const usePreferedTheme = () => {
   // }, [preferedTheme]);
 
   return { preferedTheme, switchTheme, isDark };
+};
+
+/* useCookie */
+
+type CookieOptions = {
+  expires?: Date | number | string;
+  path?: string;
+  domain?: string;
+  secure?: boolean;
+};
+
+const isBrowser = typeof window !== 'undefined';
+
+export const setCookie = (name: string, value: any, options: CookieOptions) => {
+  if (!isBrowser) return;
+
+  const optionsWithDefaults = {
+    days: 7,
+    path: '/',
+    ...options,
+  };
+
+  const expires = new Date(
+    Date.now() + optionsWithDefaults.days * 864e5
+  ).toUTCString();
+
+  document.cookie = `${name}=${encodeURIComponent(
+    value
+  )}; expires=${expires}; path=${optionsWithDefaults.path}`;
+};
+
+export const getCookie = (name: string, initialValue = '') => {
+  return (
+    (isBrowser &&
+      document.cookie.split('; ').reduce((r, v) => {
+        const parts = v.split('=');
+        return parts[0] === name ? decodeURIComponent(parts[1]) : r;
+      }, '')) ||
+    initialValue
+  );
+};
+
+export const useCookie = (
+  key: string,
+  initialValue: string
+): [string, (value: string, options: CookieOptions) => void] => {
+  const [item, setItem] = useState(() => {
+    return getCookie(key, initialValue);
+  });
+
+  const updateItem = (value: string, options: CookieOptions) => {
+    setItem(value);
+    setCookie(key, value, options);
+  };
+
+  return [item, updateItem];
 };

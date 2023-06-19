@@ -12,13 +12,17 @@ import { ToggleSwitch } from '../ToggleSwitch';
 import { Box } from '../Box';
 import { Button } from '../Button';
 import { DatepickerWrapper } from '../DatepickerWrapper';
-import format from 'date-fns/format';
 import { useAdminContext } from './AdminContext';
-import { useCreateCategory, useGetCategories } from '../../api';
+import {
+  useCreateCategory,
+  useCreateExpense,
+  useGetCategories,
+} from '../../api';
 import { Spinner } from '../Spinner';
 import { Modal } from '../Modal';
 import { ComboBox } from '../ComboBox';
 import { Textarea } from '../Textarea';
+import { NewExpense } from '../../types';
 // import toast from 'react-hot-toast';
 
 const expenseTypes = ['time', 'money'];
@@ -37,25 +41,30 @@ export const AddExpense = () => {
   const { mutate: addCategory } = useCreateCategory();
   const onHardwarechange = (val: boolean) => setIsHardware(val);
 
+  const { mutate: createExpense } = useCreateExpense('create');
+
   interface formDataType {
     [key: string]: FormDataEntryValue;
   }
-  const responseBody: formDataType = {};
+  let responseBody: NewExpense;
 
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget as HTMLFormElement);
+    const formData = new FormData(event.currentTarget);
     formData.forEach((value, property: string) => {
       let _value = value;
-      if (value === 'on') {
-        _value = 'true';
-      } else if (value === 'off') {
-        _value = 'false';
+      if (typeof value !== 'undefined') {
+        if (value === 'on') {
+          _value = 'true';
+        } else if (value === 'off') {
+          _value = 'false';
+        }
+        responseBody[property as keyof NewExpense] = _value as never;
       }
-      responseBody[property] = _value;
     });
-    console.log(JSON.stringify(responseBody));
-    //Form submission happens here
+
+    console.log(responseBody);
+    // createExpense(responseBody);
   };
 
   const onSubmitCategoryHandler = (event: React.FormEvent<HTMLFormElement>) => {
@@ -75,11 +84,11 @@ export const AddExpense = () => {
       <h2>Add expense</h2>
       <Divider spacing="m" color="transparent" />
       <form onSubmit={onSubmitHandler}>
-        <input
+        {/* <input
           type="hidden"
           name="expenseDate"
           value={`${format(expenseDate, 'yyyy-MM-dd')}`}
-        />
+        /> */}
         <Grid spacing="l">
           <Column lg="6" md="6" sm="6" xs="12">
             <FormControl fullWidth>
@@ -89,6 +98,7 @@ export const AddExpense = () => {
                   required
                   disabled={!user}
                   selected={expenseDate}
+                  name="date"
                   dateFormat="yyyy-MM-dd"
                   onChange={(date: Date) => setExpenseDate(date)}
                 />
@@ -99,7 +109,7 @@ export const AddExpense = () => {
             <Select
               required
               id="expense-type"
-              name="expense-type"
+              name="type"
               label="Expsense type"
               disabled={!user}
               onChange={(e) => setExpenseType(e.currentTarget.value)}
@@ -119,7 +129,7 @@ export const AddExpense = () => {
             <TextField
               required
               label="Amount"
-              name="amout"
+              name="sum"
               type="number"
               disabled={!user}
             />
@@ -135,7 +145,7 @@ export const AddExpense = () => {
               <div>
                 <ToggleSwitch
                   id="is-hardware"
-                  name="is-hardware"
+                  name="isHardware"
                   checked={isHardware}
                   onChange={onHardwarechange}
                   disabled={!user}
@@ -152,6 +162,7 @@ export const AddExpense = () => {
                     fullWidth
                     label="Select category"
                     disabled={!user}
+                    name="category"
                     data={categories.map((cat) => ({
                       id: cat.id,
                       title: cat.name,

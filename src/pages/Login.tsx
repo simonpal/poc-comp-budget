@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 import compLogo from '../assets/comp-logo.png';
-import { Button } from '../components/Button';
 import { Divider } from '../components/Divider';
-import { useGoogleLogin } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
 import { UserContextActionTypes, useUserContext } from '../utils/UserContext';
 import { useNavigate } from 'react-router-dom';
-import { useIsLoggedInUser } from '../utils/customHooks';
+import { useCookie, useIsLoggedInUser } from '../utils/customHooks';
 import { useEffect } from 'react';
+import jwt_decode from 'jwt-decode';
+import { toast } from 'react-hot-toast';
+import { TOKEN_COOKIE } from '../utils/constants';
 
 const LoginWrapper = styled.div`
   width: 100vw;
@@ -34,21 +36,22 @@ const Login = () => {
   const { dispatch } = useUserContext();
   const navigate = useNavigate();
 
+  const [_, updateItem] = useCookie(TOKEN_COOKIE, '');
+
   const isLoggedIn = useIsLoggedInUser();
 
-  const login = useGoogleLogin({
-    onSuccess: async (codeResponse) => {
-      dispatch({
-        type: UserContextActionTypes.SetLoggedInUser,
-        payload: { user: codeResponse },
-      });
+  // const login = useGoogleLogin({
+  //   onSuccess: async (codeResponse) => {
+  //     dispatch({
+  //       type: UserContextActionTypes.SetLoggedInUser,
+  //       payload: { user: codeResponse },
+  //     });
 
-      //   await getUserProfile(codeResponse.access_token);
-      //   await isUserAdmin(codeResponse.access_token);
-      navigate('/mybudget');
-    },
-    onError: (error) => console.error('Login Failed:', error),
-  });
+  //     console.log(codeResponse);
+  //     navigate('/mybudget');
+  //   },
+  //   onError: (error) => console.error('Login Failed:', error),
+  // });
 
   useEffect(() => {
     if (isLoggedIn) navigate('/mybudget');
@@ -60,7 +63,30 @@ const Login = () => {
       <Divider spacing="s" color="transparent" />
       <h1>My competence budget</h1>
       <Divider spacing="l" color="transparent" />
-      <Button onClick={() => login()}>Sign in with Google 🚀 </Button>
+      <GoogleLogin
+        onSuccess={(credentialResponse) => {
+          console.log(credentialResponse);
+          if (credentialResponse.credential) {
+            const user: any = jwt_decode(
+              credentialResponse.credential as string
+            );
+            const { name, picture, exp, email } = user;
+            dispatch({
+              type: UserContextActionTypes.SetGoogleUser,
+              payload: { name, picture, exp, email },
+            });
+            updateItem(credentialResponse.credential, {
+              expires: exp,
+              secure: true,
+            });
+          }
+        }}
+        onError={() => {
+          toast.error('Login Failed');
+        }}
+      />
+
+      {/* <Button onClick={() => login()}>Sign in with Google 🚀 </Button> */}
       {/* <GoogleLogin onSuccess={responseMessage} onError={errorMessage} /> */}
     </LoginWrapper>
   );

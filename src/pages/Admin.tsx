@@ -20,6 +20,7 @@ import { useUserContext } from '../utils/UserContext';
 import { ComboBox } from '../components/ComboBox';
 import styled from 'styled-components';
 import { Spinner } from '../components/Spinner';
+import { ErrorBox } from '../components/ErrorBox';
 
 const NoUser = styled.div`
   padding: var(--spacing-xl);
@@ -42,7 +43,11 @@ const Admin = () => {
     state: { isAdmin },
   } = useUserContext();
 
-  const { users, isLoading: loadingUsers } = useGetUsers();
+  const {
+    users,
+    isLoading: loadingUsers,
+    isError: errorFetchingUsers,
+  } = useGetUsers();
 
   const { expenses } = useGetExpenses(user?.id || '', {
     enabled: typeof user !== 'undefined',
@@ -88,6 +93,7 @@ const Admin = () => {
       <Grid spacing="l">
         <Column lg="6" md="6" sm="6" xs="12">
           {loadingUsers && <Spinner size="sm" />}
+          {errorFetchingUsers && <ErrorBox>Error getting users.</ErrorBox>}
           {users && Array.isArray(users) && (
             <ComboBox
               fullWidth

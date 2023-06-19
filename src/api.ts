@@ -1,15 +1,21 @@
 import toast from 'react-hot-toast';
 import { categories, myExpenses, users } from './mockData';
-import { Category, Expense, User } from './types';
-import { getErrorMessage } from './utils/helpers';
 import {
-  UseQueryOptions,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from 'react-query';
+  Category,
+  CreateUpdateDeleteType,
+  Expense,
+  NewExpense,
+  User,
+} from './types';
+import { getErrorMessage } from './utils/helpers';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useAdminContext } from './components/AdminComponents/AdminContext';
+import { getCookie } from './utils/customHooks';
+import { TOKEN_COOKIE } from './utils/constants';
 
+// const authenticateUrl = import.meta.env.VITE_GOOGLE_AUTH_URL;
 const baseUrl = import.meta.env.VITE_API_URL;
+// const urlSuffix = './auth/login/google'
 const userUrl = `${baseUrl}/users`;
 const categoryUrl = `${baseUrl}/categories`;
 const expensesUrl = `${baseUrl}/expenses`;
@@ -17,9 +23,9 @@ console.log(baseUrl);
 
 const getStoredToken = () => {
   try {
-    const value = window.localStorage.getItem('cb-token');
+    const value = getCookie(TOKEN_COOKIE, '');
     if (value) {
-      return JSON.parse(value);
+      return value;
     } else {
       return undefined;
     }
@@ -79,6 +85,9 @@ export const useGetUsers = (id?: string) => {
     () => apiFetch<User | User[]>(`${userUrl}${id ? `?id=${id}` : ''}`),
     {
       staleTime: Infinity,
+      onError(error) {
+        toast.error(`Could not get user. ${(error as Error)?.message}`);
+      },
     }
   );
 
@@ -119,6 +128,9 @@ export const useGetCategories = () => {
     isError,
   } = useQuery(['categories'], () => apiFetch<Category[]>(`${categoryUrl}`), {
     staleTime: Infinity,
+    onError(error) {
+      toast.error(`Could not get categories. ${(error as Error)?.message}`);
+    },
   });
 
   return { categories, isLoading, isFetching, isError };
@@ -160,11 +172,55 @@ export const useGetExpenses = (userId: string, queryOptions?: any) => {
     () => apiFetch<Expense[]>(`${expensesUrl}?userId=${userId}`),
     {
       staleTime: Infinity,
+      onError(error) {
+        toast.error(`Could not get expenses. ${(error as Error)?.message}`);
+      },
       ...queryOptions,
     }
   );
 
   return { expenses, isLoading, isFetching, isError };
+};
+
+const mapCreateOrUpdate = (type: CreateUpdateDeleteType) => {
+  switch (type) {
+    case 'create':
+      return 'POST';
+    case 'update':
+      return 'PUT';
+    case 'delete':
+      return 'DELETE';
+  }
+};
+
+export const useCreateExpense = (
+  reqType: CreateUpdateDeleteType,
+  mutationOptions?: any
+) => {
+  const queryClient = useQueryClient();
+  const {
+    state: { user },
+  } = useAdminContext();
+  const mutation = useMutation(
+    (expense: NewExpense) =>
+      apiFetch<NewExpense>(`${expensesUrl}`, {
+        method: mapCreateOrUpdate(reqType),
+        body: JSON.stringify(expense),
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['expenses', user?.id]);
+        toast.success(`${reqType} ran successfully!`);
+      },
+      onError(error) {
+        toast.error(
+          `Could not ${reqType} expense. ${(error as Error)?.message}`
+        );
+      },
+      ...mutationOptions,
+    }
+  );
+  return mutation;
 };
 // export const getApiExpenses = () => {
 //   return apiFetch(`${expensesUrl}`);
@@ -260,3 +316,10 @@ export const getGoogleProfile = (token: string) =>
       Accept: 'application/json',
     },
   });
+
+// export const authenticateGoogleAzure = (token: string) => {
+//   return fetch(authenticateUrl, {
+//     method: 'POST',
+//     body: JSON.stringify({ id_token: token }),
+//   });
+// };

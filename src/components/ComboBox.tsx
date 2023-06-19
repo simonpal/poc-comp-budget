@@ -99,6 +99,7 @@ type ComboBoxProps = {
   label: string;
   hideLabel?: boolean;
   disabled?: boolean;
+  name?: string;
   handleChange: (val: ComboOption | null | undefined) => void;
 };
 
@@ -110,7 +111,7 @@ const filterOptions = (inputValue?: string) => {
       !inputValue ||
       !lowerCasedInputValue ||
       item.title.toLowerCase().includes(lowerCasedInputValue) ||
-      item.id.toLowerCase().includes(lowerCasedInputValue)
+      item.id.toString().toLowerCase().includes(lowerCasedInputValue)
     );
   };
 };
@@ -120,6 +121,7 @@ export const ComboBox: React.FunctionComponent<ComboBoxProps> = ({
   fullWidth = false,
   hideLabel = false,
   disabled = false,
+  name,
   handleChange,
 }) => {
   const [items, setItems] = React.useState<ComboOption[]>(data);
@@ -156,7 +158,12 @@ export const ComboBox: React.FunctionComponent<ComboBoxProps> = ({
         </Label>
       )}
       <ComboBoxWrapper className={`${disabled && 'disabled'}`}>
-        <input placeholder={label} {...getInputProps()} disabled={disabled} />
+        <input
+          name={name}
+          placeholder={label}
+          {...getInputProps()}
+          disabled={disabled}
+        />
         <button
           aria-label="toggle menu"
           className={`${isOpen && 'open'}`}

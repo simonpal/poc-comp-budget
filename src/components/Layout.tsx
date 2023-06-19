@@ -99,7 +99,7 @@ type LayoutProps = {
 
 export const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
   const {
-    state: { loggedInProfile, isAdmin },
+    state: { isAdmin, googleUser },
     dispatch,
   } = useUserContext();
 
@@ -140,17 +140,17 @@ export const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
           </Column>
           <Column lg="6" md="6" sm="6" xs="12" alignItems="flex-end">
             <ProfileWrapper>
-              {loggedInProfile && (
+              {googleUser && (
                 <DropMenuButton
                   fromRight
                   id="user-menu"
                   label={
                     <UserButton>
-                      <UserName>{loggedInProfile.profile.name}</UserName>
+                      <UserName>{googleUser.name}</UserName>
                       <UserImage
-                        url={loggedInProfile.profile.picture}
+                        url={googleUser.picture}
                         size={50}
-                        alt={loggedInProfile.profile.name}
+                        alt={googleUser.name}
                       />
                     </UserButton>
                   }

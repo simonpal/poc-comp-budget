@@ -5,26 +5,30 @@ import React, {
   useEffect,
   useReducer,
 } from 'react';
-import { GoogleProfile } from '../types';
-import { useSessionStorage } from './customHooks';
-import { checkIsAdmin, getGoogleProfile } from '../api';
+import jwt_decode from 'jwt-decode';
+import { GoogleUser } from '../types';
+import { useCookie } from './customHooks';
+import { checkIsAdmin } from '../api';
+import { TOKEN_COOKIE } from './constants';
 // import { Expense, User } from '../../types';
 
 export enum UserContextActionTypes {
   SetLoggedInUser = 'SET_LOGGED_IN_USER',
-  SetLoggedInProfile = 'SET_LOGGED_IN_PROFILE',
+  // SetLoggedInProfile = 'SET_LOGGED_IN_PROFILE',
   SetIsAdmin = 'SET_IS_ADMIN',
   ResetUser = 'RESET_USER',
+  SetGoogleUser = 'SET_GOOGLE_USER',
   // SetTheme = 'SET_THEME',
 }
 
 type UserContextPayload = {
   [UserContextActionTypes.SetLoggedInUser]: { user: any };
-  [UserContextActionTypes.SetLoggedInProfile]:
-    | { profile: GoogleProfile }
-    | undefined;
+  // [UserContextActionTypes.SetLoggedInProfile]:
+  //   | { profile: GoogleProfile }
+  //   | undefined;
   [UserContextActionTypes.SetIsAdmin]: boolean;
   [UserContextActionTypes.ResetUser]: boolean;
+  [UserContextActionTypes.SetGoogleUser]: GoogleUser;
   // [UserContextActionTypes.SetTheme]: undefined;
   // [Types.Delete]: {
   //   id: number;
@@ -48,16 +52,18 @@ const reducer = (state: UserContext, action: UserContextActions) => {
   switch (action.type) {
     case UserContextActionTypes.SetLoggedInUser:
       return { ...state, loggedInUser: action.payload };
-    case UserContextActionTypes.SetLoggedInProfile:
-      return { ...state, loggedInProfile: action.payload };
+    // case UserContextActionTypes.SetLoggedInProfile:
+    //   return { ...state, loggedInProfile: action.payload };
     case UserContextActionTypes.SetIsAdmin:
       return { ...state, isAdmin: action.payload };
+    case UserContextActionTypes.SetGoogleUser:
+      return { ...state, googleUser: action.payload };
     case UserContextActionTypes.ResetUser:
       return {
         ...state,
         isAdmin: false,
         loggedInUser: undefined,
-        loggedInProfile: undefined,
+        googleUser: undefined,
       };
     default:
       return state;
@@ -66,8 +72,9 @@ const reducer = (state: UserContext, action: UserContextActions) => {
 
 interface UserContext {
   loggedInUser: any;
-  loggedInProfile: any;
+  // loggedInProfile: any;
   isAdmin: boolean;
+  googleUser: GoogleUser | undefined;
 }
 
 const UserContext = createContext<{
@@ -76,8 +83,9 @@ const UserContext = createContext<{
 }>({
   state: {
     loggedInUser: undefined,
-    loggedInProfile: undefined,
+    // loggedInProfile: undefined,
     isAdmin: false,
+    googleUser: undefined,
   },
   dispatch: () => null,
 });
@@ -88,31 +96,32 @@ interface Props {
 export const UserContextProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, {
     loggedInUser: undefined,
-    loggedInProfile: undefined,
+    // loggedInProfile: undefined,
     isAdmin: false,
+    googleUser: undefined,
   });
 
-  const [token, setValue] = useSessionStorage('cb-token', undefined);
+  const [token, _] = useCookie(TOKEN_COOKIE, '');
 
-  const getAndSetProfile = useCallback(async () => {
-    getGoogleProfile(token)
-      .then(async (res) => {
-        const data = await res.json();
-        if (!data?.error) {
-          dispatch({
-            type: UserContextActionTypes.SetLoggedInProfile,
-            payload: { profile: data },
-          });
-        } else {
-          throw new Error(data?.error);
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        setValue(undefined);
-        // navigate('/login');
-      });
-  }, [token, setValue]);
+  // const getAndSetProfile = useCallback(async () => {
+  //   getGoogleProfile(token)
+  //     .then(async (res) => {
+  //       const data = await res.json();
+  //       if (!data?.error) {
+  //         dispatch({
+  //           type: UserContextActionTypes.SetLoggedInProfile,
+  //           payload: { profile: data },
+  //         });
+  //       } else {
+  //         throw new Error(data?.error);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //       setValue(undefined);
+  //       // navigate('/login');
+  //     });
+  // }, [token, setValue]);
 
   const isUserAdmin = useCallback(async () => {
     checkIsAdmin(token).then((res: boolean) => {
@@ -124,24 +133,16 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
   }, [token]);
 
   useEffect(() => {
-    // console.log(state.loggedInUser, token);
-    if (state?.loggedInUser?.user && typeof token === 'undefined') {
-      setValue(state.loggedInUser.user.access_token);
-    } else if (
-      typeof token !== 'undefined' &&
-      !state.loggedInProfile?.profile
-    ) {
-      getAndSetProfile();
-      isUserAdmin();
+    isUserAdmin();
+    if (typeof token !== undefined && token.length > 0 && !state.googleUser) {
+      const user: any = jwt_decode(token);
+      const { name, picture, exp, email } = user;
+      dispatch({
+        type: UserContextActionTypes.SetGoogleUser,
+        payload: { name, picture, exp, email },
+      });
     }
-  }, [
-    state.loggedInUser,
-    state.loggedInProfile,
-    setValue,
-    token,
-    getAndSetProfile,
-    isUserAdmin,
-  ]);
+  }, [token, isUserAdmin, state.googleUser]);
 
   return (
     <UserContext.Provider value={{ state, dispatch }}>
