@@ -163,7 +163,7 @@ export const setCookie = (name: string, value: any, options: CookieOptions) => {
   };
 
   const expires = options?.expires
-    ? new Date(options.expires).toString()
+    ? new Date(options.expires).toUTCString()
     : new Date(Date.now() + optionsWithDefaults.days * 864e5).toUTCString();
   // console.log(expires);
 
