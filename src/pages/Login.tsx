@@ -76,7 +76,7 @@ const Login = () => {
               payload: { name, picture, exp, email },
             });
             updateItem(credentialResponse.credential, {
-              expires: exp,
+              expires: exp * 1000,
               path: '/',
               // secure: true,
             });
