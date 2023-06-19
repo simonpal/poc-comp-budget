@@ -11,6 +11,7 @@ import { Divider } from '../components/Divider';
 import { Timeline } from '../components/Timeline';
 import { ValueHeader } from '../components/ValueHeader';
 import { ValueContent } from '../components/ValueContent';
+import { InfoBox } from '../components/InfoBox';
 
 const MyBudget = () => {
   const [currentUser, setCurrentUser] = useState<User | undefined>();
@@ -41,7 +42,10 @@ const MyBudget = () => {
     <div>
       <h2>My budget</h2>
       <Divider spacing="2xl" />
-
+      <InfoBox>
+        Expenses added within the last two months may not be visible in your
+        list or deducted from your balance due to manual handling.
+      </InfoBox>
       <Grid spacing="l">
         <Column lg="4" md="4" sm="4" xs="12">
           <Box backgroundColor={theme.colors.silver} spacing="m">

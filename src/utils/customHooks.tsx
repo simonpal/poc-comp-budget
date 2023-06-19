@@ -18,6 +18,8 @@ export const useIsLoggedInUser = () => {
   // console.log(token, loggedInProfile);
   // return typeof token !== 'undefined' && !!loggedInProfile?.profile;
   const [item] = useCookie(TOKEN_COOKIE, '');
+  console.log('LOGGED IN: ', typeof item !== 'undefined' && item.length > 0);
+  console.log(item);
   return typeof item !== 'undefined' && item.length > 0;
 };
 
