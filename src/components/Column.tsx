@@ -25,50 +25,82 @@ export type ColumnProps = {
 
 const getSize = (noCols: number) => (noCols / COLS) * 100;
 
-const StyledColumn = styled.div<ColumnProps>`
+const StyledColumn = styled.div<ColumnProps>(
+  ({
+    theme,
+    lg,
+    $spacing,
+    justifyContent,
+    alignItems,
+    flexGrow,
+    lgOffset,
+    mdOffset,
+    smOffset,
+    xsOffset,
+    md,
+    sm,
+    xs,
+    $mobileSpacing,
+  }) => `
   display: flex;
   flex-direction: column;
-  width: ${({ lg, $spacing }) =>
-    `calc(${getSize(Number(lg))}% - var(--spacing-${$spacing}))`};
-  justify-content: ${({ justifyContent }) => justifyContent};
-  align-items: ${({ alignItems }) => alignItems};
-  flex-grow: ${({ flexGrow }) => flexGrow};
-  ${({ lgOffset }) =>
+  width: ${`calc(${getSize(Number(lg))}% - var(--spacing-${$spacing}))`};
+  justify-content: ${justifyContent};
+  align-items: ${alignItems};
+  flex-grow: ${flexGrow};
+  ${
     lgOffset &&
     css`
       margin-left: ${100 / Number(lgOffset)}%;
-    `}
-  @media screen and (min-width: ${BREAKPOINTS.md
-    .min}px) and (max-width: ${BREAKPOINTS.md.max}px) {
-    width: ${({ md, $spacing }) =>
-      `calc(${getSize(Number(md))}% - var(--spacing-${$spacing}))`};
-    ${({ mdOffset }) =>
+    `
+  }
+  @media screen and (min-width: ${
+    theme.breakpoints.md.min
+  }px) and (max-width: ${theme.breakpoints.md.max}px) {
+    width: ${
+      Number(md) < 12
+        ? `calc(${getSize(Number(md))}% - var(--spacing-${$spacing}))`
+        : '100%'
+    };
+    ${
       mdOffset &&
       css`
         margin-left: ${100 / Number(mdOffset)}%;
-      `}
+      `
+    }
   }
-  @media screen and (min-width: ${BREAKPOINTS.sm
-      .min}px) and (max-width: ${BREAKPOINTS.sm.max}px) {
-    width: ${({ sm, $spacing }) =>
-      `calc(${getSize(Number(sm))}% - var(--spacing-${$spacing}))`};
-    ${({ smOffset }) =>
+  @media screen and (min-width: ${
+    theme.breakpoints.sm.min
+  }px) and (max-width: ${theme.breakpoints.sm.max}px) {
+    width: ${
+      Number(sm) < 12
+        ? `calc(${getSize(Number(sm))}% - var(--spacing-${$spacing}))`
+        : '100%'
+    };
+    ${
       smOffset &&
       css`
         margin-left: ${100 / Number(smOffset)}%;
-      `}
+      `
+    }
   }
-  @media screen and (min-width: ${BREAKPOINTS.xs
-      .min}px) and (max-width: ${BREAKPOINTS.xs.max}px) {
-    width: ${({ xs, $mobileSpacing }) =>
-      `calc(${getSize(Number(xs))}% - var(--spacing-${$mobileSpacing}))`};
-    ${({ xsOffset }) =>
+  @media screen and (min-width: ${
+    theme.breakpoints.xs.min
+  }px) and (max-width: ${theme.breakpoints.xs.max}px) {
+    width: ${
+      Number(xs) < 12
+        ? `calc(${getSize(Number(xs))}% - var(--spacing-${$mobileSpacing}))`
+        : '100%'
+    };
+    ${
       xsOffset &&
       css`
         margin-left: ${100 / Number(xsOffset)}%;
-      `}
+      `
+    }
   }
-`;
+`
+);
 
 export const Column: React.FunctionComponent<
   ColumnProps & React.HTMLAttributes<HTMLDivElement>

@@ -17,6 +17,7 @@ const StyledInfoBox = styled.div`
     font-size: 2rem;
     margin-right: 1rem;
     color: ${({ theme }) => theme.colors.primary};
+    min-width: 2rem;
   }
 `;
 

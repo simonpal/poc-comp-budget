@@ -11,16 +11,7 @@ import { TOKEN_COOKIE } from './constants';
 import { CookieOptions } from '../types';
 
 export const useIsLoggedInUser = () => {
-  // const {
-  //   state: { loggedInProfile },
-  // } = useUserContext();
-
-  // const [token] = useSessionStorage('cb-token', undefined);
-  // console.log(token, loggedInProfile);
-  // return typeof token !== 'undefined' && !!loggedInProfile?.profile;
   const [item] = useCookie(TOKEN_COOKIE, '');
-  console.log('LOGGED IN: ', typeof item !== 'undefined' && item.length > 0);
-  console.log(item);
   return typeof item !== 'undefined' && item.length > 0;
 };
 

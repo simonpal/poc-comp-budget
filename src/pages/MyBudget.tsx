@@ -44,7 +44,7 @@ const MyBudget = () => {
       <Divider spacing="xl" />
       <InfoBox>
         Expenses added within the last two months may not be visible in your
-        list or deducted from your balance due to manual handling.
+        list, or deducted from your balance, due to manual handling.
       </InfoBox>
       <Grid spacing="l">
         <Column lg="4" md="4" sm="4" xs="12">
