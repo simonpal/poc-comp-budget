@@ -39,11 +39,12 @@ const UserButton = styled.div`
   cursor: pointer;
 `;
 
-const Header = styled.header`
+const Header = styled.header(
+  ({ theme }) => `
   padding: 2rem;
-  border-bottom: ${({ theme }) => `1px solid ${theme.colors.silver}`};
+  border-bottom: 1px solid ${theme.colors.silver};
   h1 a {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${theme.colors.primary};
     display: flex;
     align-items: center;
     text-decoration: none;
@@ -53,33 +54,38 @@ const Header = styled.header`
       display: inline-flex;
     }
   }
-  @media screen and (min-width: ${BREAKPOINTS.xs
-      .min}px) and (max-width: ${BREAKPOINTS.xs.max}px) {
+  @media screen and (min-width: ${theme.breakpoints.xs.min}px) and (max-width: ${theme.breakpoints.xs.max}px) {
     h1 {
       font-size: 1.3rem;
       a img {
         max-width: 50px;
       }
     }
+    .logo-col {
+      align-items: center;
+      justify-content: center;
+    }
   }
-`;
+`
+);
 
-const ProfileWrapper = styled.div`
+const ProfileWrapper = styled.div(
+  ({ theme }) => `
   display: flex;
   gap: 1rem;
   > div {
     display: flex;
     align-items: center;
   }
-  @media screen and (min-width: ${BREAKPOINTS.xs
-      .min}px) and (max-width: ${BREAKPOINTS.xs.max}px) {
+  @media screen and (min-width: ${theme.breakpoints.xs.min}px) and (max-width: ${theme.breakpoints.xs.max}px) {
     flex-direction: column;
     width: 100%;
     > div {
       justify-content: center;
     }
   }
-`;
+`
+);
 
 const UserName = styled.span`
   display: inline-block;
@@ -164,7 +170,7 @@ export const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
     <PageWrapper>
       <Header>
         <Grid spacing="l">
-          <Column lg="6" md="6" sm="6" xs="12">
+          <Column lg="6" md="6" sm="6" xs="12" className="logo-col">
             <h1>
               <Link to="/mybudget">
                 <img src={compLogo} alt="Competence budget" />
