@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import { Button } from './Button';
+import { AngleDownIcon } from './Icons/AngleDownIcon';
 
 type DropdownStyledProps = {
   $maxHeight: number;
@@ -15,8 +16,21 @@ export type DropMenuButtonProps = {
   fromRight?: boolean;
 };
 
+const CustomDropdownButton = styled.div`
+  display: flex;
+  align-items: center;
+  svg {
+    transition: transform 0.1s ease;
+    margin-right: 0.25rem !important;
+  }
+  .expanded {
+    transform: rotate(180deg);
+  }
+`;
+
 const DropMenuButtonWrapper = styled.div<DropdownStyledProps>`
   position: relative;
+
   [aria-expanded='true'] + [role='menu'] {
     display: flex;
   }
@@ -140,7 +154,7 @@ export const DropMenuButton: React.FunctionComponent<
           {label}
         </Button>
       ) : (
-        <div
+        <CustomDropdownButton
           role="button"
           aria-haspopup="true"
           aria-expanded={expanded}
@@ -148,8 +162,9 @@ export const DropMenuButton: React.FunctionComponent<
           onClick={() => setExpanded(!expanded)}
           ref={buttonRef}
         >
+          <AngleDownIcon className={`${expanded ? 'expanded' : ''}`} />
           {label}
-        </div>
+        </CustomDropdownButton>
       )}
       <ul
         role="menu"
