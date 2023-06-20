@@ -3,13 +3,18 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useReducer,
 } from 'react';
 import jwt_decode from 'jwt-decode';
-import { GoogleUser } from '../types';
+import { CookieSettings, GoogleUser } from '../types';
 import { useCookie } from './customHooks';
 import { checkIsAdmin } from '../api';
-import { TOKEN_COOKIE } from './constants';
+import {
+  SETTINGS_COOKIE,
+  SETTINGS_COOKIE_OPTIONS,
+  TOKEN_COOKIE,
+} from './constants';
 // import { Expense, User } from '../../types';
 
 export enum UserContextActionTypes {
@@ -18,6 +23,7 @@ export enum UserContextActionTypes {
   SetIsAdmin = 'SET_IS_ADMIN',
   ResetUser = 'RESET_USER',
   SetGoogleUser = 'SET_GOOGLE_USER',
+  SetStoredSettings = 'SET_STORED_SETTINGS',
   // SetTheme = 'SET_THEME',
 }
 
@@ -29,6 +35,7 @@ type UserContextPayload = {
   [UserContextActionTypes.SetIsAdmin]: boolean;
   [UserContextActionTypes.ResetUser]: boolean;
   [UserContextActionTypes.SetGoogleUser]: GoogleUser;
+  [UserContextActionTypes.SetStoredSettings]: CookieSettings;
   // [UserContextActionTypes.SetTheme]: undefined;
   // [Types.Delete]: {
   //   id: number;
@@ -58,6 +65,8 @@ const reducer = (state: UserContext, action: UserContextActions) => {
       return { ...state, isAdmin: action.payload };
     case UserContextActionTypes.SetGoogleUser:
       return { ...state, googleUser: action.payload };
+    case UserContextActionTypes.SetStoredSettings:
+      return { ...state, storedSettings: action.payload };
     case UserContextActionTypes.ResetUser:
       return {
         ...state,
@@ -75,6 +84,7 @@ interface UserContext {
   // loggedInProfile: any;
   isAdmin: boolean;
   googleUser: GoogleUser | undefined;
+  storedSettings: CookieSettings | undefined;
 }
 
 const UserContext = createContext<{
@@ -86,6 +96,7 @@ const UserContext = createContext<{
     // loggedInProfile: undefined,
     isAdmin: false,
     googleUser: undefined,
+    storedSettings: undefined,
   },
   dispatch: () => null,
 });
@@ -99,29 +110,24 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
     // loggedInProfile: undefined,
     isAdmin: false,
     googleUser: undefined,
+    storedSettings: undefined,
   });
 
+  const [cookieSettings, setCookieSettings] = useCookie(SETTINGS_COOKIE, '');
   const [token, _] = useCookie(TOKEN_COOKIE, '');
 
-  // const getAndSetProfile = useCallback(async () => {
-  //   getGoogleProfile(token)
-  //     .then(async (res) => {
-  //       const data = await res.json();
-  //       if (!data?.error) {
-  //         dispatch({
-  //           type: UserContextActionTypes.SetLoggedInProfile,
-  //           payload: { profile: data },
-  //         });
-  //       } else {
-  //         throw new Error(data?.error);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //       setValue(undefined);
-  //       // navigate('/login');
-  //     });
-  // }, [token, setValue]);
+  const parsedSettings: CookieSettings = useMemo(() => {
+    if (cookieSettings && cookieSettings.length) {
+      try {
+        const data = JSON.parse(cookieSettings);
+        return data;
+      } catch (e) {
+        console.error(e);
+        return undefined;
+      }
+    }
+    return undefined;
+  }, [cookieSettings]);
 
   const isUserAdmin = useCallback(async () => {
     checkIsAdmin(token).then((res: boolean) => {
@@ -143,6 +149,34 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
       });
     }
   }, [token, isUserAdmin, state.googleUser]);
+
+  useEffect(() => {
+    if (!parsedSettings || typeof parsedSettings?.darkTheme === 'undefined') {
+      const prefersDark = window.matchMedia(
+        '(prefers-color-scheme: dark)'
+      ).matches;
+      setCookieSettings(
+        JSON.stringify({ ...parsedSettings, darkTheme: prefersDark }),
+        SETTINGS_COOKIE_OPTIONS
+      );
+    } else if (!state.storedSettings && parsedSettings) {
+      dispatch({
+        type: UserContextActionTypes.SetStoredSettings,
+        payload: parsedSettings,
+      });
+    }
+  }, [parsedSettings, setCookieSettings, state.storedSettings]);
+
+  useEffect(() => {
+    if (state.storedSettings) {
+      if (JSON.stringify(state.storedSettings) !== cookieSettings) {
+        setCookieSettings(
+          JSON.stringify(state.storedSettings),
+          SETTINGS_COOKIE_OPTIONS
+        );
+      }
+    }
+  }, [state.storedSettings, setCookieSettings, cookieSettings]);
 
   return (
     <UserContext.Provider value={{ state, dispatch }}>

@@ -145,20 +145,13 @@ export type GoogleUser = {
   picture: string;
   exp: number;
 };
-// {
-//   "iss": "https://accounts.google.com",
-//   "nbf": 1687173888,
-//   "aud": "491406548974-slq1dkq4ck83rvfmsbqe2uehssbqd4ac.apps.googleusercontent.com",
-//   "sub": "114992878981779564245",
-//   "hd": "tretton37.com",
-//   "email": "simon.palmberg@tretton37.com",
-//   "email_verified": true,
-//   "azp": "491406548974-slq1dkq4ck83rvfmsbqe2uehssbqd4ac.apps.googleusercontent.com",
-//   "name": "Simon Palmberg",
-//   "picture": "https://lh3.googleusercontent.com/a/AAcHTtf3En0HxqzzgYyIvZ7TCwSpMAGQQn5QTdbIYQ_x=s96-c",
-//   "given_name": "Simon",
-//   "family_name": "Palmberg",
-//   "iat": 1687174188,
-//   "exp": 1687177788,
-//   "jti": "fa369576fbb0033b0577771d751d7676eb5ca75b"
-// }
+
+export type CookieSettings = {
+  darkTheme: boolean;
+};
+export type CookieOptions = {
+  expires?: Date | number | string;
+  path?: string;
+  domain?: string;
+  secure?: boolean;
+};

@@ -40,8 +40,8 @@ const MyBudget = () => {
   }
   return (
     <div>
-      <h2>My budget</h2>
-      <Divider spacing="2xl" />
+      <h2 style={{ lineHeight: 1 }}>My budget</h2>
+      <Divider spacing="xl" />
       <InfoBox>
         Expenses added within the last two months may not be visible in your
         list or deducted from your balance due to manual handling.

@@ -9,11 +9,7 @@ import { Button } from './Button';
 import { UserContextActionTypes, useUserContext } from '../utils/UserContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserImage } from './UserImage';
-import {
-  useCookie,
-  useIsLoggedInUser,
-  usePreferedTheme,
-} from '../utils/customHooks';
+import { useCookie, useIsLoggedInUser } from '../utils/customHooks';
 import { useEffect } from 'react';
 import { BREAKPOINTS } from '../theme';
 import { DropMenuButton } from './DropMenuButton';
@@ -101,16 +97,50 @@ type LayoutProps = {
 
 export const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
   const {
-    state: { isAdmin, googleUser },
+    state: { isAdmin, googleUser, storedSettings },
     dispatch,
   } = useUserContext();
 
   const isLoggedIn = useIsLoggedInUser();
-  const { preferedTheme, switchTheme } = usePreferedTheme();
+  // const { preferedTheme, switchTheme } = usePreferedTheme();
 
+  // const [cookieSettings, setCookieSettings] = useCookie(SETTINGS_COOKIE, '');
   const [_, updateItem] = useCookie(TOKEN_COOKIE, '');
 
   // const [, setValue] = useSessionStorage('cb-token', undefined);
+  // const settings: CookieSettings = useMemo(() => {
+  //   console.log('COOKIE SETTINGS', cookieSettings);
+  //   if (cookieSettings && cookieSettings.length) {
+  //     try {
+  //       const data = JSON.parse(cookieSettings);
+  //       console.log('SET SETTINGS', data);
+  //       return data;
+  //     } catch (e) {
+  //       console.error(e);
+  //       return undefined;
+  //     }
+  //   }
+  //   return undefined;
+  // }, [cookieSettings]);
+
+  // const switchTheme = useCallback(() => {
+  //   console.log('SWITCH THEME', settings);
+  //   if (settings) {
+  //     // const settings = JSON.parse(cookieSettings);
+  //     console.log(settings);
+  //     setCookieSettings(
+  //       JSON.stringify({ ...settings, darkTheme: !settings.darkTheme }),
+  //       SETTINGS_COOKIE_OPTIONS
+  //     );
+  //   }
+  // }, [settings, setCookieSettings]);
+
+  const switchTheme = (val: boolean) => {
+    dispatch({
+      type: UserContextActionTypes.SetStoredSettings,
+      payload: { ...storedSettings, darkTheme: val },
+    });
+  };
 
   const navigate = useNavigate();
 
@@ -164,8 +194,8 @@ export const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
                     <ToggleSwitch
                       id="is-darkmode"
                       name="is-darkmode"
-                      checked={preferedTheme?.isDark}
-                      onChange={() => switchTheme()}
+                      checked={Boolean(storedSettings?.darkTheme)}
+                      onChange={(val) => switchTheme(val)}
                     />
                   </ListSwitch>
                   {isAdmin && (

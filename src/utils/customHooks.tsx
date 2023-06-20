@@ -8,6 +8,7 @@ import {
 // import { useUserContext } from './UserContext';
 import { Theme, darkTheme, theme as lightTheme } from '../theme';
 import { TOKEN_COOKIE } from './constants';
+import { CookieOptions } from '../types';
 
 export const useIsLoggedInUser = () => {
   // const {
@@ -146,13 +147,6 @@ export const usePreferedTheme = () => {
 
 /* useCookie */
 
-type CookieOptions = {
-  expires?: Date | number | string;
-  path?: string;
-  domain?: string;
-  secure?: boolean;
-};
-
 const isBrowser = typeof window !== 'undefined';
 
 export const setCookie = (name: string, value: any, options: CookieOptions) => {
@@ -168,6 +162,13 @@ export const setCookie = (name: string, value: any, options: CookieOptions) => {
     ? new Date(options.expires).toUTCString()
     : new Date(Date.now() + optionsWithDefaults.days * 864e5).toUTCString();
   // console.log(expires);
+
+  // console.log(
+  //   'Set cookie',
+  //   `${name}=${encodeURIComponent(value)}${
+  //     options?.secure ? ';secure' : ''
+  //   }; expires=${expires}; path=${optionsWithDefaults.path}`
+  // );
 
   document.cookie = `${name}=${encodeURIComponent(value)}${
     options?.secure ? ';secure' : ''

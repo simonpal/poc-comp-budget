@@ -19,7 +19,7 @@ const baseUrl = import.meta.env.VITE_API_URL;
 const userUrl = `${baseUrl}/users`;
 const categoryUrl = `${baseUrl}/categories`;
 const expensesUrl = `${baseUrl}/expenses`;
-console.log(baseUrl);
+// console.log(baseUrl);
 
 const getStoredToken = () => {
   try {
@@ -298,13 +298,12 @@ export const getCategories = (): Promise<Category[]> =>
   });
 
 export const checkIsAdmin = (token: string): Promise<boolean> =>
-  new Promise((resolve, _) => {
-    console.log(token);
+  new Promise((resolve, reject) => {
     // const expenses = myExpenses.filter((u) => u.userId === id);
 
-    // if (!expenses) {
-    //   return setTimeout(() => reject(new Error('User not found')), 250);
-    // }
+    if (!token) {
+      return setTimeout(() => reject(new Error('User not found')), 250);
+    }
 
     setTimeout(() => resolve(true), 500);
   });

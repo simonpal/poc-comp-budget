@@ -10,9 +10,9 @@ import Admin from './pages/Admin';
 import { Layout } from './components/Layout';
 import { AdminContextProvider } from './components/AdminComponents/AdminContext';
 import AdminStats from './pages/AdminStats';
-import { usePreferedTheme } from './utils/customHooks';
-import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { darkTheme, theme } from './theme';
+import { useUserContext } from './utils/UserContext';
 
 const router = createBrowserRouter([
   {
@@ -55,13 +55,12 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const { preferedTheme, isDark } = usePreferedTheme();
-  console.log(preferedTheme);
-  useEffect(() => {
-    console.log(isDark);
-  }, [isDark]);
+  const {
+    state: { storedSettings },
+  } = useUserContext();
+
   return (
-    <ThemeProvider theme={preferedTheme}>
+    <ThemeProvider theme={storedSettings?.darkTheme ? darkTheme : theme}>
       <GlobalStyles />
       <RouterProvider router={router} />
       <Toaster position="top-center" reverseOrder={false} />
