@@ -1,8 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-import { BREAKPOINTS } from '../theme';
-// import { getClasses } from '../../helpers'
 import { AlignItems, ColumnSize, Justify, Spacings } from '../types';
 
 const COLS = 12;
