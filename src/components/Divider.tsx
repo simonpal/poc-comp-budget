@@ -1,7 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-
-import { BREAKPOINTS } from '../theme';
 // import { getClasses, getShortSpacing } from '../utils/helpers';
 import { Spacings } from '../types';
 
@@ -15,15 +13,17 @@ type StyledDividerProps = {
   $mobileSpacing?: Spacings;
 };
 
-const StyledDivider = styled.div<StyledDividerProps>`
-  --divider-color: ${({ theme }) => theme.colors.silver};
+const StyledDivider = styled.div<StyledDividerProps>(
+  ({ theme, $spacing, $mobileSpacing }) => `
+  --divider-color: ${theme.colors.silver};
   height: 1px;
-  margin: ${({ $spacing }) => `var(--spacing-${$spacing}) 0`};
+  margin: ${`var(--spacing-${$spacing}) 0`};
   background-color: var(--divider-color);
-  @media screen and (max-width: ${BREAKPOINTS.xs.max}) {
-    margin: ${({ $mobileSpacing }) => `var(spacing-${$mobileSpacing}) 0`};
+  @media screen and (max-width: ${theme.breakpoints.xs.max}) {
+    margin: ${`var(spacing-${$mobileSpacing}) 0`};
   }
-`;
+`
+);
 
 export const Divider: React.FunctionComponent<
   DividerProps & React.HTMLAttributes<HTMLDivElement>

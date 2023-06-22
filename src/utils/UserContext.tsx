@@ -142,10 +142,10 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
     isUserAdmin();
     if (typeof token !== undefined && token.length > 0 && !state.googleUser) {
       const user: any = jwt_decode(token);
-      const { name, picture, exp, email } = user;
+      const { name, picture, exp, email, sub } = user;
       dispatch({
         type: UserContextActionTypes.SetGoogleUser,
-        payload: { name, picture, exp, email },
+        payload: { name, picture, exp, email, sub },
       });
     }
   }, [token, isUserAdmin, state.googleUser]);

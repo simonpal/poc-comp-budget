@@ -70,10 +70,10 @@ const Login = () => {
             const user: any = jwt_decode(
               credentialResponse.credential as string
             );
-            const { name, picture, exp, email } = user;
+            const { name, picture, exp, email, sub } = user;
             dispatch({
               type: UserContextActionTypes.SetGoogleUser,
-              payload: { name, picture, exp, email },
+              payload: { name, picture, exp, email, sub },
             });
             updateItem(credentialResponse.credential, {
               expires: exp * 1000,

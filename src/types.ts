@@ -144,6 +144,7 @@ export type GoogleUser = {
   name: string;
   picture: string;
   exp: number;
+  sub: string;
 };
 
 export type CookieSettings = {

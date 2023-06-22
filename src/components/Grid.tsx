@@ -7,7 +7,6 @@ import styled, { css } from 'styled-components';
 // import { AlignItems, Direction, Justify, Spacings } from '../../types'
 import { Column, ColumnProps } from './Column';
 import { AlignItems, Direction, Justify, Spacings } from '../types';
-import { BREAKPOINTS } from '../theme';
 
 export type GridProps = {
   spacing: Spacings;
@@ -29,28 +28,36 @@ type StyledProps = {
   $mobileSpacing?: Spacings;
 };
 
-const StyledGrid = styled.div<StyledProps>`
+const StyledGrid = styled.div<StyledProps>(
+  ({
+    theme,
+    $spacing,
+    $direction,
+    $alignItems,
+    $justifyContent,
+    $mobileSpacing,
+    $mobileDirection,
+  }) => `
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  gap: ${({ $spacing }) => `var(--spacing-${$spacing})`};
-  flex-direction: ${({ $direction }) => $direction};
-  align-items: ${({ $alignItems }) => $alignItems};
-  justify-content: ${({ $justifyContent }) => $justifyContent};
-  /* > div {
-    margin: ${({ $spacing }) => `0 calc(var(--spacing-${$spacing}) * -1)`};
-  } */
-  @media screen and (max-width: ${BREAKPOINTS.xs.max}px) {
-    flex-direction: ${({ $mobileDirection }) => $mobileDirection};
+  gap: ${`var(--spacing-${$spacing})`};
+  flex-direction: ${$direction};
+  align-items: ${$alignItems};
+  justify-content: ${$justifyContent};
+  @media screen and (max-width: ${theme.breakpoints.xs.max}px) {
+    flex-direction: ${$mobileDirection};
   }
-  ${({ $mobileSpacing }) =>
+  ${
     $mobileSpacing &&
     css`
-      @media screen and (max-width: ${BREAKPOINTS.xs.max}px) {
+      @media screen and (max-width: ${theme.breakpoints.xs.max}px) {
         gap: ${$mobileSpacing};
       }
-    `}
-`;
+    `
+  }
+`
+);
 
 export const Grid: React.FunctionComponent<
   GridProps & React.HTMLAttributes<HTMLDivElement>

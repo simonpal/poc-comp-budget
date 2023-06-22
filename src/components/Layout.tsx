@@ -11,7 +11,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserImage } from './UserImage';
 import { useCookie, useIsLoggedInUser } from '../utils/customHooks';
 import { useEffect } from 'react';
-import { BREAKPOINTS } from '../theme';
 import { DropMenuButton } from './DropMenuButton';
 import { ToggleSwitch } from './ToggleSwitch';
 import { Label } from './FormControl/Label';
