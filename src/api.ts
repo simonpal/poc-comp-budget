@@ -1,5 +1,5 @@
 import toast from 'react-hot-toast';
-import { categories, myExpenses, users } from './mockData';
+import { categories, myExpenses } from './mockData';
 import {
   Budget,
   Category,
@@ -162,7 +162,7 @@ export const useCreateCategory = (mutationOptions?: any) => {
   const queryClient = useQueryClient();
   const mutation = useMutation(
     (categoryName: string) =>
-      apiFetch<Category>(`${categoryUrl}`, {
+      apiFetch<Category>(`${adminUrl}/categories`, {
         method: 'POST',
         body: JSON.stringify({ name: categoryName }),
       }),
@@ -225,13 +225,13 @@ export const useCreateExpense = (
   } = useAdminContext();
   const mutation = useMutation(
     (expense: NewExpense) =>
-      apiFetch<NewExpense>(`${expensesUrl}`, {
+      apiFetch<NewExpense>(`${adminUrl}/expenses`, {
         method: mapCreateOrUpdate(reqType),
         body: JSON.stringify(expense),
       }),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['expenses', user?.id]);
+        queryClient.invalidateQueries(['expenses', user?.userId]);
         toast.success(`${reqType} ran successfully!`);
       },
       onError(error) {
@@ -268,32 +268,32 @@ export const useCreateExpense = (
   End - Real api
 */
 
-export const getUser = (id: string): Promise<User> =>
-  new Promise((resolve, reject) => {
-    const user = users.find((u) => u.id === id);
+// export const getUser = (id: string): Promise<User> =>
+//   new Promise((resolve, reject) => {
+//     const user = users.find((u) => u.id === id);
 
-    if (!user) {
-      return setTimeout(() => reject(new Error('User not found')), 250);
-    }
+//     if (!user) {
+//       return setTimeout(() => reject(new Error('User not found')), 250);
+//     }
 
-    setTimeout(() => resolve(user), 500);
-  });
+//     setTimeout(() => resolve(user), 500);
+//   });
 
-export const getAllUsers = (): Promise<User[]> =>
-  new Promise((resolve, _) => {
-    setTimeout(() => resolve(users), 500);
-  });
+// export const getAllUsers = (): Promise<User[]> =>
+//   new Promise((resolve, _) => {
+//     setTimeout(() => resolve(users), 500);
+//   });
 
-export const getExpenses = (id: string): Promise<Expense[]> =>
-  new Promise((resolve, reject) => {
-    const expenses = myExpenses.filter((u) => u.userId === id);
+// export const getExpenses = (id: string): Promise<Expense[]> =>
+//   new Promise((resolve, reject) => {
+//     const expenses = myExpenses.filter((u) => u.userId === id);
 
-    if (!expenses) {
-      return setTimeout(() => reject(new Error('User not found')), 250);
-    }
+//     if (!expenses) {
+//       return setTimeout(() => reject(new Error('User not found')), 250);
+//     }
 
-    setTimeout(() => resolve(expenses), 500);
-  });
+//     setTimeout(() => resolve(expenses), 500);
+//   });
 
 export const getAllExpenses = (): Promise<Expense[]> =>
   new Promise((resolve, _) => {

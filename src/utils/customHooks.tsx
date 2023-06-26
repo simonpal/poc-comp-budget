@@ -9,6 +9,7 @@ import {
 import { Theme, darkTheme, theme as lightTheme } from '../theme';
 import { TOKEN_COOKIE } from './constants';
 import { CookieOptions } from '../types';
+import { useLocation, useParams } from 'react-router-dom';
 
 export const useIsLoggedInUser = () => {
   const [item] = useCookie(TOKEN_COOKIE, '');
@@ -191,4 +192,22 @@ export const useCookie = (
   };
 
   return [item, updateItem];
+};
+
+export const useCurrentPath = () => {
+  const location = useLocation();
+  const params = useParams();
+  const { pathname } = location;
+
+  if (!Object.keys(params).length) {
+    return pathname; // we don't need to replace anything
+  }
+
+  let path = pathname;
+  Object.entries(params).forEach(([paramName, paramValue]) => {
+    if (paramValue) {
+      path = path.replace(paramValue, `:${paramName}`);
+    }
+  });
+  return path;
 };

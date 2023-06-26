@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { User } from '../types';
-import { UserImage } from './UserImage';
+// import { UserImage } from './UserImage';
 import { Divider } from './Divider';
 import { Grid } from './Grid';
 import { Column } from './Column';
@@ -10,6 +10,7 @@ import {
   AdminContextActionTypes,
   useAdminContext,
 } from './AdminComponents/AdminContext';
+import { useGetBudgets } from '../api';
 
 const StyledCard = styled.div`
   padding: 1rem;
@@ -28,28 +29,29 @@ type UserCardProps = {
 
 export const UserCard: React.FunctionComponent<UserCardProps> = ({ user }) => {
   const { dispatch } = useAdminContext();
+  const { budget } = useGetBudgets(user.userId);
   return (
     <StyledCard>
       <h3>Current user</h3>
       <Divider spacing="2xs" color="transparent" />
       <h4>
         <span>
-          {user.name} ({user.id})
+          {user.name} ({user.userId})
         </span>
-        <UserImage size={50} url={user.image} alt={user.name} />
+        {/* <UserImage size={50} url={user.image} alt={user.name} /> */}
       </h4>
       <Divider spacing="xs" />
       <Grid spacing="m">
         <Column lg="6" md="6" sm="6" xs="6">
           <div>
             <ValueHeader>Time balance</ValueHeader>
-            <strong>{user.currentTimeBalance}</strong>
+            <strong>{budget?.currentTimeBalance}</strong>
           </div>
         </Column>
         <Column lg="6" md="6" sm="6" xs="6">
           <div>
             <ValueHeader>Total money balance</ValueHeader>
-            <strong>{user.currentMoneyBalance}</strong>
+            <strong>{budget?.currentMoneyBalance}</strong>
           </div>
         </Column>
       </Grid>
@@ -58,7 +60,7 @@ export const UserCard: React.FunctionComponent<UserCardProps> = ({ user }) => {
         <Column lg="6" md="6" sm="6" xs="6">
           <div>
             <ValueHeader>Hardware balance</ValueHeader>
-            <strong>{user.currentHardwareBalance}</strong>
+            <strong>{budget?.currentHardwareBalance}</strong>
           </div>
         </Column>
         <Column lg="6" md="6" sm="6" xs="6">

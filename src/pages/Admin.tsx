@@ -12,7 +12,7 @@ import { Grid } from '../components/Grid';
 // import { users } from '../mockData';
 import { UserCard } from '../components/UserCard';
 import { Modal } from '../components/Modal';
-import { useGetExpenses, useGetUsers } from '../api';
+import { useGetBudgets, useGetExpenses, useGetUsers } from '../api';
 import { UserProfile } from '../components/UserProfile';
 import { Button } from '../components/Button';
 import { useNavigate } from 'react-router-dom';
@@ -49,7 +49,10 @@ const Admin = () => {
     isError: errorFetchingUsers,
   } = useGetUsers();
 
-  const { expenses } = useGetExpenses(user?.id || '', {
+  const { expenses } = useGetExpenses(user?.userId || '', {
+    enabled: typeof user !== 'undefined',
+  });
+  const { budget } = useGetBudgets(user?.userId || '', {
     enabled: typeof user !== 'undefined',
   });
 
@@ -62,7 +65,7 @@ const Admin = () => {
   const switchUser = useCallback(
     (id: string) => {
       if (users && Array.isArray(users)) {
-        const selectedUser = users.find((u) => u.id === id);
+        const selectedUser = users.find((u) => u.userId === id);
         if (selectedUser) {
           dispatch({
             type: AdminContextActionTypes.SetUser,
@@ -99,7 +102,7 @@ const Admin = () => {
               fullWidth
               label="Select user"
               data={users.map((user) => ({
-                id: user.id,
+                id: user.userId,
                 title: user.name,
               }))}
               handleChange={(val) => switchUser(val?.id || '')}
@@ -146,7 +149,7 @@ const Admin = () => {
       {user ? (
         <Tabs spaceEvenly>
           <TabItem eventKey="expense" title="Add expense">
-            <AddExpense />
+            <AddExpense reqType="create" />
           </TabItem>
           <TabItem eventKey="updateuser" title="Update user">
             <UpdateUser />
@@ -167,7 +170,13 @@ const Admin = () => {
         }
         visible={showUserModal}
       >
-        <UserProfile user={user} expenses={userExpenses || []} />
+        {user && budget && (
+          <UserProfile
+            budget={budget}
+            user={user}
+            expenses={userExpenses || []}
+          />
+        )}
       </Modal>
     </div>
   );

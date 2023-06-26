@@ -84,17 +84,18 @@ export type FlexGrow = '1' | '0';
 
 export type User = {
   name: string;
-  id: string;
-  start: string;
-  image: string;
-  openingBalanceMoney: number;
-  openingBalanceTime: number;
-  yearlyRefill: number;
-  comment: string;
-  hardwareBudget: number;
-  currentMoneyBalance: number;
-  currentTimeBalance: number;
-  currentHardwareBalance: number;
+  userId: string;
+  email: string;
+  // start: string;
+  // image: string;
+  // openingBalanceMoney: number;
+  // openingBalanceTime: number;
+  // yearlyRefill: number;
+  // comment: string;
+  // hardwareBudget: number;
+  // currentMoneyBalance: number;
+  // currentTimeBalance: number;
+  // currentHardwareBalance: number;
 };
 export type Budget = {
   name: string;

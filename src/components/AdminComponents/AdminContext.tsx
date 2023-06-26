@@ -5,12 +5,14 @@ export enum AdminContextActionTypes {
   SetUser = 'SET_USER',
   SetUserExpenses = 'SET_USER_EXPENSES',
   ToggleUserModal = 'TOGGLE_USER_MODAL',
+  SetSelectedExpense = 'SET_SELECTED_EXPENSE',
 }
 
 type AdminContextPayload = {
   [AdminContextActionTypes.ToggleUserModal]: boolean;
   [AdminContextActionTypes.SetUser]: User;
   [AdminContextActionTypes.SetUserExpenses]: Expense[];
+  [AdminContextActionTypes.SetSelectedExpense]: Expense | undefined;
   // [Types.Delete]: {
   //   id: number;
   // }
@@ -37,6 +39,8 @@ const reducer = (state: AdminContext, action: AdminContextActions) => {
       return { ...state, showUserModal: action.payload };
     case AdminContextActionTypes.SetUserExpenses:
       return { ...state, userExpenses: action.payload };
+    case AdminContextActionTypes.SetSelectedExpense:
+      return { ...state, selectedExpense: action.payload };
     default:
       return state;
   }
@@ -46,6 +50,7 @@ interface AdminContext {
   user: User | undefined;
   showUserModal: boolean;
   userExpenses: Expense[] | undefined;
+  selectedExpense: Expense | undefined;
 }
 
 const AdminContext = createContext<{
@@ -56,6 +61,7 @@ const AdminContext = createContext<{
     user: undefined,
     userExpenses: undefined,
     showUserModal: false,
+    selectedExpense: undefined,
   },
   dispatch: () => null,
 });
@@ -68,6 +74,7 @@ export const AdminContextProvider: React.FC<Props> = ({ children }) => {
     user: undefined,
     userExpenses: undefined,
     showUserModal: false,
+    selectedExpense: undefined,
   });
 
   return (

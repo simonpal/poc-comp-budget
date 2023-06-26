@@ -13,6 +13,7 @@ import { Button } from '../Button';
 import styled from 'styled-components';
 import { useAdminContext } from './AdminContext';
 import { Textarea } from '../Textarea';
+import { useGetBudgets } from '../../api';
 
 const UpdateUserWrapper = styled.div`
   h4 {
@@ -30,13 +31,17 @@ export const UpdateUser = () => {
     state: { user },
   } = useAdminContext();
 
+  const { budget } = useGetBudgets(user?.userId ?? '', {
+    enabled: typeof user !== 'undefined',
+  });
+
   const [startDate, setStartDate] = useState(
-    user?.start ? new Date(user.start) : new Date()
+    budget?.start ? new Date(budget.start) : new Date()
   );
 
   useEffect(() => {
-    setStartDate(user?.start ? new Date(user.start) : new Date());
-  }, [user]);
+    setStartDate(budget?.start ? new Date(budget.start) : new Date());
+  }, [budget]);
 
   return (
     <UpdateUserWrapper>
@@ -67,7 +72,7 @@ export const UpdateUser = () => {
                 name="hardwareBudget"
                 type="number"
                 disabled={!user}
-                defaultValue={user?.hardwareBudget || 0}
+                defaultValue={budget?.hardwareBudget || 0}
               />
             </Column>
           </Grid>
@@ -80,7 +85,7 @@ export const UpdateUser = () => {
                 name="openingBalanceMoney"
                 type="number"
                 disabled={!user}
-                defaultValue={user?.openingBalanceMoney || 0}
+                defaultValue={budget?.openingBalanceMoney || 0}
               />
             </Column>
             <Column lg="6" md="6" sm="6" xs="12">
@@ -90,7 +95,7 @@ export const UpdateUser = () => {
                 name="openingBalanceTime"
                 type="number"
                 disabled={!user}
-                defaultValue={user?.openingBalanceTime || 0}
+                defaultValue={budget?.openingBalanceTime || 0}
               />
             </Column>
           </Grid>
@@ -100,7 +105,7 @@ export const UpdateUser = () => {
             name="yearlyRefill"
             type="number"
             disabled={!user}
-            defaultValue={user?.yearlyRefill || 0}
+            defaultValue={budget?.yearlyRefill || 0}
             fullWidth
           />
           <Divider spacing="m" />
@@ -108,7 +113,7 @@ export const UpdateUser = () => {
             <Label>Comment</Label>
             <Textarea
               name="comment"
-              defaultValue={user?.comment}
+              defaultValue={budget?.comment}
               disabled={!user}
             ></Textarea>
           </FormControl>

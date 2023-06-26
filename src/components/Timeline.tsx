@@ -10,6 +10,16 @@ import { getExpenseType } from '../utils/helpers';
 import { useMemo, useState } from 'react';
 import { Button } from './Button';
 import { InlineStack } from './InlineStack';
+import { useUserContext } from '../utils/UserContext';
+import { PenIcon } from './Icons/PenIcon';
+import { DeleteIcon } from './Icons/DeleteIcon';
+import {
+  AdminContextActionTypes,
+  useAdminContext,
+} from './AdminComponents/AdminContext';
+import { useCurrentPath } from '../utils/customHooks';
+import { useNavigate } from 'react-router-dom';
+import format from 'date-fns/format';
 
 const TimelineWrapper = styled.div`
   border-left: ${({ theme }) => `1px solid ${theme.colors.silver}`};
@@ -58,6 +68,14 @@ const ExpenseContent = styled.div`
   }
 `;
 
+const ExpenseButtons = styled.div`
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  display: flex;
+  gap: 1rem;
+`;
+
 const Sum = styled.span`
   font-size: 2rem;
   font-weight: bold;
@@ -89,12 +107,37 @@ export const Timeline: React.FunctionComponent<TimelineProps> = ({
     new Date().getFullYear()
   );
   const sortedExpenses = expenses.sort(sortByDate);
+
+  const {
+    state: { isAdmin },
+  } = useUserContext();
+
+  const { dispatch } = useAdminContext();
+
+  const navigate = useNavigate();
+
+  const path = useCurrentPath();
+  console.log({ path });
+
   const allYears: number[] = useMemo(() => {
     return sortedExpenses.reduce((acc: number[], curr: Expense) => {
       const year = new Date(curr.date).getFullYear();
       return [...new Set([...acc, year])];
     }, []);
   }, [sortedExpenses]);
+
+  const editExpense = (exp: Expense) => {
+    dispatch({
+      type: AdminContextActionTypes.SetSelectedExpense,
+      payload: exp,
+    });
+    dispatch({
+      type: AdminContextActionTypes.ToggleUserModal,
+      payload: false,
+    });
+
+    navigate('editexpense');
+  };
 
   const filteredExpenses = useMemo(() => {
     return sortedExpenses.filter(
@@ -125,7 +168,7 @@ export const Timeline: React.FunctionComponent<TimelineProps> = ({
               <Grid spacing="l">
                 <Column lg="9" md="9" sm="9" xs="12">
                   <div>
-                    <strong>{exp.date}</strong>
+                    <strong>{format(new Date(exp.date), 'yyyy-MM-dd')}</strong>
                   </div>
                   <Divider spacing="s" color="transparent" />
                   <div>
@@ -147,6 +190,20 @@ export const Timeline: React.FunctionComponent<TimelineProps> = ({
                   </Sum>
                 </Column>
               </Grid>
+              {isAdmin && path.includes('admin') && (
+                <ExpenseButtons>
+                  <Button
+                    priority="outline"
+                    iconOnly
+                    onClick={() => editExpense(exp)}
+                  >
+                    <PenIcon />
+                  </Button>
+                  <Button priority="outline" iconOnly>
+                    <DeleteIcon />
+                  </Button>
+                </ExpenseButtons>
+              )}
             </ExpenseContent>
           </ExpenseWrapper>
         ))}

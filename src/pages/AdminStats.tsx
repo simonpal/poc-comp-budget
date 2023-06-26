@@ -1,7 +1,7 @@
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { Divider } from '../components/Divider';
 import { Category, Expense, User } from '../types';
-import { getAllExpenses, getAllUsers, getCategories } from '../api';
+import { getAllExpenses, getCategories, useGetUsers } from '../api';
 // import { Bar } from 'react-chartjs-2';
 // import {
 //   Chart as ChartJS,
@@ -62,7 +62,9 @@ const options = {
 const AdminStats = () => {
   const [categories, setCategories] = useState<Category[] | undefined>();
   const [allExpenses, setAllExpenses] = useState<Expense[] | undefined>();
-  const [allUsers, setAllUsers] = useState<User[] | undefined>();
+  // const [allUsers, setAllUsers] = useState<User[] | undefined>();
+
+  const { users: allUsers } = useGetUsers();
 
   const theme = useTheme() as Theme;
 
@@ -81,7 +83,7 @@ const AdminStats = () => {
 
   const getAverageValue = useCallback(
     (expenseArr: Expense[]) => {
-      const noUsers = allUsers?.length || 0;
+      const noUsers = Array.isArray(allUsers) ? allUsers?.length : 0;
       const totalValue = expenseArr?.reduce((acc, curr) => {
         return (acc += curr.sum);
       }, 0);
@@ -156,11 +158,11 @@ const AdminStats = () => {
     }
   }, [allExpenses]);
 
-  useEffect(() => {
-    if (!allUsers) {
-      getAllUsers().then(setAllUsers).catch(console.error);
-    }
-  }, [allUsers]);
+  // useEffect(() => {
+  //   if (!allUsers) {
+  //     getAllUsers().then(setAllUsers).catch(console.error);
+  //   }
+  // }, [allUsers]);
   return (
     <div>
       <StatsTitle>

@@ -13,6 +13,7 @@ import AdminStats from './pages/AdminStats';
 import { Toaster } from 'react-hot-toast';
 import { darkTheme, theme } from './theme';
 import { useUserContext } from './utils/UserContext';
+import EditExpense from './pages/EditExpense';
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,16 @@ const router = createBrowserRouter([
       <AdminContextProvider>
         <Layout>
           <Admin />
+        </Layout>
+      </AdminContextProvider>
+    ),
+  },
+  {
+    path: 'admin/editexpense',
+    element: (
+      <AdminContextProvider>
+        <Layout>
+          <EditExpense />
         </Layout>
       </AdminContextProvider>
     ),

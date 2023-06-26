@@ -5,7 +5,7 @@ import { Grid } from '../Grid';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.min.css';
 import { Select } from '../Select';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Divider } from '../Divider';
 import { TextField } from '../Textfield';
 import { ToggleSwitch } from '../ToggleSwitch';
@@ -15,6 +15,7 @@ import { DatepickerWrapper } from '../DatepickerWrapper';
 import { useAdminContext } from './AdminContext';
 import {
   useCreateCategory,
+  useCreateExpense,
   // useCreateExpense,
   useGetCategories,
 } from '../../api';
@@ -22,36 +23,87 @@ import { Spinner } from '../Spinner';
 import { Modal } from '../Modal';
 import { ComboBox } from '../ComboBox';
 import { Textarea } from '../Textarea';
-import { NewExpense } from '../../types';
+import { CreateUpdateDeleteType, Expense, NewExpense } from '../../types';
+import toast from 'react-hot-toast';
+import { useQueryClient } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 // import toast from 'react-hot-toast';
 
 const expenseTypes = ['time', 'money'];
 
-export const AddExpense = () => {
+type AddExpenseType = {
+  reqType: CreateUpdateDeleteType;
+  expense?: Expense;
+};
+
+export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
+  reqType,
+  expense,
+}) => {
   const {
     state: { user },
+    // dispatch,
   } = useAdminContext();
-  const [expenseDate, setExpenseDate] = useState(new Date());
-  const [isHardware, setIsHardware] = useState(false);
-  const [expenseType, setExpenseType] = useState<string | undefined>();
-  // const [categories, setCategories] = useState<Category[]>();
+  const [expenseDate, setExpenseDate] = useState(
+    expense?.date ? new Date(expense.date) : new Date()
+  );
+  const [isHardware, setIsHardware] = useState(expense?.isHardware ?? false);
+  const [expenseType, setExpenseType] = useState<string | undefined>(
+    expense?.type ?? undefined
+  );
   const [showAddCategory, setShowAddCategory] = useState(false);
 
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { categories } = useGetCategories();
   const { mutate: addCategory } = useCreateCategory();
   const onHardwarechange = (val: boolean) => setIsHardware(val);
 
+  const { mutate: createExpense } = useCreateExpense(reqType, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['expenses', user?.userId]);
+      toast.success(`${reqType} ran successfully!`);
+      reqType === 'update' ? postUpdateForm() : postCreateForm();
+    },
+  });
+
+  // const clearForm = () => {
+  //   setExpenseDate(new Date());
+  //   setIsHardware(false);
+  //   setExpenseType(undefined);
+  //   dispatch({
+  //     type: AdminContextActionTypes.SetSelectedExpense,
+  //     payload: undefined,
+  //   });
+  // };
+
   // const { mutate: createExpense } = useCreateExpense('create');
+
+  const postCreateForm = () => {
+    if (formRef?.current) {
+      formRef.current.reset();
+      setExpenseDate(new Date());
+      setIsHardware(false);
+      setExpenseType(undefined);
+    }
+  };
+
+  const postUpdateForm = () => {
+    navigate('/admin');
+  };
 
   interface formDataType {
     [key: string]: FormDataEntryValue;
   }
-  let responseBody: NewExpense;
+  const responseBody: NewExpense = {};
 
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     formData.forEach((value, property: string) => {
+      console.log(value, property);
       let _value = value;
       if (typeof value !== 'undefined') {
         if (value === 'on') {
@@ -64,7 +116,7 @@ export const AddExpense = () => {
     });
 
     console.log(responseBody);
-    // createExpense(responseBody);
+    createExpense(responseBody);
   };
 
   const onSubmitCategoryHandler = (event: React.FormEvent<HTMLFormElement>) => {
@@ -78,13 +130,30 @@ export const AddExpense = () => {
     addCategory(postBody.categoryName as string);
     setShowAddCategory(false);
   };
+  // useEffect(() => {
+  //   if (expense) {
+  //     setExpenseDate(new Date(selectedExpense.date));
+  //     setIsHardware(selectedExpense.isHardware);
+  //     setExpenseType(selectedExpense.type);
+  //   }
+  // }, [expense]);
 
   return (
     <div>
-      <h2>Add expense</h2>
+      <h2>{reqType === 'update' ? 'Update' : 'Add'} expense</h2>
+      {/* <Grid spacing="s">
+        <Column lg="9" md="9" sm="9" xs="9">
+        </Column>
+        <Column lg="3" md="3" sm="3" xs="3">
+          <Button priority="outline" onClick={() => clearForm()}>
+            Clear form
+          </Button>
+        </Column>
+      </Grid> */}
       <Divider spacing="m" color="transparent" />
-      <form onSubmit={onSubmitHandler}>
-        <input type="hidden" name="userId" value={user?.id} />
+      <form onSubmit={onSubmitHandler} ref={formRef}>
+        <input type="hidden" name="userId" value={user?.userId} />
+        {expense && <input type="hidden" name="id" value={expense?.id} />}
         {/* <input
           type="hidden"
           name="expenseDate"
@@ -112,6 +181,7 @@ export const AddExpense = () => {
               id="expense-type"
               name="type"
               label="Expsense type"
+              defaultValue={expense?.type}
               disabled={!user}
               onChange={(e) => setExpenseType(e.currentTarget.value)}
             >
@@ -132,11 +202,18 @@ export const AddExpense = () => {
               label="Amount"
               name="sum"
               type="number"
+              defaultValue={expense?.sum}
               disabled={!user}
             />
           </Column>
           <Column lg="6" md="6" sm="6" xs="12">
-            <TextField label="Name" name="name" type="text" disabled={!user} />
+            <TextField
+              label="Name"
+              name="name"
+              type="text"
+              disabled={!user}
+              defaultValue={expense?.name}
+            />
           </Column>
         </Grid>
         <Divider spacing="m" />
@@ -163,6 +240,7 @@ export const AddExpense = () => {
                     fullWidth
                     label="Select category"
                     disabled={!user}
+                    defaultValue={expense?.category}
                     name="category"
                     data={categories.map((cat) => ({
                       id: cat.id,
@@ -198,7 +276,11 @@ export const AddExpense = () => {
         <Divider spacing="m" />
         <FormControl fullWidth>
           <Label>Comment</Label>
-          <Textarea name="comment" disabled={!user}></Textarea>
+          <Textarea
+            name="comment"
+            defaultValue={expense?.comment}
+            disabled={!user}
+          ></Textarea>
         </FormControl>
         <Box topSpacing="l" alignItems="flex-end">
           <Button type="submit" disabled={!user}>

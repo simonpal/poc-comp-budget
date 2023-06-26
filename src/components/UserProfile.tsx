@@ -1,21 +1,23 @@
 import { useTheme } from 'styled-components';
 import { Theme } from '../theme';
-import { Expense, User } from '../types';
+import { Budget, Expense, User } from '../types';
 import { Box } from './Box';
 import { Column } from './Column';
 import { Grid } from './Grid';
 import { ValueHeader } from './ValueHeader';
 import { Divider } from './Divider';
 import { Timeline } from './Timeline';
-import { UserImage } from './UserImage';
+// import { UserImage } from './UserImage';
 import { ValueContent } from './ValueContent';
 
 type UserProfileProps = {
   user?: User;
+  budget: Budget;
   expenses: Expense[];
 };
 export const UserProfile: React.FunctionComponent<UserProfileProps> = ({
   user,
+  budget,
   expenses,
 }) => {
   const theme = useTheme() as Theme;
@@ -23,7 +25,7 @@ export const UserProfile: React.FunctionComponent<UserProfileProps> = ({
   return (
     <div>
       <Box spacing="l" alignItems="center">
-        <UserImage size={100} url={user.image} alt={user.name} />
+        {/* <UserImage size={100} url={user.image} alt={user.name} /> */}
         <Divider spacing="xs" color="transparent" />
         <h3>{user.name}</h3>
       </Box>
@@ -32,19 +34,19 @@ export const UserProfile: React.FunctionComponent<UserProfileProps> = ({
         <Column lg="4" md="4" sm="4" xs="12">
           <Box backgroundColor={theme.colors.silver} spacing="m">
             <ValueHeader>Time balance</ValueHeader>
-            <ValueContent>{user.currentTimeBalance}h</ValueContent>
+            <ValueContent>{budget.currentTimeBalance}h</ValueContent>
           </Box>
         </Column>
         <Column lg="4" md="4" sm="4" xs="12">
           <Box backgroundColor={theme.colors.silver} spacing="m">
             <ValueHeader>Money balance</ValueHeader>
-            <ValueContent>{user.currentMoneyBalance}kr</ValueContent>
+            <ValueContent>{budget.currentMoneyBalance}kr</ValueContent>
           </Box>
         </Column>
         <Column lg="4" md="4" sm="4" xs="12">
           <Box backgroundColor={theme.colors.silver} spacing="m">
             <ValueHeader>Hardware balance</ValueHeader>
-            <ValueContent>{user.currentHardwareBalance}kr</ValueContent>
+            <ValueContent>{budget.currentHardwareBalance}kr</ValueContent>
           </Box>
         </Column>
       </Grid>

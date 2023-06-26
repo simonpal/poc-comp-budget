@@ -100,6 +100,7 @@ type ComboBoxProps = {
   hideLabel?: boolean;
   disabled?: boolean;
   name?: string;
+  defaultValue?: string;
   handleChange: (val: ComboOption | null | undefined) => void;
 };
 
@@ -122,6 +123,7 @@ export const ComboBox: React.FunctionComponent<ComboBoxProps> = ({
   hideLabel = false,
   disabled = false,
   name,
+  defaultValue,
   handleChange,
 }) => {
   const [items, setItems] = React.useState<ComboOption[]>(data);
