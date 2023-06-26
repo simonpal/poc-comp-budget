@@ -130,12 +130,16 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
   }, [cookieSettings]);
 
   const isUserAdmin = useCallback(async () => {
-    checkIsAdmin(token).then((res: boolean) => {
-      dispatch({
-        type: UserContextActionTypes.SetIsAdmin,
-        payload: res,
+    if (token) {
+      checkIsAdmin().then((res: boolean) => {
+        dispatch({
+          type: UserContextActionTypes.SetIsAdmin,
+          payload: res,
+        });
       });
-    });
+    } else {
+      return false;
+    }
   }, [token]);
 
   useEffect(() => {

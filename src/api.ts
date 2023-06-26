@@ -12,10 +12,11 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useAdminContext } from './components/AdminComponents/AdminContext';
 import { getCookie } from './utils/customHooks';
 import { TOKEN_COOKIE } from './utils/constants';
+import { useUserContext } from './utils/UserContext';
 
 // const authenticateUrl = import.meta.env.VITE_GOOGLE_AUTH_URL;
 const baseUrl = import.meta.env.VITE_API_URL;
-// const urlSuffix = './auth/login/google'
+const adminUrl = `${baseUrl}/adm`;
 const userUrl = `${baseUrl}/users`;
 const categoryUrl = `${baseUrl}/categories`;
 const expensesUrl = `${baseUrl}/expenses`;
@@ -71,10 +72,11 @@ export const apiFetch = async <T>(
 /*
   Users
 */
-// export const getApiAllUsers = (id: string) => {
-//   return apiFetch(`${baseUrl}/allUsers`);
-// };
+
 export const useGetUsers = (id?: string) => {
+  const {
+    state: { isAdmin },
+  } = useUserContext();
   const {
     data: users,
     isFetching,
@@ -82,7 +84,10 @@ export const useGetUsers = (id?: string) => {
     isError,
   } = useQuery(
     ['users', id],
-    () => apiFetch<User | User[]>(`${userUrl}${id ? `?id=${id}` : ''}`),
+    () =>
+      apiFetch<User | User[]>(
+        `${isAdmin ? adminUrl : baseUrl}/users${id ? `?id=${id}` : ''}`
+      ),
     {
       staleTime: Infinity,
       onError(error) {
@@ -93,9 +98,7 @@ export const useGetUsers = (id?: string) => {
 
   return { users, isLoading, isFetching, isError };
 };
-// export const getApiUser = (id: string) => {
-//   return apiFetch(`${userUrl}?id=${id}`);
-// };
+
 export const updateApiUser = (user: User) => {
   return apiFetch(`${userUrl}`, {
     method: 'PUT',
@@ -108,17 +111,37 @@ export const getApiIsAdmin = (id: string) => {
 };
 
 /*
+  Budgets
+*/
+
+export const useGetBudgets = (id: string, queryOptions?: any) => {
+  const {
+    state: { isAdmin },
+  } = useUserContext();
+  const {
+    data: budget,
+    isFetching,
+    isLoading,
+    isError,
+  } = useQuery(
+    ['budget', id],
+    () =>
+      apiFetch<User | User[]>(
+        `${isAdmin ? adminUrl : baseUrl}/budgets?userId=${id}`
+      ),
+    {
+      staleTime: Infinity,
+      onError(error) {
+        toast.error(`Could not get user. ${(error as Error)?.message}`);
+      },
+      ...queryOptions,
+    }
+  );
+  return { budget, isLoading, isFetching, isError };
+};
+/*
   Categories
 */
-// export const getApiCategories = (): Category[] => {
-//   return apiFetch(`${categoryUrl}`);
-// };
-// export const addApiCategory = (name: string) => {
-//   return apiFetch(`${categoryUrl}`, {
-//     method: 'POST',
-//     body: JSON.stringify(name),
-//   });
-// };
 
 export const useGetCategories = () => {
   const {
@@ -222,27 +245,25 @@ export const useCreateExpense = (
   );
   return mutation;
 };
-// export const getApiExpenses = () => {
-//   return apiFetch(`${expensesUrl}`);
-// };
-export const addApiExpense = (exp: Expense) => {
-  return apiFetch(`${expensesUrl}`, {
-    method: 'POST',
-    body: JSON.stringify(exp),
-  });
-};
-export const updateApiExpense = (exp: Expense) => {
-  return apiFetch(`${expensesUrl}`, {
-    method: 'PUT',
-    body: JSON.stringify(exp),
-  });
-};
 
-export const deleteApiExpense = (id: string | number) => {
-  return apiFetch(`${expensesUrl}?id=${id}`, {
-    method: 'DELETE',
-  });
-};
+// export const addApiExpense = (exp: Expense) => {
+//   return apiFetch(`${expensesUrl}`, {
+//     method: 'POST',
+//     body: JSON.stringify(exp),
+//   });
+// };
+// export const updateApiExpense = (exp: Expense) => {
+//   return apiFetch(`${expensesUrl}`, {
+//     method: 'PUT',
+//     body: JSON.stringify(exp),
+//   });
+// };
+
+// export const deleteApiExpense = (id: string | number) => {
+//   return apiFetch(`${expensesUrl}?id=${id}`, {
+//     method: 'DELETE',
+//   });
+// };
 
 /*
   End - Real api
@@ -297,16 +318,8 @@ export const getCategories = (): Promise<Category[]> =>
     setTimeout(() => resolve(categories), 500);
   });
 
-export const checkIsAdmin = (token: string): Promise<boolean> =>
-  new Promise((resolve, reject) => {
-    // const expenses = myExpenses.filter((u) => u.userId === id);
-
-    if (!token) {
-      return setTimeout(() => reject(new Error('User not found')), 250);
-    }
-
-    setTimeout(() => resolve(true), 500);
-  });
+export const checkIsAdmin = (): Promise<boolean> =>
+  apiFetch(`${adminUrl}/isAdmin`);
 
 export const getGoogleProfile = (token: string) =>
   fetch(`https://www.googleapis.com/oauth2/v3/userinfo`, {

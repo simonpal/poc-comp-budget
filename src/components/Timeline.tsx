@@ -104,7 +104,7 @@ export const Timeline: React.FunctionComponent<TimelineProps> = ({
 
   return (
     <>
-      <h5>Filter by year</h5>
+      <h5>By year</h5>
       <Divider spacing="2xs" color="transparent" />
       <InlineStack spacing="s">
         {allYears.map((year) => (

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Expense, User } from '../types';
-import { getExpenses, getUser } from '../api';
+import { getExpenses, getUser, useGetBudgets, useGetExpenses } from '../api';
 import { Box } from '../components/Box';
 import { Spinner } from '../components/Spinner';
 import { Grid } from '../components/Grid';
@@ -12,24 +12,38 @@ import { Timeline } from '../components/Timeline';
 import { ValueHeader } from '../components/ValueHeader';
 import { ValueContent } from '../components/ValueContent';
 import { InfoBox } from '../components/InfoBox';
+import { useUserContext } from '../utils/UserContext';
 
 const MyBudget = () => {
   const [currentUser, setCurrentUser] = useState<User | undefined>();
   const [myExpenses, setMyExpenses] = useState<Expense[] | undefined>();
 
+  const {
+    state: { googleUser },
+  } = useUserContext();
+
+  const { budget } = useGetBudgets(googleUser?.sub ?? '', {
+    enabled: typeof googleUser?.sub !== 'undefined',
+  });
+  const { expenses } = useGetExpenses(googleUser?.sub ?? '', {
+    enabled: typeof googleUser?.sub !== 'undefined',
+  });
+  console.log({ budget });
+  console.log({ expenses });
+
   const theme = useTheme() as Theme;
-  useEffect(() => {
-    if (!currentUser) {
-      getUser('1234')
-        .then((data) => setCurrentUser(data))
-        .catch(console.error);
-    }
-    if (!myExpenses) {
-      getExpenses('1234')
-        .then((data) => setMyExpenses(data))
-        .catch(console.error);
-    }
-  }, [currentUser, myExpenses]);
+  // useEffect(() => {
+  //   if (!currentUser) {
+  //     getUser('1234')
+  //       .then((data) => setCurrentUser(data))
+  //       .catch(console.error);
+  //   }
+  //   if (!myExpenses) {
+  //     getExpenses('1234')
+  //       .then((data) => setMyExpenses(data))
+  //       .catch(console.error);
+  //   }
+  // }, [currentUser, myExpenses]);
 
   if (!currentUser || !myExpenses) {
     return (

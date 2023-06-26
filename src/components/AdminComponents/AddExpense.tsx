@@ -84,6 +84,7 @@ export const AddExpense = () => {
       <h2>Add expense</h2>
       <Divider spacing="m" color="transparent" />
       <form onSubmit={onSubmitHandler}>
+        <input type="hidden" name="userId" value={user?.id} />
         {/* <input
           type="hidden"
           name="expenseDate"
