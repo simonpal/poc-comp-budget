@@ -1,4 +1,4 @@
-import { Category, Expense, User } from './types';
+import { Category, Expense } from './types';
 
 // export const users: User[] = [
 //   {

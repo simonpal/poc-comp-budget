@@ -1,6 +1,6 @@
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { Divider } from '../components/Divider';
-import { Category, Expense, User } from '../types';
+import { Category, Expense } from '../types';
 import { getAllExpenses, getCategories, useGetUsers } from '../api';
 // import { Bar } from 'react-chartjs-2';
 // import {

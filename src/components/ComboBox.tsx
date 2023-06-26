@@ -123,7 +123,6 @@ export const ComboBox: React.FunctionComponent<ComboBoxProps> = ({
   hideLabel = false,
   disabled = false,
   name,
-  defaultValue,
   handleChange,
 }) => {
   const [items, setItems] = React.useState<ComboOption[]>(data);

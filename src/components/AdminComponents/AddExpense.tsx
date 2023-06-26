@@ -97,7 +97,7 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
   interface formDataType {
     [key: string]: FormDataEntryValue;
   }
-  const responseBody: NewExpense = {};
+  const responseBody: any = {};
 
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
