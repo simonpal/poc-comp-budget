@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast';
 import { categories, myExpenses, users } from './mockData';
 import {
+  Budget,
   Category,
   CreateUpdateDeleteType,
   Expense,
@@ -126,9 +127,7 @@ export const useGetBudgets = (id: string, queryOptions?: any) => {
   } = useQuery(
     ['budget', id],
     () =>
-      apiFetch<User | User[]>(
-        `${isAdmin ? adminUrl : baseUrl}/budgets?userId=${id}`
-      ),
+      apiFetch<Budget>(`${isAdmin ? adminUrl : baseUrl}/budgets?userId=${id}`),
     {
       staleTime: Infinity,
       onError(error) {

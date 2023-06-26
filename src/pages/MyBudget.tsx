@@ -1,6 +1,4 @@
-import { useEffect, useState } from 'react';
-import { Expense, User } from '../types';
-import { getExpenses, getUser, useGetBudgets, useGetExpenses } from '../api';
+import { useGetBudgets, useGetExpenses } from '../api';
 import { Box } from '../components/Box';
 import { Spinner } from '../components/Spinner';
 import { Grid } from '../components/Grid';
@@ -15,8 +13,8 @@ import { InfoBox } from '../components/InfoBox';
 import { useUserContext } from '../utils/UserContext';
 
 const MyBudget = () => {
-  const [currentUser, setCurrentUser] = useState<User | undefined>();
-  const [myExpenses, setMyExpenses] = useState<Expense[] | undefined>();
+  // const [currentUser, setCurrentUser] = useState<User | undefined>();
+  // const [myExpenses, setMyExpenses] = useState<Expense[] | undefined>();
 
   const {
     state: { googleUser },
@@ -45,7 +43,7 @@ const MyBudget = () => {
   //   }
   // }, [currentUser, myExpenses]);
 
-  if (!currentUser || !myExpenses) {
+  if (!budget || !expenses) {
     return (
       <Box spacing="l" alignItems="center" justifyContent="center">
         <Spinner size="md" />
@@ -64,26 +62,26 @@ const MyBudget = () => {
         <Column lg="4" md="4" sm="4" xs="12">
           <Box backgroundColor={theme.colors.silver} spacing="m">
             <ValueHeader>Time balance</ValueHeader>
-            <ValueContent>{currentUser.currentTimeBalance}h</ValueContent>
+            <ValueContent>{budget?.currentTimeBalance}h</ValueContent>
           </Box>
         </Column>
         <Column lg="4" md="4" sm="4" xs="12">
           <Box backgroundColor={theme.colors.silver} spacing="m">
             <ValueHeader>Money balance</ValueHeader>
-            <ValueContent>{currentUser.currentMoneyBalance}kr</ValueContent>
+            <ValueContent>{budget.currentMoneyBalance}kr</ValueContent>
           </Box>
         </Column>
         <Column lg="4" md="4" sm="4" xs="12">
           <Box backgroundColor={theme.colors.silver} spacing="m">
             <ValueHeader>Hardware balance</ValueHeader>
-            <ValueContent>{currentUser.currentHardwareBalance}kr</ValueContent>
+            <ValueContent>{budget.currentHardwareBalance}kr</ValueContent>
           </Box>
         </Column>
       </Grid>
       <Divider spacing="2xl" />
       <h3>My expenses</h3>
       <Divider spacing="m" />
-      {myExpenses && <Timeline expenses={myExpenses} />}
+      {expenses && <Timeline expenses={expenses} />}
     </div>
   );
 };

@@ -96,6 +96,21 @@ export type User = {
   currentTimeBalance: number;
   currentHardwareBalance: number;
 };
+export type Budget = {
+  name: string;
+  userId: string;
+  id: string;
+  start: string;
+  image: string;
+  openingBalanceMoney: number;
+  openingBalanceTime: number;
+  yearlyRefill: number;
+  comment: string;
+  hardwareBudget: number;
+  currentMoneyBalance: number;
+  currentTimeBalance: number;
+  currentHardwareBalance: number;
+};
 
 export type Expense = {
   id: string;
