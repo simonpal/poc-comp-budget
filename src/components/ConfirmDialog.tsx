@@ -1,10 +1,8 @@
-import { Box } from './Box';
 import { Button } from './Button';
 import { Column } from './Column';
 import { Divider } from './Divider';
 import { Grid } from './Grid';
 import { Modal, ModalProps } from './Modal';
-import { ModalContent } from './ModalContent';
 
 interface ConfirmDialogProps extends ModalProps {
   onConfirm: () => void;

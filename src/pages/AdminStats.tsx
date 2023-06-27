@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import { Suspense, useCallback, useEffect, useMemo } from 'react';
 import { Divider } from '../components/Divider';
 import { Expense } from '../types';
 import { useGetAllExpenses, useGetCategories, useGetUsers } from '../api';
