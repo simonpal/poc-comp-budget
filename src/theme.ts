@@ -36,7 +36,7 @@ export const theme = {
     primaryButtonColor: "#eff2f6",
     pageBg: "#FFF",
     text: "#04060c",
-    silver: "#eff2f6",
+    silver: "rgba(235, 235, 235, 0.5)",
     inputBg: "#fff",
   },
   breakpoints: {
