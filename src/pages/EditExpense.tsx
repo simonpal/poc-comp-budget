@@ -9,11 +9,11 @@ import { ArrowLeftIcon } from "../components/Icons/ArrowLeftIcon";
 
 const EditExpense = () => {
   const {
-    state: { isAdmin }
+    state: { isAdmin },
   } = useUserContext();
 
   const {
-    state: { selectedExpense }
+    state: { selectedExpense },
   } = useAdminContext();
 
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ const EditExpense = () => {
   }, [isAdmin, navigate]);
   return (
     <div>
-      <Button priority="outline" onClick={() => navigate(-1)}>
+      <Button priority="outline" iconLeft onClick={() => navigate(-1)}>
         <ArrowLeftIcon /> Back
       </Button>
       <Divider spacing="s" />

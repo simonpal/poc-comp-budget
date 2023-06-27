@@ -133,12 +133,11 @@ const AdminStats = () => {
 
   return (
     <div>
-      <StatsTitle>
-        <Button priority="secondary" iconOnly onClick={() => navigate(-1)}>
-          <ArrowLeftIcon />
-        </Button>
-        Statistics
-      </StatsTitle>
+      <Button priority="outline" iconLeft onClick={() => navigate(-1)}>
+        <ArrowLeftIcon /> Back
+      </Button>
+      <Divider spacing="s" />
+      <StatsTitle>Statistics</StatsTitle>
       <Divider spacing="l" />
       <h3>Average usage of budget</h3>
       <Divider spacing="s" color="transparent" />

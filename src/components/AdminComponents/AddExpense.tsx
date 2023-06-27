@@ -159,12 +159,13 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
         <Grid spacing="l">
           <Column lg="6" md="6" sm="6" xs="12">
             <FormControl fullWidth>
-              <Label>Date of expense *</Label>
+              <Label htmlFor="date">Date of expense *</Label>
               <DatepickerWrapper>
                 <DatePicker
                   required
                   disabled={!user}
                   selected={expenseDate}
+                  id="date"
                   name="date"
                   dateFormat="yyyy-MM-dd"
                   onChange={(date: Date) => setExpenseDate(date)}
@@ -196,6 +197,7 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
             <TextField
               required
               label="Amount"
+              id="sum"
               name="sum"
               type="number"
               defaultValue={expense?.sum}
@@ -206,6 +208,7 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
             <TextField
               label="Name"
               name="name"
+              id="name"
               type="text"
               disabled={!user}
               defaultValue={expense?.name}
@@ -262,8 +265,9 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
         </Grid>
         <Divider spacing="m" />
         <FormControl fullWidth>
-          <Label>Comment</Label>
+          <Label htmlFor="comment">Comment</Label>
           <Textarea
+            id="comment"
             name="comment"
             defaultValue={expense?.comment}
             disabled={!user}></Textarea>

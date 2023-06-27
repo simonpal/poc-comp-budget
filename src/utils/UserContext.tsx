@@ -130,7 +130,7 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
   }, [cookieSettings]);
 
   const isUserAdmin = useCallback(async () => {
-    if (token) {
+    if (state.googleUser && token) {
       checkIsAdmin().then((res: boolean) => {
         dispatch({
           type: UserContextActionTypes.SetIsAdmin,
@@ -140,7 +140,7 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
     } else {
       return false;
     }
-  }, [token]);
+  }, [token, state.googleUser]);
 
   useEffect(() => {
     isUserAdmin();

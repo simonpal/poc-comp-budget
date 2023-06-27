@@ -83,10 +83,12 @@ export const UpdateUser = () => {
           <Grid spacing="l">
             <Column lg="6" md="6" sm="6" xs="12">
               <FormControl fullWidth>
-                <Label>Start date</Label>
+                <Label htmlFor="start">Start date</Label>
                 <DatepickerWrapper>
                   <DatePicker
                     required
+                    name="start"
+                    id="start"
                     selected={startDate}
                     disabled={!user}
                     dateFormat="yyyy-MM-dd"
@@ -99,6 +101,7 @@ export const UpdateUser = () => {
               <TextField
                 required
                 label="Hardware budget"
+                id="hardwareBudget"
                 name="hardwareBudget"
                 type="number"
                 disabled={!user}
@@ -112,6 +115,7 @@ export const UpdateUser = () => {
               <TextField
                 required
                 label="Opening balance money"
+                id="openingBalanceMoney"
                 name="openingBalanceMoney"
                 type="number"
                 disabled={!user}
@@ -122,6 +126,7 @@ export const UpdateUser = () => {
               <TextField
                 required
                 label="Opening balance time"
+                id="openingBalanceTime"
                 name="openingBalanceTime"
                 type="number"
                 disabled={!user}
@@ -132,6 +137,7 @@ export const UpdateUser = () => {
           <Divider spacing="m" />
           <TextField
             label="Yearly refill"
+            id="yearlyRefill"
             name="yearlyRefill"
             type="number"
             disabled={!user}
@@ -140,8 +146,9 @@ export const UpdateUser = () => {
           />
           <Divider spacing="m" />
           <FormControl fullWidth>
-            <Label>Comment</Label>
+            <Label htmlFor="comment">Comment</Label>
             <Textarea
+              id="comment"
               name="comment"
               defaultValue={budget?.comment}
               disabled={!user}></Textarea>
