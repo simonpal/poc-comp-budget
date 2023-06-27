@@ -16,6 +16,7 @@ import { Textarea } from "../Textarea";
 import { useGetBudgets, useUpdateBudget } from "../../api";
 import { BudgetRequestBody } from "../../types";
 import { Spinner } from "../Spinner";
+import { getFormValue } from "../../utils/helpers";
 
 const UpdateUserWrapper = styled.div`
   h4 {
@@ -52,14 +53,9 @@ export const UpdateUser = () => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     formData.forEach((value, property: string) => {
-      let _value = value;
       if (typeof value !== "undefined") {
-        if (value === "on") {
-          _value = "true";
-        } else if (value === "off") {
-          _value = "false";
-        }
-        responseBody[property as keyof BudgetRequestBody] = _value as never;
+        const newVal = getFormValue(value);
+        responseBody[property as keyof BudgetRequestBody] = newVal as never;
       }
     });
 

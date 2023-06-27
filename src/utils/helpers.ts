@@ -3,6 +3,24 @@ import { Expense } from "../types";
 export const getExpenseType = (exp: Expense): string =>
   exp.isHardware ? "hardware" : exp.type;
 
+const isNumber = (val: unknown) => {
+  const pattern = /^\d+\.?\d*$/;
+  return pattern.test(val as string);
+};
+
+export const getFormValue = (
+  val: FormDataEntryValue
+): string | boolean | number | FormDataEntryValue => {
+  if (isNumber(val)) {
+    return Number(val);
+  } else if (val === "on") {
+    return true;
+  } else if (val === "off") {
+    return false;
+  }
+  return val;
+};
+
 export const barColors = [
   "#FF6633",
   "#FFB399",
@@ -53,7 +71,7 @@ export const barColors = [
   "#4DB380",
   "#FF4D4D",
   "#99E6E6",
-  "#6666FF"
+  "#6666FF",
 ];
 
 export const getErrorMessage = (status: number, text = "") => {

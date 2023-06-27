@@ -1,9 +1,9 @@
-import { useCombobox } from 'downshift';
-import React from 'react';
-import { Label } from './FormControl/Label';
-import { FormControl } from './FormControl/FormControl';
-import styled from 'styled-components';
-import { AngleDownIcon } from './Icons/AngleDownIcon';
+import { useCombobox } from "downshift";
+import React from "react";
+import { Label } from "./FormControl/Label";
+import { FormControl } from "./FormControl/FormControl";
+import styled from "styled-components";
+import { AngleDownIcon } from "./Icons/AngleDownIcon";
 
 const ComboBoxWrapper = styled.div`
   --input-radius: 0;
@@ -122,6 +122,7 @@ export const ComboBox: React.FunctionComponent<ComboBoxProps> = ({
   fullWidth = false,
   hideLabel = false,
   disabled = false,
+  defaultValue,
   name,
   handleChange,
 }) => {
@@ -141,8 +142,9 @@ export const ComboBox: React.FunctionComponent<ComboBoxProps> = ({
       setItems(data.filter(filterOptions(inputValue)));
     },
     items,
+    initialInputValue: defaultValue,
     itemToString(item) {
-      return item ? item.title : '';
+      return item ? item.title : "";
     },
     onSelectedItemChange: ({ selectedItem: newSelectedItem }) =>
       handleChange(newSelectedItem),
@@ -158,7 +160,7 @@ export const ComboBox: React.FunctionComponent<ComboBoxProps> = ({
             )} */}
         </Label>
       )}
-      <ComboBoxWrapper className={`${disabled && 'disabled'}`}>
+      <ComboBoxWrapper className={`${disabled && "disabled"}`}>
         <input
           name={name}
           placeholder={label}
@@ -167,27 +169,24 @@ export const ComboBox: React.FunctionComponent<ComboBoxProps> = ({
         />
         <button
           aria-label="toggle menu"
-          className={`${isOpen && 'open'}`}
+          className={`${isOpen && "open"}`}
           disabled={disabled}
           type="button"
-          {...getToggleButtonProps()}
-        >
+          {...getToggleButtonProps()}>
           <AngleDownIcon />
         </button>
         <ul
-          className={`${!(isOpen && items.length) && 'hidden'}`}
-          {...getMenuProps()}
-        >
+          className={`${!(isOpen && items.length) && "hidden"}`}
+          {...getMenuProps()}>
           {isOpen &&
             items.map((item, index) => (
               <li
                 className={`
-                  ${highlightedIndex === index && 'highlight'}
-                  ${selectedItem === item && 'selected'}
+                  ${highlightedIndex === index && "highlight"}
+                  ${selectedItem === item && "selected"}
                   `}
                 key={`${item.id}${index}`}
-                {...getItemProps({ item, index })}
-              >
+                {...getItemProps({ item, index })}>
                 <span>{item.title}</span>
               </li>
             ))}

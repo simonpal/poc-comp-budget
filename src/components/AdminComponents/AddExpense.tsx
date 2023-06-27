@@ -27,6 +27,7 @@ import { CreateUpdateDeleteType, Expense, NewExpense } from "../../types";
 import toast from "react-hot-toast";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
+import { getFormValue } from "../../utils/helpers";
 // import toast from 'react-hot-toast';
 
 const expenseTypes = ["time", "money"];
@@ -104,14 +105,10 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
     const formData = new FormData(event.currentTarget);
     formData.forEach((value, property: string) => {
       console.log(value, property);
-      let _value = value;
+      // let _value = value;
       if (typeof value !== "undefined") {
-        if (value === "on") {
-          _value = "true";
-        } else if (value === "off") {
-          _value = "false";
-        }
-        responseBody[property as keyof NewExpense] = _value as never;
+        const newVal = getFormValue(value);
+        responseBody[property as keyof NewExpense] = newVal as never;
       }
     });
 
@@ -162,7 +159,7 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
         <Grid spacing="l">
           <Column lg="6" md="6" sm="6" xs="12">
             <FormControl fullWidth>
-              <Label>Date of expense</Label>
+              <Label>Date of expense *</Label>
               <DatepickerWrapper>
                 <DatePicker
                   required
