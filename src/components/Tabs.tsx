@@ -25,6 +25,7 @@ const TabHeaders = styled.ul<StyledTabProps>`
   li {
     background-color: transparent;
     display: inline-flex;
+    position: relative;
     border: ${({ theme }) => `1px solid ${theme.colors.silver}`};
     button,
     span {
@@ -52,6 +53,17 @@ const TabHeaders = styled.ul<StyledTabProps>`
       button {
         color: ${({ theme }) => theme.colors.primaryButtonColor};
         /* text-decoration: underline; */
+      }
+      &:after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 100%;
+        transform: translateX(-50%);
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-top: ${({ theme }) =>
+          `8px solid ${theme.colors.primaryButtonBg}`};
       }
     }
 
@@ -85,7 +97,7 @@ export const Tabs = ({
   onTabChange,
   defaultActiveIndex = 0,
   spaceEvenly = false,
-  className
+  className,
 }: TabProps) => {
   // Dependant on children
 
@@ -106,16 +118,14 @@ export const Tabs = ({
       <TabHeaders
         $spaceEvenly={spaceEvenly}
         className={`base-tabs-headers ${className}`}
-        role="tablist"
-      >
+        role="tablist">
         {children &&
           children.map((child: any, index: number) => (
             <li
               className={`${isActive(index) ? "active" : ""} ${
                 child.props.disabled ? "disabled" : ""
               }`}
-              key={child.props.eventKey}
-            >
+              key={child.props.eventKey}>
               <button
                 disabled={child.props.disabled}
                 aria-selected={isActive(index)}
@@ -123,8 +133,7 @@ export const Tabs = ({
                 id={`${child.props.eventKey}-control`}
                 type="button"
                 role="tab"
-                onClick={() => handleClick(index)}
-              >
+                onClick={() => handleClick(index)}>
                 {child.props.title}
               </button>
               {/* 
@@ -155,7 +164,7 @@ export type TabItemProps = {
 export const TabItem = ({
   children,
   visible = false,
-  eventKey
+  eventKey,
 }: // title,
 TabItemProps) => {
   if (!visible) {
@@ -165,8 +174,7 @@ TabItemProps) => {
     <div
       role="tabpanel"
       id={`${eventKey}-content`}
-      aria-labelledby={`${eventKey}-control`}
-    >
+      aria-labelledby={`${eventKey}-control`}>
       {children}
     </div>
   );
