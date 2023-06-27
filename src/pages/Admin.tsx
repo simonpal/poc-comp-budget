@@ -1,26 +1,26 @@
-import { useCallback, useEffect } from 'react';
-import { TabItem, Tabs } from '../components/Tabs';
-import { AddExpense } from '../components/AdminComponents/AddExpense';
-import { UpdateUser } from '../components/AdminComponents/UpdateUser';
+import { useCallback, useEffect } from "react";
+import { TabItem, Tabs } from "../components/Tabs";
+import { AddExpense } from "../components/AdminComponents/AddExpense";
+import { UpdateUser } from "../components/AdminComponents/UpdateUser";
 import {
   AdminContextActionTypes,
   useAdminContext,
-} from '../components/AdminComponents/AdminContext';
-import { Divider } from '../components/Divider';
-import { Column } from '../components/Column';
-import { Grid } from '../components/Grid';
+} from "../components/AdminComponents/AdminContext";
+import { Divider } from "../components/Divider";
+import { Column } from "../components/Column";
+import { Grid } from "../components/Grid";
 // import { users } from '../mockData';
-import { UserCard } from '../components/UserCard';
-import { Modal } from '../components/Modal';
-import { useGetBudgets, useGetExpenses, useGetUsers } from '../api';
-import { UserProfile } from '../components/UserProfile';
-import { Button } from '../components/Button';
-import { useNavigate } from 'react-router-dom';
-import { useUserContext } from '../utils/UserContext';
-import { ComboBox } from '../components/ComboBox';
-import styled from 'styled-components';
-import { Spinner } from '../components/Spinner';
-import { ErrorBox } from '../components/ErrorBox';
+import { UserCard } from "../components/UserCard";
+import { Modal } from "../components/Modal";
+import { useGetBudgets, useGetExpenses, useGetUsers } from "../api";
+import { UserProfile } from "../components/UserProfile";
+import { Button } from "../components/Button";
+import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../utils/UserContext";
+import { ComboBox } from "../components/ComboBox";
+import styled from "styled-components";
+import { Spinner } from "../components/Spinner";
+import { ErrorBox } from "../components/ErrorBox";
 
 const NoUser = styled.div`
   padding: var(--spacing-xl);
@@ -49,11 +49,11 @@ const Admin = () => {
     isError: errorFetchingUsers,
   } = useGetUsers();
 
-  const { expenses } = useGetExpenses(user?.userId || '', {
-    enabled: typeof user !== 'undefined',
+  const { expenses } = useGetExpenses(user?.userId || "", {
+    enabled: typeof user !== "undefined",
   });
-  const { budget } = useGetBudgets(user?.userId || '', {
-    enabled: typeof user !== 'undefined',
+  const { budget } = useGetBudgets(user?.userId || "", {
+    enabled: typeof user !== "undefined",
   });
 
   // const [showModal, setShowModal] = useState(false);
@@ -88,11 +88,15 @@ const Admin = () => {
 
   useEffect(() => {
     if (!isAdmin) {
-      navigate('/mybudget');
+      navigate("/mybudget");
     }
   }, [isAdmin, navigate]);
   return (
     <div>
+      <Button priority="outline" fullWidth onClick={() => navigate("stats")}>
+        Show statistics
+      </Button>
+      <Divider spacing="l" />
       <Grid spacing="l">
         <Column lg="6" md="6" sm="6" xs="12">
           {loadingUsers && <Spinner size="sm" />}
@@ -105,7 +109,7 @@ const Admin = () => {
                 id: user.userId,
                 title: user.name,
               }))}
-              handleChange={(val) => switchUser(val?.id || '')}
+              handleChange={(val) => switchUser(val?.id || "")}
             />
           )}
           {/* <FormControl fullWidth>
@@ -132,14 +136,6 @@ const Admin = () => {
               </option>
             ))}
           </Select> */}
-          <Divider spacing="l" />
-          <Button
-            priority="outline"
-            fullWidth
-            onClick={() => navigate('stats')}
-          >
-            Show statistics
-          </Button>
         </Column>
         <Column lg="6" md="6" sm="6" xs="12">
           {user && <UserCard user={user} />}
@@ -168,8 +164,7 @@ const Admin = () => {
             payload: false,
           })
         }
-        visible={showUserModal}
-      >
+        visible={showUserModal}>
         {user && budget && (
           <UserProfile
             budget={budget}
