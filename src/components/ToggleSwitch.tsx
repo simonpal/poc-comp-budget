@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const StyledToggleSwitch = styled.div`
-  --switch-color: ${({ theme }) => theme.colors.secondary};
+  --switch-color: ${({ theme }) => theme.colors.primaryButtonBg};
   position: relative;
   margin-right: 10px;
   width: 75px;
@@ -88,6 +88,9 @@ const StyledToggleSwitch = styled.div`
   input[type="checkbox"]:checked + label {
     .toggle-switch-inner {
       margin-left: 0;
+      &:before {
+        color: ${({ theme }) => theme.colors.primaryButtonColor};
+      }
     }
     .toggle-switch-switch {
       right: 0px;
@@ -128,7 +131,7 @@ export const ToggleSwitch = ({
   onChange,
   optionLabels = ["Yes", "No"],
   small,
-  disabled
+  disabled,
 }: ToggleSwitchProps) => {
   const handleKeyPress = (e: React.KeyboardEvent<HTMLLabelElement>) => {
     if (e.code !== "Enter" && e.code !== "Space") return;
@@ -141,24 +144,22 @@ export const ToggleSwitch = ({
     <StyledToggleSwitch
       className={`${small ? " small-switch" : ""}`}
       role="switch"
-      aria-checked={checked}
-    >
+      aria-checked={checked}>
       <input
         type="checkbox"
         name={name}
         className="toggle-switch-checkbox"
         id={id}
         checked={checked}
-        onChange={e => onChange(e.target.checked)}
+        onChange={(e) => onChange(e.target.checked)}
         disabled={disabled}
       />
       {id ? (
         <label
           className="toggle-switch-label"
           tabIndex={disabled ? -1 : 1}
-          onKeyDown={e => handleKeyPress(e)}
-          htmlFor={id}
-        >
+          onKeyDown={(e) => handleKeyPress(e)}
+          htmlFor={id}>
           <span
             className={
               disabled
