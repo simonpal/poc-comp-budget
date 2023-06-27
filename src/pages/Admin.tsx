@@ -21,6 +21,7 @@ import { ComboBox } from "../components/ComboBox";
 import styled from "styled-components";
 import { Spinner } from "../components/Spinner";
 import { ErrorBox } from "../components/ErrorBox";
+import { Box } from "../components/Box";
 
 const NoUser = styled.div`
   padding: var(--spacing-xl);
@@ -93,9 +94,11 @@ const Admin = () => {
   }, [isAdmin, navigate]);
   return (
     <div>
-      <Button priority="outline" fullWidth onClick={() => navigate("stats")}>
-        Show statistics
-      </Button>
+      <Box alignItems="flex-end">
+        <Button priority="outline" fullWidth onClick={() => navigate("stats")}>
+          Show statistics
+        </Button>
+      </Box>
       <Divider spacing="l" />
       <Grid spacing="l">
         <Column lg="6" md="6" sm="6" xs="12">
