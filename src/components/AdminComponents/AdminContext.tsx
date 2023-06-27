@@ -1,11 +1,11 @@
-import React, { createContext, useContext, useReducer } from 'react';
-import { Expense, User } from '../../types';
+import React, { createContext, useContext, useReducer } from "react";
+import { Expense, User } from "../../types";
 
 export enum AdminContextActionTypes {
-  SetUser = 'SET_USER',
-  SetUserExpenses = 'SET_USER_EXPENSES',
-  ToggleUserModal = 'TOGGLE_USER_MODAL',
-  SetSelectedExpense = 'SET_SELECTED_EXPENSE',
+  SetUser = "SET_USER",
+  SetUserExpenses = "SET_USER_EXPENSES",
+  ToggleUserModal = "TOGGLE_USER_MODAL",
+  SetSelectedExpense = "SET_SELECTED_EXPENSE"
 }
 
 type AdminContextPayload = {
@@ -28,8 +28,9 @@ type ActionMap<M extends { [index: string]: any }> = {
       };
 };
 
-export type AdminContextActions =
-  ActionMap<AdminContextPayload>[keyof ActionMap<AdminContextPayload>];
+export type AdminContextActions = ActionMap<
+  AdminContextPayload
+>[keyof ActionMap<AdminContextPayload>];
 
 const reducer = (state: AdminContext, action: AdminContextActions) => {
   switch (action.type) {
@@ -61,9 +62,9 @@ const AdminContext = createContext<{
     user: undefined,
     userExpenses: undefined,
     showUserModal: false,
-    selectedExpense: undefined,
+    selectedExpense: undefined
   },
-  dispatch: () => null,
+  dispatch: () => null
 });
 
 interface Props {
@@ -74,7 +75,7 @@ export const AdminContextProvider: React.FC<Props> = ({ children }) => {
     user: undefined,
     userExpenses: undefined,
     showUserModal: false,
-    selectedExpense: undefined,
+    selectedExpense: undefined
   });
 
   return (

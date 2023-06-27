@@ -1,8 +1,8 @@
-import React, { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
-import styled from 'styled-components';
+import React, { forwardRef, useEffect, useMemo, useRef, useState } from "react";
+import styled from "styled-components";
 
-import { FormControl } from './FormControl/FormControl';
-import { Label } from './FormControl/Label';
+import { FormControl } from "./FormControl/FormControl";
+import { Label } from "./FormControl/Label";
 
 const StyledInput = styled.input`
   --input-radius: 0;
@@ -61,14 +61,14 @@ const HidePasswordIcon = () => (
 );
 
 type InputType =
-  | 'text'
-  | 'number'
-  | 'email'
-  | 'password'
-  | 'date'
-  | 'datetime-local'
-  | 'time'
-  | 'tel';
+  | "text"
+  | "number"
+  | "email"
+  | "password"
+  | "date"
+  | "datetime-local"
+  | "time"
+  | "tel";
 export type TextfieldProps = {
   label: string;
   hideLabel?: boolean;
@@ -96,17 +96,17 @@ export const TextField = forwardRef<
     {
       label,
       hideLabel = false,
-      error = '',
+      error = "",
       fullWidth = false,
       // multiline = false,
       id,
-      type = 'text',
+      type = "text",
       className,
       onChange,
       required = false,
-      requiredText = '*',
+      requiredText = "*",
       disabled = false,
-      placeholder = '',
+      placeholder = "",
       value,
       icon,
       iconLeft = true,
@@ -125,9 +125,9 @@ export const TextField = forwardRef<
     const inputRef = useRef<HTMLInputElement>(null);
 
     const iconPosition = useMemo(() => {
-      let pos = iconLeft ? 'left' : 'right';
-      if (type === 'password') {
-        pos = 'right';
+      let pos = iconLeft ? "left" : "right";
+      if (type === "password") {
+        pos = "right";
       }
       return pos;
     }, [type, iconLeft]);
@@ -142,8 +142,8 @@ export const TextField = forwardRef<
     if (value) valueProp = { value };
 
     useEffect(() => {
-      if (type === 'password') {
-        _setType(showAsText ? 'text' : 'password');
+      if (type === "password") {
+        _setType(showAsText ? "text" : "password");
         if (inputRef.current) inputRef.current.focus();
       }
     }, [showAsText, type]);
@@ -152,7 +152,7 @@ export const TextField = forwardRef<
       <FormControl
         fullWidth={fullWidth}
         className={`${
-          icon || type === 'password' ? `icon-position-${iconPosition}` : ''
+          icon || type === "password" ? `icon-position-${iconPosition}` : ""
         }`}
       >
         {!hideLabel && (
@@ -164,9 +164,9 @@ export const TextField = forwardRef<
           </Label>
         )}
         <StyledInput
-          className={`${error ? 'has-error' : ''} ${
-            isDirty ? 'is-dirty' : ''
-          } ${className ? className : ''}`}
+          className={`${error ? "has-error" : ""} ${
+            isDirty ? "is-dirty" : ""
+          } ${className ? className : ""}`}
           ref={ref || inputRef}
           type={_type}
           id={id}
@@ -181,7 +181,7 @@ export const TextField = forwardRef<
           {...valueProp}
           {...rest}
         />
-        {type === 'password' && (
+        {type === "password" && (
           <div
             className="input-icon clickable"
             onClick={() => setShowAsText(!showAsText)}
@@ -190,11 +190,11 @@ export const TextField = forwardRef<
             {showAsText ? <HidePasswordIcon /> : <ShowPasswordIcon />}
           </div>
         )}
-        {icon && error.length === 0 && type !== 'password' && (
+        {icon && error.length === 0 && type !== "password" && (
           <div className={`input-icon`}>{icon}</div>
         )}
         {error && error.length > 0 && (
-          <div className={`base-form-input-error ${errorBox ? 'fill' : ''}`}>
+          <div className={`base-form-input-error ${errorBox ? "fill" : ""}`}>
             {error}
           </div>
         )}

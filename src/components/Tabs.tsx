@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import styled, { css } from 'styled-components';
+import React, { useState } from "react";
+import styled, { css } from "styled-components";
 // import TabItem from '../TabItem';
 
 const TabHeaders = styled.ul<StyledTabProps>`
@@ -85,7 +85,7 @@ export const Tabs = ({
   onTabChange,
   defaultActiveIndex = 0,
   spaceEvenly = false,
-  className,
+  className
 }: TabProps) => {
   // Dependant on children
 
@@ -95,7 +95,7 @@ export const Tabs = ({
 
   const handleClick = (idx: number) => {
     setActiveTab(idx);
-    if (typeof onTabChange === 'function') {
+    if (typeof onTabChange === "function") {
       onTabChange(idx);
     }
   };
@@ -111,8 +111,8 @@ export const Tabs = ({
         {children &&
           children.map((child: any, index: number) => (
             <li
-              className={`${isActive(index) ? 'active' : ''} ${
-                child.props.disabled ? 'disabled' : ''
+              className={`${isActive(index) ? "active" : ""} ${
+                child.props.disabled ? "disabled" : ""
               }`}
               key={child.props.eventKey}
             >
@@ -155,7 +155,7 @@ export type TabItemProps = {
 export const TabItem = ({
   children,
   visible = false,
-  eventKey,
+  eventKey
 }: // title,
 TabItemProps) => {
   if (!visible) {

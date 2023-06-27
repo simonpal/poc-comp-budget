@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const ValueHeader = styled.div`
   font-size: 0.75rem;

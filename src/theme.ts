@@ -24,24 +24,24 @@ const BREAKPOINTS: Breakpoints = {
   xs: { min: 0, max: 600 },
   sm: { min: 601, max: 960 },
   md: { min: 961, max: 1280 },
-  lg: { min: 1281 },
+  lg: { min: 1281 }
 };
 
 export const theme = {
   isDark: false,
   colors: {
-    primary: '#1d2e8c',
-    secondary: '#04C866',
-    primaryButtonBg: '#04060c',
-    primaryButtonColor: '#eff2f6',
-    pageBg: '#FFF',
-    text: '#04060c',
-    silver: '#eff2f6',
-    inputBg: '#fff',
+    primary: "#1d2e8c",
+    secondary: "#04C866",
+    primaryButtonBg: "#04060c",
+    primaryButtonColor: "#eff2f6",
+    pageBg: "#FFF",
+    text: "#04060c",
+    silver: "#eff2f6",
+    inputBg: "#fff"
   },
   breakpoints: {
-    ...BREAKPOINTS,
-  },
+    ...BREAKPOINTS
+  }
 };
 
 export const darkTheme = {
@@ -49,12 +49,12 @@ export const darkTheme = {
   isDark: true,
   colors: {
     ...theme.colors,
-    primary: '#04C866',
-    secondary: '#1d2e8c',
-    pageBg: '#082032',
-    text: '#FFF',
-    silver: 'rgba(255,255,255,0.1)',
-    primaryButtonBg: '#04C866',
-    inputBg: '#213747',
-  },
+    primary: "#04C866",
+    secondary: "#1d2e8c",
+    pageBg: "#082032",
+    text: "#FFF",
+    silver: "rgba(255,255,255,0.1)",
+    primaryButtonBg: "#04C866",
+    inputBg: "#213747"
+  }
 };

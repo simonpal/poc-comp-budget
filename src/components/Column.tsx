@@ -1,7 +1,7 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
+import React from "react";
+import styled, { css } from "styled-components";
 
-import { AlignItems, ColumnSize, Justify, Spacings } from '../types';
+import { AlignItems, ColumnSize, Justify, Spacings } from "../types";
 
 const COLS = 12;
 
@@ -16,7 +16,7 @@ export type ColumnProps = {
   lgOffset?: ColumnSize;
   alignItems?: AlignItems;
   justifyContent?: Justify;
-  flexGrow?: '1' | '0';
+  flexGrow?: "1" | "0";
   $spacing?: Spacings;
   $mobileSpacing?: Spacings;
 };
@@ -38,7 +38,7 @@ const StyledColumn = styled.div<ColumnProps>(
     md,
     sm,
     xs,
-    $mobileSpacing,
+    $mobileSpacing
   }) => `
   display: flex;
   flex-direction: column;
@@ -46,26 +46,22 @@ const StyledColumn = styled.div<ColumnProps>(
   justify-content: ${justifyContent};
   align-items: ${alignItems};
   flex-grow: ${flexGrow};
-  ${
-    lgOffset &&
+  ${lgOffset &&
     css`
       margin-left: ${100 / Number(lgOffset)}%;
-    `
-  }
+    `}
   @media screen and (min-width: ${
     theme.breakpoints.md.min
   }px) and (max-width: ${theme.breakpoints.md.max}px) {
     width: ${
       Number(md) < 12
         ? `calc(${getSize(Number(md))}% - var(--spacing-${$spacing}))`
-        : '100%'
+        : "100%"
     };
-    ${
-      mdOffset &&
+    ${mdOffset &&
       css`
         margin-left: ${100 / Number(mdOffset)}%;
-      `
-    }
+      `}
   }
   @media screen and (min-width: ${
     theme.breakpoints.sm.min
@@ -73,14 +69,12 @@ const StyledColumn = styled.div<ColumnProps>(
     width: ${
       Number(sm) < 12
         ? `calc(${getSize(Number(sm))}% - var(--spacing-${$spacing}))`
-        : '100%'
+        : "100%"
     };
-    ${
-      smOffset &&
+    ${smOffset &&
       css`
         margin-left: ${100 / Number(smOffset)}%;
-      `
-    }
+      `}
   }
   @media screen and (min-width: ${
     theme.breakpoints.xs.min
@@ -88,14 +82,12 @@ const StyledColumn = styled.div<ColumnProps>(
     width: ${
       Number(xs) < 12
         ? `calc(${getSize(Number(xs))}% - var(--spacing-${$mobileSpacing}))`
-        : '100%'
+        : "100%"
     };
-    ${
-      xsOffset &&
+    ${xsOffset &&
       css`
         margin-left: ${100 / Number(xsOffset)}%;
-      `
-    }
+      `}
   }
 `
 );
@@ -103,17 +95,17 @@ const StyledColumn = styled.div<ColumnProps>(
 export const Column: React.FunctionComponent<
   ColumnProps & React.HTMLAttributes<HTMLDivElement>
 > = ({
-  xs = '12',
-  sm = '12',
-  md = '12',
-  lg = '12',
+  xs = "12",
+  sm = "12",
+  md = "12",
+  lg = "12",
   xsOffset,
   smOffset,
   mdOffset,
   lgOffset,
-  justifyContent = 'flex-start',
-  alignItems = 'stretch',
-  flexGrow = '1',
+  justifyContent = "flex-start",
+  alignItems = "stretch",
+  flexGrow = "1",
   $spacing,
   ...rest
 }) => {

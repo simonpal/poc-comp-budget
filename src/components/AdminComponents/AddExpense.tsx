@@ -1,35 +1,35 @@
-import { Column } from '../Column';
-import { FormControl } from '../FormControl/FormControl';
-import { Label } from '../FormControl/Label';
-import { Grid } from '../Grid';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.min.css';
-import { Select } from '../Select';
-import { useRef, useState } from 'react';
-import { Divider } from '../Divider';
-import { TextField } from '../Textfield';
-import { ToggleSwitch } from '../ToggleSwitch';
-import { Box } from '../Box';
-import { Button } from '../Button';
-import { DatepickerWrapper } from '../DatepickerWrapper';
-import { useAdminContext } from './AdminContext';
+import { Column } from "../Column";
+import { FormControl } from "../FormControl/FormControl";
+import { Label } from "../FormControl/Label";
+import { Grid } from "../Grid";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.min.css";
+import { Select } from "../Select";
+import { useRef, useState } from "react";
+import { Divider } from "../Divider";
+import { TextField } from "../Textfield";
+import { ToggleSwitch } from "../ToggleSwitch";
+import { Box } from "../Box";
+import { Button } from "../Button";
+import { DatepickerWrapper } from "../DatepickerWrapper";
+import { useAdminContext } from "./AdminContext";
 import {
   useCreateCategory,
   useCreateExpense,
   // useCreateExpense,
   useGetCategories,
-} from '../../api';
-import { Spinner } from '../Spinner';
-import { Modal } from '../Modal';
-import { ComboBox } from '../ComboBox';
-import { Textarea } from '../Textarea';
-import { CreateUpdateDeleteType, Expense, NewExpense } from '../../types';
-import toast from 'react-hot-toast';
-import { useQueryClient } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+} from "../../api";
+import { Spinner } from "../Spinner";
+import { Modal } from "../Modal";
+import { ComboBox } from "../ComboBox";
+import { Textarea } from "../Textarea";
+import { CreateUpdateDeleteType, Expense, NewExpense } from "../../types";
+import toast from "react-hot-toast";
+import { useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
 // import toast from 'react-hot-toast';
 
-const expenseTypes = ['time', 'money'];
+const expenseTypes = ["time", "money"];
 
 type AddExpenseType = {
   reqType: CreateUpdateDeleteType;
@@ -63,9 +63,9 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
 
   const { mutate: createExpense } = useCreateExpense(reqType, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['expenses', user?.userId]);
+      queryClient.invalidateQueries(["expenses", user?.userId]);
       toast.success(`${reqType} ran successfully!`);
-      reqType === 'update' ? postUpdateForm() : postCreateForm();
+      reqType === "update" ? postUpdateForm() : postCreateForm();
     },
   });
 
@@ -91,13 +91,13 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
   };
 
   const postUpdateForm = () => {
-    navigate('/admin');
+    navigate("/admin");
   };
 
   interface formDataType {
     [key: string]: FormDataEntryValue;
   }
-  const responseBody: any = {};
+  const responseBody = {} as NewExpense;
 
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -105,11 +105,11 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
     formData.forEach((value, property: string) => {
       console.log(value, property);
       let _value = value;
-      if (typeof value !== 'undefined') {
-        if (value === 'on') {
-          _value = 'true';
-        } else if (value === 'off') {
-          _value = 'false';
+      if (typeof value !== "undefined") {
+        if (value === "on") {
+          _value = "true";
+        } else if (value === "off") {
+          _value = "false";
         }
         responseBody[property as keyof NewExpense] = _value as never;
       }
@@ -140,7 +140,7 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
 
   return (
     <div>
-      <h2>{reqType === 'update' ? 'Update' : 'Add'} expense</h2>
+      <h2>{reqType === "update" ? "Update" : "Add"} expense</h2>
       {/* <Grid spacing="s">
         <Column lg="9" md="9" sm="9" xs="9">
         </Column>
@@ -183,8 +183,7 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
               label="Expsense type"
               defaultValue={expense?.type}
               disabled={!user}
-              onChange={(e) => setExpenseType(e.currentTarget.value)}
-            >
+              onChange={(e) => setExpenseType(e.currentTarget.value)}>
               <option value="-1">- Select expense type -</option>
               {expenseTypes.map((t) => (
                 <option value={t} key={t}>
@@ -219,7 +218,7 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
         <Divider spacing="m" />
         <Grid spacing="l">
           <Column lg="6" md="6" sm="6" xs="12" justifyContent="center">
-            {expenseType !== 'time' && (
+            {expenseType !== "time" && (
               <div>
                 <ToggleSwitch
                   id="is-hardware"
@@ -246,23 +245,14 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
                       id: cat.id,
                       title: cat.name,
                     }))}
-                    handleChange={(val) => console.log(val?.id || '')}
+                    handleChange={(val) => console.log(val?.id || "")}
                   />
-                  {/* <Select label="Category" required disabled={!user}>
-                    <option>- Select category -</option>
-                    {categories.map((c) => (
-                      <option value={c.title} key={c.id}>
-                        {c.title}
-                      </option>
-                    ))}
-                  </Select> */}
                 </Column>
                 <Column lg="3" md="3" sm="3" xs="12">
                   <Box topSpacing="m" alignItems="stretch">
                     <Button
                       priority="tertiary"
-                      onClick={() => setShowAddCategory(true)}
-                    >
+                      onClick={() => setShowAddCategory(true)}>
                       Add new
                     </Button>
                   </Box>
@@ -279,8 +269,7 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
           <Textarea
             name="comment"
             defaultValue={expense?.comment}
-            disabled={!user}
-          ></Textarea>
+            disabled={!user}></Textarea>
         </FormControl>
         <Box topSpacing="l" alignItems="flex-end">
           <Button type="submit" disabled={!user}>
@@ -290,8 +279,7 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
       </form>
       <Modal
         visible={showAddCategory}
-        onClose={() => setShowAddCategory(false)}
-      >
+        onClose={() => setShowAddCategory(false)}>
         <h2>Add a new category</h2>
         <Divider spacing="l" />
         <form onSubmit={onSubmitCategoryHandler}>

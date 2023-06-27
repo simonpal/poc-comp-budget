@@ -1,8 +1,8 @@
-import React, { forwardRef } from 'react';
-import styled from 'styled-components';
+import React, { forwardRef } from "react";
+import styled from "styled-components";
 
-import { FormControl } from './FormControl/FormControl';
-import { Label } from './FormControl/Label';
+import { FormControl } from "./FormControl/FormControl";
+import { Label } from "./FormControl/Label";
 
 const SelectWrapper = styled.div`
   --select-border: #777;
@@ -11,7 +11,7 @@ const SelectWrapper = styled.div`
   --size-input-default: 3rem;
   width: 100%;
   display: grid;
-  grid-template-areas: 'select';
+  grid-template-areas: "select";
   align-items: center;
   position: relative;
   /* min-width: 15ch;
@@ -36,7 +36,7 @@ const SelectWrapper = styled.div`
 
   // Custom arrow
   &:not(.select--multiple)::after {
-    content: '';
+    content: "";
     justify-self: end;
     width: 0.8em;
     height: 0.5em;
@@ -123,7 +123,7 @@ export const Select = forwardRef<
       id,
       fullWidth,
       required,
-      requiredText = '*',
+      requiredText = "*",
       error,
       errorBox,
       name,
@@ -154,7 +154,7 @@ export const Select = forwardRef<
           <span className="focus"></span>
         </SelectWrapper>
         {error && error.length > 0 && (
-          <div className={`base-form-input-error ${errorBox ? 'fill' : ''}`}>
+          <div className={`base-form-input-error ${errorBox ? "fill" : ""}`}>
             {error}
           </div>
         )}

@@ -1,14 +1,14 @@
-import styled from 'styled-components';
-import compLogo from '../assets/comp-logo.png';
-import { Divider } from '../components/Divider';
-import { GoogleLogin } from '@react-oauth/google';
-import { UserContextActionTypes, useUserContext } from '../utils/UserContext';
-import { useNavigate } from 'react-router-dom';
-import { useCookie, useIsLoggedInUser } from '../utils/customHooks';
-import { useEffect } from 'react';
-import jwt_decode from 'jwt-decode';
-import { toast } from 'react-hot-toast';
-import { TOKEN_COOKIE } from '../utils/constants';
+import styled from "styled-components";
+import compLogo from "../assets/comp-logo.png";
+import { Divider } from "../components/Divider";
+import { GoogleLogin } from "@react-oauth/google";
+import { UserContextActionTypes, useUserContext } from "../utils/UserContext";
+import { useNavigate } from "react-router-dom";
+import { useCookie, useIsLoggedInUser } from "../utils/customHooks";
+import { useEffect } from "react";
+import jwt_decode from "jwt-decode";
+import { toast } from "react-hot-toast";
+import { TOKEN_COOKIE } from "../utils/constants";
 
 const LoginWrapper = styled.div`
   width: 100vw;
@@ -36,7 +36,7 @@ const Login = () => {
   const { dispatch } = useUserContext();
   const navigate = useNavigate();
 
-  const [_, updateItem] = useCookie(TOKEN_COOKIE, '');
+  const [_, updateItem] = useCookie(TOKEN_COOKIE, "");
 
   const isLoggedIn = useIsLoggedInUser();
 
@@ -54,7 +54,7 @@ const Login = () => {
   // });
 
   useEffect(() => {
-    if (isLoggedIn) navigate('/mybudget');
+    if (isLoggedIn) navigate("/mybudget");
   }, [isLoggedIn, navigate]);
 
   return (
@@ -64,7 +64,7 @@ const Login = () => {
       <h1>My competence budget</h1>
       <Divider spacing="l" color="transparent" />
       <GoogleLogin
-        onSuccess={(credentialResponse) => {
+        onSuccess={credentialResponse => {
           console.log(credentialResponse);
           if (credentialResponse.credential) {
             const user: any = jwt_decode(
@@ -73,18 +73,18 @@ const Login = () => {
             const { name, picture, exp, email, sub } = user;
             dispatch({
               type: UserContextActionTypes.SetGoogleUser,
-              payload: { name, picture, exp, email, sub },
+              payload: { name, picture, exp, email, sub }
             });
             updateItem(credentialResponse.credential, {
               expires: exp * 1000,
-              path: '/',
+              path: "/"
               // secure: true,
             });
-            navigate('/mybudget');
+            navigate("/mybudget");
           }
         }}
         onError={() => {
-          toast.error('Login Failed');
+          toast.error("Login Failed");
         }}
       />
 

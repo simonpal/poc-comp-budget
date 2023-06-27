@@ -1,15 +1,17 @@
 import React, {
+  Dispatch,
+  SetStateAction,
   forwardRef,
   useCallback,
   useEffect,
   useRef,
   useState,
-} from 'react';
-import styled from 'styled-components';
+} from "react";
+import styled from "styled-components";
 
-import { AngleDownIcon } from './Icons/AngleDownIcon';
+import { AngleDownIcon } from "./Icons/AngleDownIcon";
 // import { DropdownItem, Option } from './DropdownItem';
-import { useRoveFocus } from '../utils/customHooks';
+import { useRoveFocus } from "../utils/customHooks";
 
 const StyledDropdown = styled.div`
   background-color: #fff;
@@ -112,7 +114,7 @@ const StyledDropdown = styled.div`
         background: #eee;
       }
 
-      &[aria-selected='true'] {
+      &[aria-selected="true"] {
         border: 1px 0 1px 0 solid #0000ff;
       }
 
@@ -212,7 +214,7 @@ const StyledDropdown = styled.div`
 
 // TODO: Search is buggy, needs some fixing
 
-const debounce = (delay: number, fn: any) => {
+const debounce = (delay: number, fn: Dispatch<SetStateAction<string>>) => {
   let inDebounce: any = null;
   return (args: any) => {
     clearTimeout(inDebounce);
@@ -255,9 +257,9 @@ const DropdownItem: React.FunctionComponent<
     if (focus && ref.current) {
       // Move element into view when it is focused
       ref.current.focus();
-      ref.current.setAttribute('aria-selected', 'true');
+      ref.current.setAttribute("aria-selected", "true");
     } else if (!focus && ref.current) {
-      ref.current.setAttribute('aria-selected', 'false');
+      ref.current.setAttribute("aria-selected", "false");
     }
   }, [focus]);
 
@@ -269,8 +271,7 @@ const DropdownItem: React.FunctionComponent<
       onClick={(e) => handleClick(e, option, index)}
       tabIndex={focus ? 0 : -1}
       ref={ref}
-      onKeyPress={(e) => handleClick(e, option, index)}
-    >
+      onKeyPress={(e) => handleClick(e, option, index)}>
       {option.text}
     </li>
   );
@@ -299,7 +300,7 @@ export const Dropdown = forwardRef<
     const [selectedValue, setSelectedValue] = useState<string | undefined>(
       defaultValue
     );
-    const [searchValue, setSearchValue] = useState<string>('');
+    const [searchValue, setSearchValue] = useState<string>("");
     const [isFocused, setIsFocused] = useState<boolean>(false);
     const [fromTop, setFromTop] = useState<boolean>(true);
     const [dropMaxHeight, setDropMaxHeight] = useState<number>(300);
@@ -319,7 +320,7 @@ export const Dropdown = forwardRef<
       e.preventDefault();
       e.stopPropagation();
 
-      if (e.nativeEvent.type === 'keypress' && e.nativeEvent.code !== 'Enter') {
+      if (e.nativeEvent.type === "keypress" && e.nativeEvent.code !== "Enter") {
         // Needed because focus of element when searching
         // Check if keypress is a valid string
         // const stringPattern = /^[a-zA-ZåäöÅÄÖ]/;
@@ -334,9 +335,9 @@ export const Dropdown = forwardRef<
 
       setSelectedValue(option.text);
       setFocus(index);
-      setSearchValue('');
+      setSearchValue("");
       setIsFocused(false);
-      if (inputRef.current) inputRef.current.value = '';
+      if (inputRef.current) inputRef.current.value = "";
       setFilteredOptions(options || []);
       if (handleChange) handleChange(option);
     };
@@ -377,9 +378,9 @@ export const Dropdown = forwardRef<
     };
 
     const handleDropdownKeyPress = (e: any) => {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         setIsFocused(false);
-      } else if (e.key === 'Enter' && !disabled) {
+      } else if (e.key === "Enter" && !disabled) {
         setIsFocused(!isFocused);
       }
     };
@@ -415,12 +416,12 @@ export const Dropdown = forwardRef<
       }
       if (isFocused) {
         getElementFromTop();
-        window.addEventListener('scroll', getElementFromTop);
-        document.addEventListener('mousedown', handleClickOutside);
+        window.addEventListener("scroll", getElementFromTop);
+        document.addEventListener("mousedown", handleClickOutside);
       }
       return () => {
-        window.removeEventListener('scroll', getElementFromTop);
-        document.removeEventListener('mousedown', handleClickOutside);
+        window.removeEventListener("scroll", getElementFromTop);
+        document.removeEventListener("mousedown", handleClickOutside);
       };
     }, [isFocused]);
 
@@ -445,8 +446,8 @@ export const Dropdown = forwardRef<
 
     return (
       <StyledDropdown
-        className={` ${disabled ? 'disabled' : ''} ${
-          isFocused ? 'is-focused' : ''
+        className={` ${disabled ? "disabled" : ""} ${
+          isFocused ? "is-focused" : ""
         }`}
         ref={dropMenuRef}
         role="combobox"
@@ -455,14 +456,13 @@ export const Dropdown = forwardRef<
         onClick={() => !disabled && setIsFocused(!isFocused)}
         onKeyDown={handleDropdownKeyPress}
         tabIndex={0}
-        {...rest}
-      >
+        {...rest}>
         {search && icon && <div className="icon search-icon">{icon}</div>}
         {search && (
           <input
             // isFocused={isFocused}
-            className={`dropdown-input ${!!icon && 'has-icon'} ${
-              hasValue && '.has-value'
+            className={`dropdown-input ${!!icon && "has-icon"} ${
+              hasValue && ".has-value"
             }`}
             disabled={disabled || false}
             ref={inputRef}
@@ -480,8 +480,7 @@ export const Dropdown = forwardRef<
             className={`styled-label`}
             role="alert"
             aria-live="polite"
-            aria-atomic="true"
-          >
+            aria-atomic="true">
             {icon && <div className="icon">{icon}</div>}
             {hasValue ? selectedValue : placeholder}
           </label>
@@ -498,20 +497,18 @@ export const Dropdown = forwardRef<
         )} */}
         <i
           aria-hidden="true"
-          className={`dropdown-icon ${isFocused && 'is-focused'}`}
-        >
+          className={`dropdown-icon ${isFocused && "is-focused"}`}>
           <AngleDownIcon />
         </i>
         {filteredOptions.length > 0 && (
           <ul
-            className={`dropdown ${isFocused ? 'is-focused' : ''} ${
-              fromTop ? 'from-top' : ''
+            className={`dropdown ${isFocused ? "is-focused" : ""} ${
+              fromTop ? "from-top" : ""
             }`}
             style={{ maxHeight: `${setMaxHeight || dropMaxHeight}px` }}
             aria-label={placeholder}
             role="listbox"
-            ref={ref}
-          >
+            ref={ref}>
             {filteredOptions.map((option: Option, index: number) => (
               <DropdownItem
                 key={option.value}

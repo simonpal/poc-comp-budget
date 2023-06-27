@@ -1,13 +1,13 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 type FormControlProps = {
-  fullWidth?: boolean
-  inlineControl?: boolean
-}
+  fullWidth?: boolean;
+  inlineControl?: boolean;
+};
 
 export const FormControl = styled.div<FormControlProps>`
-  display: ${({ fullWidth }) => (fullWidth ? 'flex' : 'inline-flex')};
-  flex-direction: ${({ inlineControl }) => (inlineControl ? 'row' : 'column')};
+  display: ${({ fullWidth }) => (fullWidth ? "flex" : "inline-flex")};
+  flex-direction: ${({ inlineControl }) => (inlineControl ? "row" : "column")};
   position: relative;
   .input-icon {
     position: absolute;
@@ -42,7 +42,7 @@ export const FormControl = styled.div<FormControlProps>`
       right: auto;
     }
 
-    input.co-form-element:not([type='checkbox']):not([type='radio']) {
+    input.co-form-element:not([type="checkbox"]):not([type="radio"]) {
       text-indent: var(--spacing-m);
     }
   }
@@ -64,4 +64,4 @@ export const FormControl = styled.div<FormControlProps>`
       color: #000;
     }
   }
-`
+`;

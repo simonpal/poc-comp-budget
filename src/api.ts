@@ -1,19 +1,20 @@
-import toast from 'react-hot-toast';
-import { categories, myExpenses } from './mockData';
+import toast from "react-hot-toast";
+import { categories, myExpenses } from "./mockData";
 import {
   Budget,
+  BudgetRequestBody,
   Category,
   CreateUpdateDeleteType,
   Expense,
   NewExpense,
   User,
-} from './types';
-import { getErrorMessage } from './utils/helpers';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { useAdminContext } from './components/AdminComponents/AdminContext';
-import { getCookie } from './utils/customHooks';
-import { TOKEN_COOKIE } from './utils/constants';
-import { useUserContext } from './utils/UserContext';
+} from "./types";
+import { getErrorMessage } from "./utils/helpers";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useAdminContext } from "./components/AdminComponents/AdminContext";
+import { getCookie } from "./utils/customHooks";
+import { TOKEN_COOKIE } from "./utils/constants";
+import { useUserContext } from "./utils/UserContext";
 
 // const authenticateUrl = import.meta.env.VITE_GOOGLE_AUTH_URL;
 const baseUrl = import.meta.env.VITE_API_URL;
@@ -25,7 +26,7 @@ const expensesUrl = `${baseUrl}/expenses`;
 
 const getStoredToken = () => {
   try {
-    const value = getCookie(TOKEN_COOKIE, '');
+    const value = getCookie(TOKEN_COOKIE, "");
     if (value) {
       return value;
     } else {
@@ -49,7 +50,7 @@ export const apiFetch = async <T>(
   const _options = {
     ...options,
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
       ...options.headers,
     },
@@ -84,10 +85,10 @@ export const useGetUsers = (id?: string) => {
     isLoading,
     isError,
   } = useQuery(
-    ['users', id],
+    ["users", id],
     () =>
       apiFetch<User | User[]>(
-        `${isAdmin ? adminUrl : baseUrl}/users${id ? `?id=${id}` : ''}`
+        `${isAdmin ? adminUrl : baseUrl}/users${id ? `?id=${id}` : ""}`
       ),
     {
       staleTime: Infinity,
@@ -102,7 +103,7 @@ export const useGetUsers = (id?: string) => {
 
 export const updateApiUser = (user: User) => {
   return apiFetch(`${userUrl}`, {
-    method: 'PUT',
+    method: "PUT",
     body: JSON.stringify(user),
   });
 };
@@ -125,7 +126,7 @@ export const useGetBudgets = (id: string, queryOptions?: any) => {
     isLoading,
     isError,
   } = useQuery(
-    ['budget', id],
+    ["budget", id],
     () =>
       apiFetch<Budget>(`${isAdmin ? adminUrl : baseUrl}/budgets?userId=${id}`),
     {
@@ -138,6 +139,29 @@ export const useGetBudgets = (id: string, queryOptions?: any) => {
   );
   return { budget, isLoading, isFetching, isError };
 };
+
+export const useUpdateBudget = (mutationOptions?: any) => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation(
+    (budget: BudgetRequestBody) =>
+      apiFetch<Budget>(`${adminUrl}/budgets`, {
+        method: "PUT",
+        body: JSON.stringify(budget),
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["budget"]);
+        toast.success("Budget successfully updated!");
+      },
+      onError(error) {
+        toast.error(`Could not update budget. ${(error as Error)?.message}`);
+      },
+      ...mutationOptions,
+    }
+  );
+  return mutation;
+};
+
 /*
   Categories
 */
@@ -148,7 +172,7 @@ export const useGetCategories = () => {
     isFetching,
     isLoading,
     isError,
-  } = useQuery(['categories'], () => apiFetch<Category[]>(`${categoryUrl}`), {
+  } = useQuery(["categories"], () => apiFetch<Category[]>(`${categoryUrl}`), {
     staleTime: Infinity,
     onError(error) {
       toast.error(`Could not get categories. ${(error as Error)?.message}`);
@@ -163,13 +187,13 @@ export const useCreateCategory = (mutationOptions?: any) => {
   const mutation = useMutation(
     (categoryName: string) =>
       apiFetch<Category>(`${adminUrl}/categories`, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({ name: categoryName }),
       }),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['categories']);
-        toast.success('Category successfully created!');
+        queryClient.invalidateQueries(["categories"]);
+        toast.success("Category successfully created!");
       },
       onError(error) {
         toast.error(`Could not create category. ${(error as Error)?.message}`);
@@ -190,7 +214,7 @@ export const useGetExpenses = (userId: string, queryOptions?: any) => {
     isLoading,
     isError,
   } = useQuery(
-    ['expenses', userId],
+    ["expenses", userId],
     () => apiFetch<Expense[]>(`${expensesUrl}?userId=${userId}`),
     {
       staleTime: Infinity,
@@ -211,7 +235,7 @@ export const useGetAllExpenses = (queryOptions?: any) => {
     isLoading,
     isError,
   } = useQuery(
-    ['allExpenses'],
+    ["allExpenses"],
     () => apiFetch<Expense[]>(`${adminUrl}/expenses`),
     {
       staleTime: Infinity,
@@ -227,12 +251,12 @@ export const useGetAllExpenses = (queryOptions?: any) => {
 
 const mapCreateOrUpdate = (type: CreateUpdateDeleteType) => {
   switch (type) {
-    case 'create':
-      return 'POST';
-    case 'update':
-      return 'PUT';
-    case 'delete':
-      return 'DELETE';
+    case "create":
+      return "POST";
+    case "update":
+      return "PUT";
+    case "delete":
+      return "DELETE";
   }
 };
 
@@ -252,7 +276,7 @@ export const useCreateExpense = (
       }),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['expenses', user?.userId]);
+        queryClient.invalidateQueries(["expenses", user?.userId]);
         toast.success(`${reqType} ran successfully!`);
       },
       onError(error) {
@@ -274,11 +298,11 @@ export const useDeleteExpense = (mutationOptions?: any) => {
   const mutation = useMutation(
     (id: string) =>
       apiFetch<NewExpense>(`${adminUrl}/expenses?id=${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       }),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['expenses', user?.userId]);
+        queryClient.invalidateQueries(["expenses", user?.userId]);
         toast.success(`Deleted successfully!`);
       },
       onError(error) {
@@ -369,7 +393,7 @@ export const getGoogleProfile = (token: string) =>
   fetch(`https://www.googleapis.com/oauth2/v3/userinfo`, {
     headers: {
       Authorization: `Bearer ${token}`,
-      Accept: 'application/json',
+      Accept: "application/json",
     },
   });
 

@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { AlignItems, Justify, Spacings } from '../types';
+import { AlignItems, Justify, Spacings } from "../types";
 
 type StyledInlineStackProps = {
   $spacing: Spacings;
@@ -35,8 +35,8 @@ export const InlineStack: React.FunctionComponent<
 > = ({
   spacing,
   children,
-  justifyContent = 'flex-start',
-  alignItems = 'stretch',
+  justifyContent = "flex-start",
+  alignItems = "stretch",
   className,
   ...rest
 }) => {
@@ -46,11 +46,11 @@ export const InlineStack: React.FunctionComponent<
       $alignItems={alignItems}
       $justifyContent={justifyContent}
       className={`base-inline-stack-wrapper ${
-        className ? ` ${className}` : ''
+        className ? ` ${className}` : ""
       }`}
       {...rest}
     >
-      {React.Children.map(children, (child) => {
+      {React.Children.map(children, child => {
         if (!child) return null;
         return <ChildWrapper>{child}</ChildWrapper>;
       })}

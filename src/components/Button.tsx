@@ -1,5 +1,5 @@
-import React, { forwardRef, useMemo } from 'react';
-import styled, { css, keyframes } from 'styled-components';
+import React, { forwardRef, useMemo } from "react";
+import styled, { css, keyframes } from "styled-components";
 
 const ripple = keyframes`
   from {
@@ -47,7 +47,7 @@ const StyledButton = styled.button<StyledButtonProps>`
   border-width: 0;
   font-size: var(--button-font-size);
   font-weight: bold;
-  display: ${({ $fullWidth }) => ($fullWidth ? 'flex' : 'inline-flex')};
+  display: ${({ $fullWidth }) => ($fullWidth ? "flex" : "inline-flex")};
   justify-content: center;
   line-height: 100%;
   cursor: pointer;
@@ -60,7 +60,7 @@ const StyledButton = styled.button<StyledButtonProps>`
 
     &::after {
       display: none;
-      content: '';
+      content: "";
       position: absolute;
       border-radius: 50%;
 
@@ -86,7 +86,7 @@ const StyledButton = styled.button<StyledButtonProps>`
 
   svg {
     margin: ${({ $iconLeft }) =>
-      $iconLeft ? '0 var(--spacing-xs) 0 0' : '0 0 0 var(--spacing-xs)'};
+      $iconLeft ? "0 var(--spacing-xs) 0 0" : "0 0 0 var(--spacing-xs)"};
     path {
       fill: var(--color-button-primary-color);
     }
@@ -159,9 +159,9 @@ const StyledButton = styled.button<StyledButtonProps>`
 `;
 
 export type ButtonProps = {
-  priority?: 'primary' | 'secondary' | 'tertiary' | 'outline';
+  priority?: "primary" | "secondary" | "tertiary" | "outline";
   disabled?: boolean;
-  type?: 'button' | 'submit' | 'reset';
+  type?: "button" | "submit" | "reset";
   fullWidth?: boolean;
   children: React.ReactNode;
   iconLeft?: boolean;
@@ -175,9 +175,9 @@ export const Button = forwardRef<
   (
     {
       children,
-      priority = 'primary',
+      priority = "primary",
       disabled = false,
-      type = 'button',
+      type = "button",
       fullWidth = false,
       onClick,
       iconLeft = false,
@@ -189,7 +189,7 @@ export const Button = forwardRef<
   ) => {
     const inlineStyle: any = useMemo(
       () => ({
-        ['--ripple-background']: `var(--color-button-${priority}-hover)`,
+        ["--ripple-background"]: `var(--color-button-${priority}-hover)`
       }),
       [priority]
     );
@@ -199,8 +199,8 @@ export const Button = forwardRef<
         style={inlineStyle}
         aria-label={type}
         className={`base-button ${priority} icon-${
-          iconLeft ? 'left' : 'right'
-        } ${className ? ` ${className}` : ''}`}
+          iconLeft ? "left" : "right"
+        } ${className ? ` ${className}` : ""}`}
         onClick={onClick}
         type={type}
         disabled={disabled}

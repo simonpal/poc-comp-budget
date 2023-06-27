@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useEffect } from "react";
+import styled from "styled-components";
 
-import { AlignItems, Justify } from '../types';
-import { TimesIcon } from './Icons/TimesIcon';
+import { AlignItems, Justify } from "../types";
+import { TimesIcon } from "./Icons/TimesIcon";
 // import Box from '../box/Box';
-import { Overlay, OverlayProps } from './Overlay';
-import { ModalContent } from './ModalContent';
+import { Overlay, OverlayProps } from "./Overlay";
+import { ModalContent } from "./ModalContent";
 // import { getClasses } from '../utils/helpers';
 
 type StyledModalProps = {
@@ -68,29 +68,29 @@ export const Modal: React.FunctionComponent<
 > = ({
   children,
   visible,
-  width = '50rem',
+  width = "50rem",
   onClose,
   zIndex = 5,
   disableClick = false,
-  alignItems = 'flex-start',
-  justifyContent = 'flex-start',
+  alignItems = "flex-start",
+  justifyContent = "flex-start",
   blur,
   className,
   ...rest
 }) => {
   useEffect(() => {
     if (visible) {
-      document.body.classList.add('overflow-hidden');
+      document.body.classList.add("overflow-hidden");
     } else {
-      document.body.classList.remove('overflow-hidden');
+      document.body.classList.remove("overflow-hidden");
     }
-    return () => document.body.classList.remove('overflow-hidden');
+    return () => document.body.classList.remove("overflow-hidden");
   }, [visible]);
   if (!visible) return null;
 
   const inlineStyle = {
     ...(zIndex && { zIndex: zIndex + 1 }),
-    ...(width && { width }),
+    ...(width && { width })
   };
 
   return (
@@ -103,7 +103,7 @@ export const Modal: React.FunctionComponent<
         blur={blur}
       >
         <StyledModal
-          className={`base-modal ${className ? ` ${className}` : ''}`}
+          className={`base-modal ${className ? ` ${className}` : ""}`}
           style={inlineStyle}
           $alignItems={alignItems}
           $justifyContent={justifyContent}

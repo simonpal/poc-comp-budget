@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const StyledToggleSwitch = styled.div`
   --switch-color: ${({ theme }) => theme.colors.secondary};
@@ -10,7 +10,7 @@ const StyledToggleSwitch = styled.div`
   vertical-align: middle;
   user-select: none;
   text-align: left;
-  input[type='checkbox'] {
+  input[type="checkbox"] {
     display: none;
   }
   label {
@@ -69,7 +69,7 @@ const StyledToggleSwitch = styled.div`
     text-transform: uppercase;
     padding-right: 10px;
     background-color: ${({ theme }) =>
-      theme.isDark ? theme.colors.inputBg : '#EEE'};
+      theme.isDark ? theme.colors.inputBg : "#EEE"};
     color: ${({ theme }) => theme.colors.text};
     text-align: right;
   }
@@ -85,7 +85,7 @@ const StyledToggleSwitch = styled.div`
     border-radius: 20px;
     transition: all 0.3s ease-in 0s;
   }
-  input[type='checkbox']:checked + label {
+  input[type="checkbox"]:checked + label {
     .toggle-switch-inner {
       margin-left: 0;
     }
@@ -98,7 +98,7 @@ const StyledToggleSwitch = styled.div`
     .toggle-switch-inner {
       &:after,
       &:before {
-        content: '';
+        content: "";
         height: 20px;
         line-height: 20px;
       }
@@ -126,12 +126,12 @@ export const ToggleSwitch = ({
   name,
   checked,
   onChange,
-  optionLabels = ['Yes', 'No'],
+  optionLabels = ["Yes", "No"],
   small,
-  disabled,
+  disabled
 }: ToggleSwitchProps) => {
   const handleKeyPress = (e: React.KeyboardEvent<HTMLLabelElement>) => {
-    if (e.code !== 'Enter' && e.code !== 'Space') return;
+    if (e.code !== "Enter" && e.code !== "Space") return;
 
     e.preventDefault();
     onChange(!checked);
@@ -139,7 +139,7 @@ export const ToggleSwitch = ({
 
   return (
     <StyledToggleSwitch
-      className={`${small ? ' small-switch' : ''}`}
+      className={`${small ? " small-switch" : ""}`}
       role="switch"
       aria-checked={checked}
     >
@@ -149,21 +149,21 @@ export const ToggleSwitch = ({
         className="toggle-switch-checkbox"
         id={id}
         checked={checked}
-        onChange={(e) => onChange(e.target.checked)}
+        onChange={e => onChange(e.target.checked)}
         disabled={disabled}
       />
       {id ? (
         <label
           className="toggle-switch-label"
           tabIndex={disabled ? -1 : 1}
-          onKeyDown={(e) => handleKeyPress(e)}
+          onKeyDown={e => handleKeyPress(e)}
           htmlFor={id}
         >
           <span
             className={
               disabled
-                ? 'toggle-switch-inner toggle-switch-disabled'
-                : 'toggle-switch-inner'
+                ? "toggle-switch-inner toggle-switch-disabled"
+                : "toggle-switch-inner"
             }
             data-yes={optionLabels[0]}
             data-no={optionLabels[1]}
@@ -172,8 +172,8 @@ export const ToggleSwitch = ({
           <span
             className={
               disabled
-                ? 'toggle-switch-switch toggle-switch-disabled'
-                : 'toggle-switch-switch'
+                ? "toggle-switch-switch toggle-switch-disabled"
+                : "toggle-switch-switch"
             }
             tabIndex={-1}
           />

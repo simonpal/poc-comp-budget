@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 export const Label = styled.label`
   display: inline-flex;
@@ -11,4 +11,4 @@ export const Label = styled.label`
   > span.required-symbol {
     margin-left: var(--spacing-2xs);
   }
-`
+`;

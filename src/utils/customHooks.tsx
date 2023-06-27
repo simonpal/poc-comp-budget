@@ -4,16 +4,16 @@ import {
   useCallback,
   useEffect,
   useState,
-} from 'react';
+} from "react";
 // import { useUserContext } from './UserContext';
-import { Theme, darkTheme, theme as lightTheme } from '../theme';
-import { TOKEN_COOKIE } from './constants';
-import { CookieOptions } from '../types';
-import { useLocation, useParams } from 'react-router-dom';
+import { Theme, darkTheme, theme as lightTheme } from "../theme";
+import { TOKEN_COOKIE } from "./constants";
+import { CookieOptions } from "../types";
+import { useLocation, useParams } from "react-router-dom";
 
 export const useIsLoggedInUser = () => {
-  const [item] = useCookie(TOKEN_COOKIE, '');
-  return typeof item !== 'undefined' && item.length > 0;
+  const [item] = useCookie(TOKEN_COOKIE, "");
+  return typeof item !== "undefined" && item.length > 0;
 };
 
 export const useSessionStorage = (keyName: string, defaultValue: unknown) => {
@@ -32,7 +32,7 @@ export const useSessionStorage = (keyName: string, defaultValue: unknown) => {
     }
   });
 
-  const setValue = (newValue: any) => {
+  const setValue = (newValue: unknown) => {
     try {
       window.sessionStorage.setItem(keyName, JSON.stringify(newValue));
     } catch (err) {
@@ -51,13 +51,13 @@ export const useRoveFocus = (
   const [currentFocus, setCurrentFocus] = useState<number>(0);
 
   const handleKeyDown = useCallback(
-    (e: any) => {
+    (e: KeyboardEvent) => {
       if (!enabled) return;
-      if (e.keyCode === 40) {
+      if (e.code === "ArrowDown") {
         // Down arrow
         e.preventDefault();
         setCurrentFocus(currentFocus === size - 1 ? 0 : currentFocus + 1);
-      } else if (e.keyCode === 38) {
+      } else if (e.code === "ArrowUp") {
         // Up arrow
         e.preventDefault();
         setCurrentFocus(currentFocus === 0 ? size - 1 : currentFocus - 1);
@@ -67,9 +67,9 @@ export const useRoveFocus = (
   );
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown, false);
+    document.addEventListener("keydown", handleKeyDown, false);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown, false);
+      document.removeEventListener("keydown", handleKeyDown, false);
     };
   }, [handleKeyDown]);
 
@@ -77,7 +77,7 @@ export const useRoveFocus = (
 };
 
 export const usePreferedTheme = () => {
-  const keyName = 'darktheme';
+  const keyName = "darktheme";
   const defaultValue = false;
   const [preferedTheme, setPreferedTheme] = useState<Theme>(lightTheme);
   const [isDark, setIsDark] = useState<boolean>(() => {
@@ -121,9 +121,9 @@ export const usePreferedTheme = () => {
   useEffect(() => {
     const savedDark = getSavedValue();
     const prefersDark = window.matchMedia(
-      '(prefers-color-scheme: dark)'
+      "(prefers-color-scheme: dark)"
     ).matches;
-    if (typeof savedDark !== 'undefined') {
+    if (typeof savedDark !== "undefined") {
       setPreferedTheme(savedDark ? darkTheme : lightTheme);
     } else if (prefersDark) {
       setPreferedTheme(darkTheme);
@@ -139,14 +139,18 @@ export const usePreferedTheme = () => {
 
 /* useCookie */
 
-const isBrowser = typeof window !== 'undefined';
+const isBrowser = typeof window !== "undefined";
 
-export const setCookie = (name: string, value: any, options: CookieOptions) => {
+export const setCookie = (
+  name: string,
+  value: string | number | boolean,
+  options: CookieOptions
+) => {
   if (!isBrowser) return;
 
   const optionsWithDefaults = {
     days: 7,
-    path: '/',
+    path: "/",
     ...options,
   };
 
@@ -163,17 +167,17 @@ export const setCookie = (name: string, value: any, options: CookieOptions) => {
   // );
 
   document.cookie = `${name}=${encodeURIComponent(value)}${
-    options?.secure ? ';secure' : ''
+    options?.secure ? ";secure" : ""
   }; expires=${expires}; path=${optionsWithDefaults.path}`;
 };
 
-export const getCookie = (name: string, initialValue = '') => {
+export const getCookie = (name: string, initialValue = "") => {
   return (
     (isBrowser &&
-      document.cookie.split('; ').reduce((r, v) => {
-        const parts = v.split('=');
+      document.cookie.split("; ").reduce((r, v) => {
+        const parts = v.split("=");
         return parts[0] === name ? decodeURIComponent(parts[1]) : r;
-      }, '')) ||
+      }, "")) ||
     initialValue
   );
 };

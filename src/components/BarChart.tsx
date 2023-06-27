@@ -5,9 +5,9 @@ import {
   BarElement,
   Title,
   Tooltip,
-  Legend,
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+  Legend
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
 
 ChartJS.register(
   CategoryScale,
@@ -32,7 +32,7 @@ type BarChartProps = {
     responsive: boolean;
     plugins: {
       legend: {
-        position: 'top';
+        position: "top";
       };
       title: {
         display: boolean;
@@ -48,7 +48,7 @@ const BarChart = ({ barData, options, id }: BarChartProps) => {
   return (
     <Bar
       options={{
-        ...options,
+        ...options
       }}
       data={barData}
       id={id}

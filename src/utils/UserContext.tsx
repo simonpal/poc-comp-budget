@@ -5,30 +5,30 @@ import React, {
   useEffect,
   useMemo,
   useReducer,
-} from 'react';
-import jwt_decode from 'jwt-decode';
-import { CookieSettings, GoogleUser } from '../types';
-import { useCookie } from './customHooks';
-import { checkIsAdmin } from '../api';
+} from "react";
+import jwt_decode from "jwt-decode";
+import { CookieSettings, GoogleUser } from "../types";
+import { useCookie } from "./customHooks";
+import { checkIsAdmin } from "../api";
 import {
   SETTINGS_COOKIE,
   SETTINGS_COOKIE_OPTIONS,
   TOKEN_COOKIE,
-} from './constants';
+} from "./constants";
 // import { Expense, User } from '../../types';
 
 export enum UserContextActionTypes {
-  SetLoggedInUser = 'SET_LOGGED_IN_USER',
+  // SetLoggedInUser = "SET_LOGGED_IN_USER",
   // SetLoggedInProfile = 'SET_LOGGED_IN_PROFILE',
-  SetIsAdmin = 'SET_IS_ADMIN',
-  ResetUser = 'RESET_USER',
-  SetGoogleUser = 'SET_GOOGLE_USER',
-  SetStoredSettings = 'SET_STORED_SETTINGS',
+  SetIsAdmin = "SET_IS_ADMIN",
+  ResetUser = "RESET_USER",
+  SetGoogleUser = "SET_GOOGLE_USER",
+  SetStoredSettings = "SET_STORED_SETTINGS",
   // SetTheme = 'SET_THEME',
 }
 
 type UserContextPayload = {
-  [UserContextActionTypes.SetLoggedInUser]: { user: any };
+  // [UserContextActionTypes.SetLoggedInUser]: { user: any };
   // [UserContextActionTypes.SetLoggedInProfile]:
   //   | { profile: GoogleProfile }
   //   | undefined;
@@ -57,8 +57,8 @@ export type UserContextActions =
 
 const reducer = (state: UserContext, action: UserContextActions) => {
   switch (action.type) {
-    case UserContextActionTypes.SetLoggedInUser:
-      return { ...state, loggedInUser: action.payload };
+    // case UserContextActionTypes.SetLoggedInUser:
+    //   return { ...state, loggedInUser: action.payload };
     // case UserContextActionTypes.SetLoggedInProfile:
     //   return { ...state, loggedInProfile: action.payload };
     case UserContextActionTypes.SetIsAdmin:
@@ -80,7 +80,7 @@ const reducer = (state: UserContext, action: UserContextActions) => {
 };
 
 interface UserContext {
-  loggedInUser: any;
+  // loggedInUser: any;
   // loggedInProfile: any;
   isAdmin: boolean;
   googleUser: GoogleUser | undefined;
@@ -92,7 +92,7 @@ const UserContext = createContext<{
   dispatch: React.Dispatch<any>;
 }>({
   state: {
-    loggedInUser: undefined,
+    // loggedInUser: undefined,
     // loggedInProfile: undefined,
     isAdmin: false,
     googleUser: undefined,
@@ -106,15 +106,15 @@ interface Props {
 }
 export const UserContextProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, {
-    loggedInUser: undefined,
+    // loggedInUser: undefined,
     // loggedInProfile: undefined,
     isAdmin: false,
     googleUser: undefined,
     storedSettings: undefined,
   });
 
-  const [cookieSettings, setCookieSettings] = useCookie(SETTINGS_COOKIE, '');
-  const [token, _] = useCookie(TOKEN_COOKIE, '');
+  const [cookieSettings, setCookieSettings] = useCookie(SETTINGS_COOKIE, "");
+  const [token, _] = useCookie(TOKEN_COOKIE, "");
 
   const parsedSettings: CookieSettings = useMemo(() => {
     if (cookieSettings && cookieSettings.length) {
@@ -155,9 +155,9 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
   }, [token, isUserAdmin, state.googleUser]);
 
   useEffect(() => {
-    if (!parsedSettings || typeof parsedSettings?.darkTheme === 'undefined') {
+    if (!parsedSettings || typeof parsedSettings?.darkTheme === "undefined") {
       const prefersDark = window.matchMedia(
-        '(prefers-color-scheme: dark)'
+        "(prefers-color-scheme: dark)"
       ).matches;
       setCookieSettings(
         JSON.stringify({ ...parsedSettings, darkTheme: prefersDark }),
@@ -191,5 +191,5 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
 
 export const useUserContext = (): {
   state: UserContext;
-  dispatch: React.Dispatch<any>;
+  dispatch: React.Dispatch<{ type: UserContextActionTypes; payload: unknown }>;
 } => useContext(UserContext);

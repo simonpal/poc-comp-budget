@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 type UserImageProps = {
   url: string;
@@ -24,7 +24,7 @@ const StyledImage = styled.img<StyledImageProps>`
 export const UserImage: React.FunctionComponent<UserImageProps> = ({
   url,
   size = 50,
-  alt,
+  alt
 }) => {
   return <StyledImage $size={size} src={url} alt={alt} />;
 };

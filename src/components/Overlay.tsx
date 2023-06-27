@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import styled, { css } from 'styled-components';
+import React, { useRef } from "react";
+import styled, { css } from "styled-components";
 export type OverlayProps = {
   zIndex?: number;
   visible?: boolean;
@@ -62,13 +62,13 @@ export const Overlay: React.FunctionComponent<
   if (!visible) return null;
 
   const inlineStyle = {
-    ...(zIndex && { ['--overlay-index']: zIndex }),
+    ...(zIndex && { ["--overlay-index"]: zIndex })
   } as any;
 
   return (
     <StyledOverlay
       ref={ovRef}
-      className={`base-overlay ${className ? ` ${className}` : ''}`}
+      className={`base-overlay ${className ? ` ${className}` : ""}`}
       aria-hidden="true"
       style={inlineStyle}
       $transparent={transparent}

@@ -1,14 +1,14 @@
-import { useTheme } from 'styled-components';
-import { Theme } from '../theme';
-import { Budget, Expense, User } from '../types';
-import { Box } from './Box';
-import { Column } from './Column';
-import { Grid } from './Grid';
-import { ValueHeader } from './ValueHeader';
-import { Divider } from './Divider';
-import { Timeline } from './Timeline';
+import { useTheme } from "styled-components";
+import { Theme } from "../theme";
+import { Budget, Expense, User } from "../types";
+import { Box } from "./Box";
+import { Column } from "./Column";
+import { Grid } from "./Grid";
+import { ValueHeader } from "./ValueHeader";
+import { Divider } from "./Divider";
+import { Timeline } from "./Timeline";
 // import { UserImage } from './UserImage';
-import { ValueContent } from './ValueContent';
+import { ValueContent } from "./ValueContent";
 
 type UserProfileProps = {
   user?: User;
@@ -18,7 +18,7 @@ type UserProfileProps = {
 export const UserProfile: React.FunctionComponent<UserProfileProps> = ({
   user,
   budget,
-  expenses,
+  expenses
 }) => {
   const theme = useTheme() as Theme;
   if (!user) return null;
