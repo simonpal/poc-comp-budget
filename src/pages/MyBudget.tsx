@@ -1,16 +1,17 @@
-import { useGetBudgets, useGetExpenses } from '../api';
-import { Box } from '../components/Box';
-import { Spinner } from '../components/Spinner';
-import { Grid } from '../components/Grid';
-import { Column } from '../components/Column';
-import { useTheme } from 'styled-components';
-import { Theme } from '../theme';
-import { Divider } from '../components/Divider';
-import { Timeline } from '../components/Timeline';
-import { ValueHeader } from '../components/ValueHeader';
-import { ValueContent } from '../components/ValueContent';
-import { InfoBox } from '../components/InfoBox';
-import { useUserContext } from '../utils/UserContext';
+import { leetImgUrl, useGetBudgets, useGetExpenses } from "../api";
+import { Box } from "../components/Box";
+import { Spinner } from "../components/Spinner";
+import { Grid } from "../components/Grid";
+import { Column } from "../components/Column";
+import { useTheme } from "styled-components";
+import { Theme } from "../theme";
+import { Divider } from "../components/Divider";
+import { Timeline } from "../components/Timeline";
+import { ValueHeader } from "../components/ValueHeader";
+import { ValueContent } from "../components/ValueContent";
+import { InfoBox } from "../components/InfoBox";
+import { useUserContext } from "../utils/UserContext";
+import { useEffect } from "react";
 
 const MyBudget = () => {
   // const [currentUser, setCurrentUser] = useState<User | undefined>();
@@ -20,11 +21,11 @@ const MyBudget = () => {
     state: { googleUser },
   } = useUserContext();
 
-  const { budget } = useGetBudgets(googleUser?.sub ?? '', {
-    enabled: typeof googleUser?.sub !== 'undefined',
+  const { budget } = useGetBudgets(googleUser?.sub ?? "", {
+    enabled: typeof googleUser?.sub !== "undefined",
   });
-  const { expenses } = useGetExpenses(googleUser?.sub ?? '', {
-    enabled: typeof googleUser?.sub !== 'undefined',
+  const { expenses } = useGetExpenses(googleUser?.sub ?? "", {
+    enabled: typeof googleUser?.sub !== "undefined",
   });
   console.log({ budget });
   console.log({ expenses });
@@ -42,6 +43,19 @@ const MyBudget = () => {
   //       .catch(console.error);
   //   }
   // }, [currentUser, myExpenses]);
+
+  useEffect(() => {
+    if (googleUser) {
+      document.body.classList.add("has-bg");
+      document.body.style.backgroundImage = `url(${leetImgUrl}/${googleUser.name
+        .toLocaleLowerCase()
+        .replace(" ", "-")})`;
+    }
+    return () => {
+      document.body.style.backgroundImage = "";
+      document.body.classList.remove("has-bg");
+    };
+  }, [googleUser]);
 
   if (!budget || !expenses) {
     return (

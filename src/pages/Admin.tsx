@@ -12,7 +12,7 @@ import { Grid } from "../components/Grid";
 // import { users } from '../mockData';
 import { UserCard } from "../components/UserCard";
 import { Modal } from "../components/Modal";
-import { useGetBudgets, useGetExpenses, useGetUsers } from "../api";
+import { useGetAllUsers, useGetBudgets, useGetExpenses } from "../api";
 import { UserProfile } from "../components/UserProfile";
 import { Button } from "../components/Button";
 import { useNavigate } from "react-router-dom";
@@ -47,7 +47,7 @@ const Admin = () => {
     users,
     isLoading: loadingUsers,
     isError: errorFetchingUsers,
-  } = useGetUsers();
+  } = useGetAllUsers();
 
   const { expenses } = useGetExpenses(user?.userId || "", {
     enabled: typeof user !== "undefined",

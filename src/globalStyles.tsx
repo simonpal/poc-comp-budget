@@ -38,6 +38,15 @@ export const GlobalStyles = createGlobalStyle<GlobalStyleProps>`
     background-color: ${({ theme }) => theme.colors.pageBg};
     color: ${({ theme }) => theme.colors.text};
     font-family: 'Sora', sans-serif;
+    background-position: top center;
+    background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+    &.has-bg #root {
+      backdrop-filter: blur(12px);
+      background-color: ${({ theme }) =>
+        theme.isDark ? "rgba(0,0,0,0.5)" : "rgba(255,255,255,0.7)"};
+    }
   }
   img, picture, video, canvas, svg {
     display: block;

@@ -1,27 +1,27 @@
-import styled from 'styled-components';
-import { Expense } from '../types';
-import { HardwareIcon } from './Icons/HardwareIcon';
-import { TimeIcon } from './Icons/TimeIcon';
-import { MoneyIcon } from './Icons/MoneyIcon';
-import { Grid } from './Grid';
-import { Column } from './Column';
-import { Divider } from './Divider';
-import { getExpenseType } from '../utils/helpers';
-import { useMemo, useState } from 'react';
-import { Button } from './Button';
-import { InlineStack } from './InlineStack';
-import { useUserContext } from '../utils/UserContext';
-import { PenIcon } from './Icons/PenIcon';
-import { DeleteIcon } from './Icons/DeleteIcon';
+import styled from "styled-components";
+import { Expense } from "../types";
+import { HardwareIcon } from "./Icons/HardwareIcon";
+import { TimeIcon } from "./Icons/TimeIcon";
+import { MoneyIcon } from "./Icons/MoneyIcon";
+import { Grid } from "./Grid";
+import { Column } from "./Column";
+import { Divider } from "./Divider";
+import { getExpenseType } from "../utils/helpers";
+import { useMemo, useState } from "react";
+import { Button } from "./Button";
+import { InlineStack } from "./InlineStack";
+import { useUserContext } from "../utils/UserContext";
+import { PenIcon } from "./Icons/PenIcon";
+import { DeleteIcon } from "./Icons/DeleteIcon";
 import {
   AdminContextActionTypes,
   useAdminContext,
-} from './AdminComponents/AdminContext';
-import { useCurrentPath } from '../utils/customHooks';
-import { useNavigate } from 'react-router-dom';
-import format from 'date-fns/format';
-import { ConfirmDialog } from './ConfirmDialog';
-import { useDeleteExpense } from '../api';
+} from "./AdminComponents/AdminContext";
+import { useCurrentPath } from "../utils/customHooks";
+import { useNavigate } from "react-router-dom";
+import format from "date-fns/format";
+import { ConfirmDialog } from "./ConfirmDialog";
+import { useDeleteExpense } from "../api";
 
 const TimelineWrapper = styled.div`
   border-left: ${({ theme }) => `1px solid ${theme.colors.silver}`};
@@ -60,7 +60,7 @@ const ExpenseContent = styled.div`
   position: relative;
   flex-direction: column;
   &:after {
-    content: '';
+    content: "";
     border-right: ${({ theme }) => `0.5rem solid ${theme.colors.silver}`};
     border-top: 0.5rem solid transparent;
     border-bottom: 0.5rem solid transparent;
@@ -76,6 +76,13 @@ const ExpenseButtons = styled.div`
   bottom: 1rem;
   display: flex;
   gap: 1rem;
+  @media screen and (max-width: 600px) {
+    position: relative;
+    width: 100%;
+    justify-content: flex-end;
+    right: auto;
+    bottom: auto;
+  }
 `;
 
 const Sum = styled.span`
@@ -85,9 +92,9 @@ const Sum = styled.span`
 
 const getIcon = (type: string) => {
   switch (type) {
-    case 'hardware':
+    case "hardware":
       return <HardwareIcon />;
-    case 'time':
+    case "time":
       return <TimeIcon />;
     default:
       return <MoneyIcon />;
@@ -143,7 +150,7 @@ export const Timeline: React.FunctionComponent<TimelineProps> = ({
       payload: false,
     });
 
-    navigate('editexpense');
+    navigate("editexpense");
   };
 
   const filteredExpenses = useMemo(() => {
@@ -160,9 +167,8 @@ export const Timeline: React.FunctionComponent<TimelineProps> = ({
         {allYears.map((year) => (
           <Button
             key={`filter-year-${year}`}
-            priority={`${year === selectedYear ? 'primary' : 'secondary'}`}
-            onClick={() => setSelectedYear(year)}
-          >
+            priority={`${year === selectedYear ? "primary" : "secondary"}`}
+            onClick={() => setSelectedYear(year)}>
             {year}
           </Button>
         ))}
@@ -175,7 +181,7 @@ export const Timeline: React.FunctionComponent<TimelineProps> = ({
               <Grid spacing="l">
                 <Column lg="9" md="9" sm="9" xs="12">
                   <div>
-                    <strong>{format(new Date(exp.date), 'yyyy-MM-dd')}</strong>
+                    <strong>{format(new Date(exp.date), "yyyy-MM-dd")}</strong>
                   </div>
                   <Divider spacing="s" color="transparent" />
                   <div>
@@ -193,17 +199,16 @@ export const Timeline: React.FunctionComponent<TimelineProps> = ({
                 </Column>
                 <Column lg="3" md="3" sm="3" xs="12" alignItems="flex-end">
                   <Sum>
-                    {exp.sum} {exp.type === 'time' ? 'h' : 'kr'}
+                    {exp.sum} {exp.type === "time" ? "h" : "kr"}
                   </Sum>
                 </Column>
               </Grid>
-              {isAdmin && path.includes('admin') && (
+              {isAdmin && path.includes("admin") && (
                 <ExpenseButtons>
                   <Button
                     priority="outline"
                     iconOnly
-                    onClick={() => editExpense(exp)}
-                  >
+                    onClick={() => editExpense(exp)}>
                     <PenIcon />
                   </Button>
                   <Button
@@ -212,8 +217,7 @@ export const Timeline: React.FunctionComponent<TimelineProps> = ({
                       setShowConfirmDelete(true);
                       setExpenseToDelete(exp);
                     }}
-                    iconOnly
-                  >
+                    iconOnly>
                     <DeleteIcon />
                   </Button>
                 </ExpenseButtons>

@@ -1,23 +1,23 @@
-import { Suspense, useCallback, useEffect, useMemo } from 'react';
-import { Divider } from '../components/Divider';
-import { Expense } from '../types';
-import { useGetAllExpenses, useGetCategories, useGetUsers } from '../api';
-import { barColors } from '../utils/helpers';
-import { Grid } from '../components/Grid';
-import { Column } from '../components/Column';
-import { Box } from '../components/Box';
-import styled, { useTheme } from 'styled-components';
-import { Theme } from '../theme';
-import { ValueHeader } from '../components/ValueHeader';
-import { ValueContent } from '../components/ValueContent';
-import { Button } from '../components/Button';
-import { ArrowLeftIcon } from '../components/Icons/ArrowLeftIcon';
-import { useNavigate } from 'react-router-dom';
-import { useUserContext } from '../utils/UserContext';
-import React from 'react';
-import { Spinner } from '../components/Spinner';
+import { Suspense, useCallback, useEffect, useMemo } from "react";
+import { Divider } from "../components/Divider";
+import { Expense } from "../types";
+import { useGetAllExpenses, useGetAllUsers, useGetCategories } from "../api";
+import { barColors } from "../utils/helpers";
+import { Grid } from "../components/Grid";
+import { Column } from "../components/Column";
+import { Box } from "../components/Box";
+import styled, { useTheme } from "styled-components";
+import { Theme } from "../theme";
+import { ValueHeader } from "../components/ValueHeader";
+import { ValueContent } from "../components/ValueContent";
+import { Button } from "../components/Button";
+import { ArrowLeftIcon } from "../components/Icons/ArrowLeftIcon";
+import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../utils/UserContext";
+import React from "react";
+import { Spinner } from "../components/Spinner";
 
-const BarChart = React.lazy(() => import('../components/BarChart'));
+const BarChart = React.lazy(() => import("../components/BarChart"));
 
 const StatsTitle = styled.h2`
   align-items: center;
@@ -32,11 +32,11 @@ const options = {
   responsive: true,
   plugins: {
     legend: {
-      position: 'top' as const,
+      position: "top" as const,
     },
     title: {
       display: true,
-      text: 'Chart.js Bar Chart',
+      text: "Chart.js Bar Chart",
     },
   },
 };
@@ -44,7 +44,7 @@ const options = {
 const AdminStats = () => {
   const { allExpenses, isLoading: loadingExpenses } = useGetAllExpenses();
   const { categories, isLoading: loadingCategories } = useGetCategories();
-  const { users: allUsers, isLoading: loadingUsers } = useGetUsers();
+  const { users: allUsers, isLoading: loadingUsers } = useGetAllUsers();
 
   const theme = useTheme() as Theme;
 
@@ -54,11 +54,11 @@ const AdminStats = () => {
   const navigate = useNavigate();
 
   const timeExpenses = useMemo(() => {
-    return allExpenses?.filter((exp) => exp.type === 'time') || [];
+    return allExpenses?.filter((exp) => exp.type === "time") || [];
   }, [allExpenses]);
 
   const moneyExpenses = useMemo(() => {
-    return allExpenses?.filter((exp) => exp.type === 'money') || [];
+    return allExpenses?.filter((exp) => exp.type === "money") || [];
   }, [allExpenses]);
 
   const getAverageValue = useCallback(
@@ -99,7 +99,7 @@ const AdminStats = () => {
       labels: categories?.map((c) => c.name) || [],
       datasets: [
         {
-          label: 'Time expenses by category',
+          label: "Time expenses by category",
           data: getCategoryByExpenseType(timeExpenses) || [],
           backgroundColor: barColors,
           borderWidth: 1,
@@ -112,7 +112,7 @@ const AdminStats = () => {
       labels: categories?.map((c) => c.name) || [],
       datasets: [
         {
-          label: 'Money expenses by category',
+          label: "Money expenses by category",
           data: getCategoryByExpenseType(moneyExpenses) || [],
           backgroundColor: barColors,
           borderWidth: 1,
@@ -123,7 +123,7 @@ const AdminStats = () => {
 
   useEffect(() => {
     if (!isAdmin) {
-      navigate('/mybudget');
+      navigate("/mybudget");
     }
   }, [isAdmin, navigate]);
 
@@ -173,7 +173,7 @@ const AdminStats = () => {
             ...options,
             plugins: {
               ...options.plugins,
-              title: { display: false, text: 'Categories used by type Time' },
+              title: { display: false, text: "Categories used by type Time" },
             },
           }}
           barData={barTimeData}
@@ -189,7 +189,7 @@ const AdminStats = () => {
             ...options,
             plugins: {
               ...options.plugins,
-              title: { display: false, text: 'Categories used by type Money' },
+              title: { display: false, text: "Categories used by type Money" },
             },
           }}
           barData={barMoneyData}

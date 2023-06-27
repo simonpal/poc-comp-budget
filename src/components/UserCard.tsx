@@ -1,16 +1,16 @@
-import styled from 'styled-components';
-import { User } from '../types';
+import styled from "styled-components";
+import { User } from "../types";
 // import { UserImage } from './UserImage';
-import { Divider } from './Divider';
-import { Grid } from './Grid';
-import { Column } from './Column';
-import { ValueHeader } from './ValueHeader';
-import { Button } from './Button';
+import { Divider } from "./Divider";
+import { Grid } from "./Grid";
+import { Column } from "./Column";
+import { ValueHeader } from "./ValueHeader";
+import { Button } from "./Button";
 import {
   AdminContextActionTypes,
   useAdminContext,
-} from './AdminComponents/AdminContext';
-import { useGetBudgets } from '../api';
+} from "./AdminComponents/AdminContext";
+import { useGetBudgets } from "../api";
 
 const StyledCard = styled.div`
   padding: 1rem;
@@ -41,7 +41,7 @@ export const UserCard: React.FunctionComponent<UserCardProps> = ({ user }) => {
         {/* <UserImage size={50} url={user.image} alt={user.name} /> */}
       </h4>
       <Divider spacing="xs" />
-      <Grid spacing="m">
+      <Grid spacing="m" mobileDirection="row">
         <Column lg="6" md="6" sm="6" xs="6">
           <div>
             <ValueHeader>Time balance</ValueHeader>
@@ -56,7 +56,7 @@ export const UserCard: React.FunctionComponent<UserCardProps> = ({ user }) => {
         </Column>
       </Grid>
       <Divider spacing="xs" />
-      <Grid spacing="m">
+      <Grid spacing="m" mobileDirection="row">
         <Column lg="6" md="6" sm="6" xs="6">
           <div>
             <ValueHeader>Hardware balance</ValueHeader>
@@ -71,8 +71,7 @@ export const UserCard: React.FunctionComponent<UserCardProps> = ({ user }) => {
                 type: AdminContextActionTypes.ToggleUserModal,
                 payload: true,
               })
-            }
-          >
+            }>
             Show all
           </Button>
           {/* <div>

@@ -52,7 +52,6 @@ const TabHeaders = styled.ul<StyledTabProps>`
       background-color: ${({ theme }) => theme.colors.primaryButtonBg};
       button {
         color: ${({ theme }) => theme.colors.primaryButtonColor};
-        /* text-decoration: underline; */
       }
       &:after {
         content: "";
@@ -66,17 +65,6 @@ const TabHeaders = styled.ul<StyledTabProps>`
           `8px solid ${theme.colors.primaryButtonBg}`};
       }
     }
-
-    /* &:not(:first-of-type) {
-      button::before,
-      span::before {
-        content: '';
-        border-right: 1px solid #eee;
-        height: 18px;
-        position: absolute;
-        left: 0;
-      }
-    } */
   }
 `;
 

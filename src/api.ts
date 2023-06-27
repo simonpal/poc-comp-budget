@@ -17,6 +17,7 @@ import { TOKEN_COOKIE } from "./utils/constants";
 import { useUserContext } from "./utils/UserContext";
 
 // const authenticateUrl = import.meta.env.VITE_GOOGLE_AUTH_URL;
+export const leetImgUrl = "https://i.1337co.de/wallofleet";
 const baseUrl = import.meta.env.VITE_API_URL;
 const adminUrl = `${baseUrl}/adm`;
 const userUrl = `${baseUrl}/users`;
@@ -75,10 +76,29 @@ export const apiFetch = async <T>(
   Users
 */
 
-export const useGetUsers = (id?: string) => {
+export const useGetAllUsers = () => {
   const {
-    state: { isAdmin },
-  } = useUserContext();
+    data: users,
+    isFetching,
+    isLoading,
+    isError,
+  } = useQuery(
+    ["allUsers"],
+    () => apiFetch<User | User[]>(`${adminUrl}/users`),
+    {
+      staleTime: Infinity,
+      onError(error) {
+        toast.error(`Could not get user. ${(error as Error)?.message}`);
+      },
+    }
+  );
+
+  return { users, isLoading, isFetching, isError };
+};
+export const useGetUser = (id: string) => {
+  // const {
+  //   state: { isAdmin },
+  // } = useUserContext();
   const {
     data: users,
     isFetching,
@@ -86,10 +106,7 @@ export const useGetUsers = (id?: string) => {
     isError,
   } = useQuery(
     ["users", id],
-    () =>
-      apiFetch<User | User[]>(
-        `${isAdmin ? adminUrl : baseUrl}/users${id ? `?id=${id}` : ""}`
-      ),
+    () => apiFetch<User | User[]>(`${baseUrl}/users?userId=${id}`),
     {
       staleTime: Infinity,
       onError(error) {

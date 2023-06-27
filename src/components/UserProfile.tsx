@@ -18,7 +18,7 @@ type UserProfileProps = {
 export const UserProfile: React.FunctionComponent<UserProfileProps> = ({
   user,
   budget,
-  expenses
+  expenses,
 }) => {
   const theme = useTheme() as Theme;
   if (!user) return null;
