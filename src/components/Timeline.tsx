@@ -20,6 +20,8 @@ import {
 import { useCurrentPath } from '../utils/customHooks';
 import { useNavigate } from 'react-router-dom';
 import format from 'date-fns/format';
+import { ConfirmDialog } from './ConfirmDialog';
+import { useDeleteExpense } from '../api';
 
 const TimelineWrapper = styled.div`
   border-left: ${({ theme }) => `1px solid ${theme.colors.silver}`};
@@ -106,6 +108,11 @@ export const Timeline: React.FunctionComponent<TimelineProps> = ({
   const [selectedYear, setSelectedYear] = useState<number>(
     new Date().getFullYear()
   );
+  const [showConfirmDelete, setShowConfirmDelete] = useState<boolean>(false);
+  const [expenseToDelete, setExpenseToDelete] = useState<Expense | undefined>();
+
+  const { mutate: deleteExpense } = useDeleteExpense();
+
   const sortedExpenses = expenses.sort(sortByDate);
 
   const {
@@ -199,7 +206,14 @@ export const Timeline: React.FunctionComponent<TimelineProps> = ({
                   >
                     <PenIcon />
                   </Button>
-                  <Button priority="outline" iconOnly>
+                  <Button
+                    priority="outline"
+                    onClick={() => {
+                      setShowConfirmDelete(true);
+                      setExpenseToDelete(exp);
+                    }}
+                    iconOnly
+                  >
                     <DeleteIcon />
                   </Button>
                 </ExpenseButtons>
@@ -208,6 +222,19 @@ export const Timeline: React.FunctionComponent<TimelineProps> = ({
           </ExpenseWrapper>
         ))}
       </TimelineWrapper>
+      <ConfirmDialog
+        visible={showConfirmDelete}
+        onClose={() => setShowConfirmDelete(false)}
+        onConfirm={() => {
+          if (expenseToDelete?.id) {
+            deleteExpense(expenseToDelete?.id);
+          }
+          setShowConfirmDelete(false);
+        }}
+        width="30rem"
+        title="Delete expense"
+        description="Are you sure you want to delete this expense?"
+      />
     </>
   );
 };

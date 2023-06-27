@@ -204,6 +204,27 @@ export const useGetExpenses = (userId: string, queryOptions?: any) => {
   return { expenses, isLoading, isFetching, isError };
 };
 
+export const useGetAllExpenses = (queryOptions?: any) => {
+  const {
+    data: allExpenses,
+    isFetching,
+    isLoading,
+    isError,
+  } = useQuery(
+    ['allExpenses'],
+    () => apiFetch<Expense[]>(`${adminUrl}/expenses`),
+    {
+      staleTime: Infinity,
+      onError(error) {
+        toast.error(`Could not get expenses. ${(error as Error)?.message}`);
+      },
+      ...queryOptions,
+    }
+  );
+
+  return { allExpenses, isLoading, isFetching, isError };
+};
+
 const mapCreateOrUpdate = (type: CreateUpdateDeleteType) => {
   switch (type) {
     case 'create':
@@ -238,6 +259,30 @@ export const useCreateExpense = (
         toast.error(
           `Could not ${reqType} expense. ${(error as Error)?.message}`
         );
+      },
+      ...mutationOptions,
+    }
+  );
+  return mutation;
+};
+
+export const useDeleteExpense = (mutationOptions?: any) => {
+  const queryClient = useQueryClient();
+  const {
+    state: { user },
+  } = useAdminContext();
+  const mutation = useMutation(
+    (id: string) =>
+      apiFetch<NewExpense>(`${adminUrl}/expenses?id=${id}`, {
+        method: 'DELETE',
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['expenses', user?.userId]);
+        toast.success(`Deleted successfully!`);
+      },
+      onError(error) {
+        toast.error(`Could not delete expense. ${(error as Error)?.message}`);
       },
       ...mutationOptions,
     }

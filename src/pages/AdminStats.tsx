@@ -1,17 +1,7 @@
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { Divider } from '../components/Divider';
-import { Category, Expense } from '../types';
-import { getAllExpenses, getCategories, useGetUsers } from '../api';
-// import { Bar } from 'react-chartjs-2';
-// import {
-//   Chart as ChartJS,
-//   CategoryScale,
-//   LinearScale,
-//   BarElement,
-//   Title,
-//   Tooltip,
-//   Legend,
-// } from 'chart.js';
+import { Expense } from '../types';
+import { useGetAllExpenses, useGetCategories, useGetUsers } from '../api';
 import { barColors } from '../utils/helpers';
 import { Grid } from '../components/Grid';
 import { Column } from '../components/Column';
@@ -25,6 +15,7 @@ import { ArrowLeftIcon } from '../components/Icons/ArrowLeftIcon';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../utils/UserContext';
 import React from 'react';
+import { Spinner } from '../components/Spinner';
 
 const BarChart = React.lazy(() => import('../components/BarChart'));
 
@@ -36,15 +27,6 @@ const StatsTitle = styled.h2`
     /* font-size: 1.5rem; */
   }
 `;
-
-// ChartJS.register(
-//   CategoryScale,
-//   LinearScale,
-//   BarElement,
-//   Title,
-//   Tooltip,
-//   Legend
-// );
 
 const options = {
   responsive: true,
@@ -60,11 +42,9 @@ const options = {
 };
 
 const AdminStats = () => {
-  const [categories, setCategories] = useState<Category[] | undefined>();
-  const [allExpenses, setAllExpenses] = useState<Expense[] | undefined>();
-  // const [allUsers, setAllUsers] = useState<User[] | undefined>();
-
-  const { users: allUsers } = useGetUsers();
+  const { allExpenses, isLoading: loadingExpenses } = useGetAllExpenses();
+  const { categories, isLoading: loadingCategories } = useGetCategories();
+  const { users: allUsers, isLoading: loadingUsers } = useGetUsers();
 
   const theme = useTheme() as Theme;
 
@@ -147,22 +127,10 @@ const AdminStats = () => {
     }
   }, [isAdmin, navigate]);
 
-  useEffect(() => {
-    if (!categories) {
-      getCategories().then(setCategories).catch(console.error);
-    }
-  }, [categories]);
-  useEffect(() => {
-    if (!allExpenses) {
-      getAllExpenses().then(setAllExpenses).catch(console.error);
-    }
-  }, [allExpenses]);
+  if (loadingCategories || loadingUsers || loadingExpenses) {
+    return <Spinner size="md" />;
+  }
 
-  // useEffect(() => {
-  //   if (!allUsers) {
-  //     getAllUsers().then(setAllUsers).catch(console.error);
-  //   }
-  // }, [allUsers]);
   return (
     <div>
       <StatsTitle>
