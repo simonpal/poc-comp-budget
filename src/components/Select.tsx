@@ -5,9 +5,9 @@ import { FormControl } from "./FormControl/FormControl";
 import { Label } from "./FormControl/Label";
 
 const SelectWrapper = styled.div`
-  --select-border: #777;
+  --select-border: #000;
   --select-focus: blue;
-  --select-arrow: var(--select-border);
+  --select-arrow: ${({ theme }) => theme.colors.text};
   --size-input-default: 3rem;
   width: 100%;
   display: grid;
@@ -17,8 +17,8 @@ const SelectWrapper = styled.div`
   /* min-width: 15ch;
   max-width: 30ch; */
 
-  border: 1px solid var(--input-background);
-  border-radius: 0.25rem;
+  border: 1px solid var(--select-border);
+  border-radius: 0;
   height: var(--size-input-default);
   align-items: center;
   padding: 0 0.5rem;
@@ -147,8 +147,7 @@ export const Select = forwardRef<
             ref={ref}
             required={required}
             name={name}
-            {...rest}
-          >
+            {...rest}>
             {children}
           </StyledSelect>
           <span className="focus"></span>

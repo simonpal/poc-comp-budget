@@ -24,7 +24,7 @@ const BREAKPOINTS: Breakpoints = {
   xs: { min: 0, max: 600 },
   sm: { min: 601, max: 960 },
   md: { min: 961, max: 1280 },
-  lg: { min: 1281 }
+  lg: { min: 1281 },
 };
 
 export const theme = {
@@ -37,11 +37,11 @@ export const theme = {
     pageBg: "#FFF",
     text: "#04060c",
     silver: "#eff2f6",
-    inputBg: "#fff"
+    inputBg: "#fff",
   },
   breakpoints: {
-    ...BREAKPOINTS
-  }
+    ...BREAKPOINTS,
+  },
 };
 
 export const darkTheme = {
@@ -55,6 +55,7 @@ export const darkTheme = {
     text: "#FFF",
     silver: "rgba(255,255,255,0.1)",
     primaryButtonBg: "#04C866",
-    inputBg: "#213747"
-  }
+    primaryButtonColor: "#000",
+    inputBg: "#213747",
+  },
 };
