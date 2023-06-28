@@ -1,64 +1,109 @@
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from "styled-components";
 // import './App.css';
 // import { theme } from './theme';
-import { GlobalStyles } from './globalStyles';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import ErrorPage from './pages/ErrorPage';
-import Login from './pages/Login';
-import MyBudget from './pages/MyBudget';
-import Admin from './pages/Admin';
-import { Layout } from './components/Layout';
-import { AdminContextProvider } from './components/AdminComponents/AdminContext';
-import AdminStats from './pages/AdminStats';
-import { Toaster } from 'react-hot-toast';
-import { darkTheme, theme } from './theme';
-import { useUserContext } from './utils/UserContext';
-import EditExpense from './pages/EditExpense';
+import { GlobalStyles } from "./globalStyles";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+// import ErrorPage from './pages/ErrorPage';
+import Login from "./pages/Login";
+// import MyBudget from "./pages/MyBudget";
+// import Admin from "./pages/Admin";
+import { Layout } from "./components/Layout";
+import { AdminContextProvider } from "./components/AdminComponents/AdminContext";
+// import AdminStats from "./pages/AdminStats";
+import { Toaster } from "react-hot-toast";
+import { darkTheme, theme } from "./theme";
+import { useUserContext } from "./utils/UserContext";
+// import EditExpense from "./pages/EditExpense";
+import React, { Suspense } from "react";
+import { Spinner } from "./components/Spinner";
+
+const ErrorPage = React.lazy(() => import("./pages/ErrorPage"));
+const MyBudget = React.lazy(() => import("./pages/MyBudget"));
+const Admin = React.lazy(() => import("./pages/Admin"));
+const AdminStats = React.lazy(() => import("./pages/AdminStats"));
+const EditExpense = React.lazy(() => import("./pages/EditExpense"));
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <Login />,
-    errorElement: <ErrorPage />,
+    errorElement: (
+      <Suspense
+        fallback={
+          <p>
+            <Spinner size="md" />
+          </p>
+        }>
+        <ErrorPage />
+      </Suspense>
+    ),
   },
   {
-    path: 'login',
+    path: "login",
     element: <Login />,
   },
   {
-    path: 'mybudget',
+    path: "mybudget",
     element: (
       <Layout>
-        <MyBudget />
+        <Suspense
+          fallback={
+            <p>
+              <Spinner size="md" />
+            </p>
+          }>
+          <MyBudget />
+        </Suspense>
       </Layout>
     ),
   },
   {
-    path: 'admin',
+    path: "admin",
     element: (
       <AdminContextProvider>
         <Layout>
-          <Admin />
+          <Suspense
+            fallback={
+              <p>
+                <Spinner size="md" />
+              </p>
+            }>
+            <Admin />
+          </Suspense>
         </Layout>
       </AdminContextProvider>
     ),
   },
   {
-    path: 'admin/editexpense',
+    path: "admin/editexpense",
     element: (
       <AdminContextProvider>
         <Layout>
-          <EditExpense />
+          <Suspense
+            fallback={
+              <p>
+                <Spinner size="md" />
+              </p>
+            }>
+            <EditExpense />
+          </Suspense>
         </Layout>
       </AdminContextProvider>
     ),
   },
   {
-    path: 'admin/stats',
+    path: "admin/stats",
     element: (
       <AdminContextProvider>
         <Layout>
-          <AdminStats />
+          <Suspense
+            fallback={
+              <p>
+                <Spinner size="md" />
+              </p>
+            }>
+            <AdminStats />
+          </Suspense>
         </Layout>
       </AdminContextProvider>
     ),
