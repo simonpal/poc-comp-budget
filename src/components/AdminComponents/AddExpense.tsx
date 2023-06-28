@@ -28,6 +28,8 @@ import toast from "react-hot-toast";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { getFormValue } from "../../utils/helpers";
+import { InlineStack } from "../InlineStack";
+import { Checkbox } from "../Checkbox";
 // import toast from 'react-hot-toast';
 
 const expenseTypes = ["time", "money"];
@@ -96,7 +98,7 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
   };
 
   interface formDataType {
-    [key: string]: FormDataEntryValue;
+    [key: string]: FormDataEntryValue | FormDataEntryValue[];
   }
   const responseBody = {} as NewExpense;
 
@@ -105,6 +107,7 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
     const formData = new FormData(event.currentTarget);
     formData.forEach((value, property: string) => {
       console.log(value, property);
+
       // let _value = value;
       if (typeof value !== "undefined") {
         const newVal = getFormValue(value);
@@ -121,11 +124,15 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
     const postBody: formDataType = {};
     const formData = new FormData(event.currentTarget as HTMLFormElement);
     formData.forEach((value, property: string) => {
-      postBody[property] = value;
+      if (typeof postBody[property] !== "undefined") {
+        postBody[property] = formData.getAll(property);
+      } else {
+        postBody[property] = value;
+      }
     });
     console.log(postBody);
-    addCategory(postBody.categoryName as string);
-    setShowAddCategory(false);
+    // addCategory(postBody.categoryName as string);
+    // setShowAddCategory(false);
   };
   // useEffect(() => {
   //   if (expense) {
@@ -285,6 +292,20 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
         <Divider spacing="l" />
         <form onSubmit={onSubmitCategoryHandler}>
           <TextField label="Category name" name="categoryName" fullWidth />
+          <InlineStack spacing="l">
+            <Checkbox
+              id="time-cat"
+              name="categoryType"
+              label="Time"
+              value="time"
+            />
+            <Checkbox
+              id="money-cat"
+              name="categoryType"
+              label="Money"
+              value="money"
+            />
+          </InlineStack>
           <Divider spacing="l" />
           <Box alignItems="flex-end">
             <Button type="submit">Add category</Button>
