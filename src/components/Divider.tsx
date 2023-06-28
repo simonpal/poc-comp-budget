@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 // import { getClasses, getShortSpacing } from '../utils/helpers';
-import { Spacings } from '../types';
+import { Spacings } from "../types";
 
 export type DividerProps = {
   color?: string;
@@ -27,14 +27,14 @@ const StyledDivider = styled.div<StyledDividerProps>(
 
 export const Divider: React.FunctionComponent<
   DividerProps & React.HTMLAttributes<HTMLDivElement>
-> = ({ color, spacing = 'l', mobileSpacing, className, ...rest }) => {
+> = ({ color, spacing = "l", mobileSpacing, className, ...rest }) => {
   const inlineStyle = {
-    ...(color && { ['--divider-color']: color }),
-  } as any;
+    ...(color && { ["--divider-color"]: color }),
+  } as React.CSSProperties;
   return (
     <StyledDivider
       aria-hidden="true"
-      className={`base-divider ${className ? ` ${className}` : ''}`}
+      className={`base-divider ${className ? ` ${className}` : ""}`}
       $spacing={spacing}
       $mobileSpacing={mobileSpacing ?? spacing}
       style={inlineStyle}

@@ -187,12 +187,12 @@ export const Button = forwardRef<
     },
     ref?: React.Ref<HTMLButtonElement>
   ) => {
-    const inlineStyle: any = useMemo(
+    const inlineStyle = useMemo(
       () => ({
-        ["--ripple-background"]: `var(--color-button-${priority}-hover)`
+        ["--ripple-background"]: `var(--color-button-${priority}-hover)`,
       }),
       [priority]
-    );
+    ) as React.CSSProperties;
 
     return (
       <StyledButton
@@ -208,8 +208,7 @@ export const Button = forwardRef<
         $iconLeft={iconLeft}
         $iconOnly={iconOnly}
         ref={ref}
-        {...rest}
-      >
+        {...rest}>
         {children}
       </StyledButton>
     );
