@@ -151,6 +151,7 @@ export type NewExpense = Pick<
 export type Category = {
   id: string;
   name: string;
+  categoryTypes: string[];
 };
 
 export type GoogleProfile = {

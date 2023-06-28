@@ -1,4 +1,4 @@
-import { Category, Expense } from "./types";
+import { Expense } from "./types";
 
 // export const users: User[] = [
 //   {
@@ -55,7 +55,7 @@ export const myExpenses: Expense[] = [
     name: "M-store",
     isHardware: true,
     comment: "Phone upgrade",
-    category: "Phone upgrade"
+    category: "Phone upgrade",
   },
   {
     id: "1",
@@ -66,7 +66,7 @@ export const myExpenses: Expense[] = [
     name: "M-store",
     isHardware: true,
     comment: "Phone upgrade",
-    category: "Phone upgrade"
+    category: "Phone upgrade",
   },
   {
     id: "2",
@@ -77,7 +77,7 @@ export const myExpenses: Expense[] = [
     name: "Conference",
     isHardware: false,
     comment: "NordicJS",
-    category: "Conference"
+    category: "Conference",
   },
   {
     id: "3",
@@ -88,7 +88,7 @@ export const myExpenses: Expense[] = [
     name: "Cource",
     isHardware: false,
     comment: "Udemy",
-    category: "Course"
+    category: "Course",
   },
   {
     id: "4",
@@ -99,7 +99,7 @@ export const myExpenses: Expense[] = [
     name: "M-store",
     isHardware: true,
     comment: "Phone upgrade",
-    category: "Phone upgrade"
+    category: "Phone upgrade",
   },
   {
     id: "5",
@@ -110,7 +110,7 @@ export const myExpenses: Expense[] = [
     name: "Conference",
     isHardware: false,
     comment: "NordicJS",
-    category: "Conference"
+    category: "Conference",
   },
   {
     id: "5",
@@ -121,7 +121,7 @@ export const myExpenses: Expense[] = [
     name: "Conference",
     isHardware: false,
     comment: "NordicJS",
-    category: "Conference"
+    category: "Conference",
   },
   {
     id: "6",
@@ -132,18 +132,18 @@ export const myExpenses: Expense[] = [
     name: "Conference",
     isHardware: false,
     comment: "NordicJS",
-    category: "Conference"
-  }
+    category: "Conference",
+  },
 ];
-export const categories: Category[] = [
-  { id: "1", name: "Conference" },
-  { id: "2", name: "Course" },
-  { id: "3", name: "Phone upgrade" },
-  { id: "4", name: "Computer upgrade" },
-  { id: "5", name: "Headphones" },
-  { id: "6", name: "Keyboard" },
-  { id: "7", name: "Mouse" },
-  { id: "8", name: "Books" },
-  { id: "9", name: "Accessories" },
-  { id: "10", name: "Other" }
-];
+// export const categories: Category[] = [
+//   { id: "1", name: "Conference" },
+//   { id: "2", name: "Course" },
+//   { id: "3", name: "Phone upgrade" },
+//   { id: "4", name: "Computer upgrade" },
+//   { id: "5", name: "Headphones" },
+//   { id: "6", name: "Keyboard" },
+//   { id: "7", name: "Mouse" },
+//   { id: "8", name: "Books" },
+//   { id: "9", name: "Accessories" },
+//   { id: "10", name: "Other" }
+// ];

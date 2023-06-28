@@ -23,7 +23,12 @@ import { Spinner } from "../Spinner";
 import { Modal } from "../Modal";
 import { ComboBox } from "../ComboBox";
 import { Textarea } from "../Textarea";
-import { CreateUpdateDeleteType, Expense, NewExpense } from "../../types";
+import {
+  Category,
+  CreateUpdateDeleteType,
+  Expense,
+  NewExpense,
+} from "../../types";
 import toast from "react-hot-toast";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
@@ -131,8 +136,7 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
       }
     });
     console.log(postBody);
-    // addCategory(postBody.categoryName as string);
-    // setShowAddCategory(false);
+    addCategory(postBody as Category);
   };
   // useEffect(() => {
   //   if (expense) {

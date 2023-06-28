@@ -1,5 +1,4 @@
 import toast from "react-hot-toast";
-import { categories, myExpenses } from "./mockData";
 import {
   Budget,
   BudgetRequestBody,
@@ -202,10 +201,10 @@ export const useGetCategories = () => {
 export const useCreateCategory = (mutationOptions?: any) => {
   const queryClient = useQueryClient();
   const mutation = useMutation(
-    (categoryName: string) =>
+    (category: Category) =>
       apiFetch<Category>(`${adminUrl}/categories`, {
         method: "POST",
-        body: JSON.stringify({ name: categoryName }),
+        body: JSON.stringify(category),
       }),
     {
       onSuccess: () => {
@@ -331,80 +330,12 @@ export const useDeleteExpense = (mutationOptions?: any) => {
   return mutation;
 };
 
-// export const addApiExpense = (exp: Expense) => {
-//   return apiFetch(`${expensesUrl}`, {
-//     method: 'POST',
-//     body: JSON.stringify(exp),
-//   });
-// };
-// export const updateApiExpense = (exp: Expense) => {
-//   return apiFetch(`${expensesUrl}`, {
-//     method: 'PUT',
-//     body: JSON.stringify(exp),
-//   });
-// };
-
-// export const deleteApiExpense = (id: string | number) => {
-//   return apiFetch(`${expensesUrl}?id=${id}`, {
-//     method: 'DELETE',
-//   });
-// };
+export const checkIsAdmin = (): Promise<boolean> =>
+  apiFetch(`${adminUrl}/isAdmin`);
 
 /*
   End - Real api
 */
-
-// export const getUser = (id: string): Promise<User> =>
-//   new Promise((resolve, reject) => {
-//     const user = users.find((u) => u.id === id);
-
-//     if (!user) {
-//       return setTimeout(() => reject(new Error('User not found')), 250);
-//     }
-
-//     setTimeout(() => resolve(user), 500);
-//   });
-
-// export const getAllUsers = (): Promise<User[]> =>
-//   new Promise((resolve, _) => {
-//     setTimeout(() => resolve(users), 500);
-//   });
-
-// export const getExpenses = (id: string): Promise<Expense[]> =>
-//   new Promise((resolve, reject) => {
-//     const expenses = myExpenses.filter((u) => u.userId === id);
-
-//     if (!expenses) {
-//       return setTimeout(() => reject(new Error('User not found')), 250);
-//     }
-
-//     setTimeout(() => resolve(expenses), 500);
-//   });
-
-export const getAllExpenses = (): Promise<Expense[]> =>
-  new Promise((resolve, _) => {
-    // const expenses = myExpenses.filter((u) => u.userId === id);
-
-    // if (!expenses) {
-    //   return setTimeout(() => reject(new Error('User not found')), 250);
-    // }
-
-    setTimeout(() => resolve(myExpenses), 500);
-  });
-
-export const getCategories = (): Promise<Category[]> =>
-  new Promise((resolve, _) => {
-    // const expenses = myExpenses.filter((u) => u.userId === id);
-
-    // if (!expenses) {
-    //   return setTimeout(() => reject(new Error('User not found')), 250);
-    // }
-
-    setTimeout(() => resolve(categories), 500);
-  });
-
-export const checkIsAdmin = (): Promise<boolean> =>
-  apiFetch(`${adminUrl}/isAdmin`);
 
 export const getGoogleProfile = (token: string) =>
   fetch(`https://www.googleapis.com/oauth2/v3/userinfo`, {
@@ -413,10 +344,3 @@ export const getGoogleProfile = (token: string) =>
       Accept: "application/json",
     },
   });
-
-// export const authenticateGoogleAzure = (token: string) => {
-//   return fetch(authenticateUrl, {
-//     method: 'POST',
-//     body: JSON.stringify({ id_token: token }),
-//   });
-// };
