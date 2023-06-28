@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import compLogo from "../assets/comp-logo.png";
 import { Divider } from "../components/Divider";
-import { GoogleLogin } from "@react-oauth/google";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { UserContextActionTypes, useUserContext } from "../utils/UserContext";
 import { useNavigate } from "react-router-dom";
 import { useCookie, useIsLoggedInUser } from "../utils/customHooks";
@@ -40,18 +40,23 @@ const Login = () => {
 
   const isLoggedIn = useIsLoggedInUser();
 
-  // const login = useGoogleLogin({
-  //   onSuccess: async (codeResponse) => {
-  //     dispatch({
-  //       type: UserContextActionTypes.SetLoggedInUser,
-  //       payload: { user: codeResponse },
-  //     });
-
-  //     console.log(codeResponse);
-  //     navigate('/mybudget');
-  //   },
-  //   onError: (error) => console.error('Login Failed:', error),
-  // });
+  const loginSuccess = (credentialResponse: CredentialResponse) => {
+    console.log(credentialResponse);
+    if (credentialResponse.credential) {
+      const user: any = jwt_decode(credentialResponse.credential as string);
+      const { name, picture, exp, email, sub } = user;
+      dispatch({
+        type: UserContextActionTypes.SetGoogleUser,
+        payload: { name, picture, exp, email, sub },
+      });
+      updateItem(credentialResponse.credential, {
+        expires: exp * 1000,
+        path: "/",
+        // secure: true,
+      });
+      navigate("/mybudget");
+    }
+  };
 
   useEffect(() => {
     if (isLoggedIn) navigate("/mybudget");
@@ -64,25 +69,7 @@ const Login = () => {
       <h1>My competence budget</h1>
       <Divider spacing="l" color="transparent" />
       <GoogleLogin
-        onSuccess={credentialResponse => {
-          console.log(credentialResponse);
-          if (credentialResponse.credential) {
-            const user: any = jwt_decode(
-              credentialResponse.credential as string
-            );
-            const { name, picture, exp, email, sub } = user;
-            dispatch({
-              type: UserContextActionTypes.SetGoogleUser,
-              payload: { name, picture, exp, email, sub }
-            });
-            updateItem(credentialResponse.credential, {
-              expires: exp * 1000,
-              path: "/"
-              // secure: true,
-            });
-            navigate("/mybudget");
-          }
-        }}
+        onSuccess={loginSuccess}
         onError={() => {
           toast.error("Login Failed");
         }}
