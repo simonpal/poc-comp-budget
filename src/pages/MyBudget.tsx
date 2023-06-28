@@ -14,9 +14,6 @@ import { useUserContext } from "../utils/UserContext";
 import { useEffect } from "react";
 
 const MyBudget = () => {
-  // const [currentUser, setCurrentUser] = useState<User | undefined>();
-  // const [myExpenses, setMyExpenses] = useState<Expense[] | undefined>();
-
   const {
     state: { googleUser },
   } = useUserContext();
@@ -31,18 +28,6 @@ const MyBudget = () => {
   console.log({ expenses });
 
   const theme = useTheme() as Theme;
-  // useEffect(() => {
-  //   if (!currentUser) {
-  //     getUser('1234')
-  //       .then((data) => setCurrentUser(data))
-  //       .catch(console.error);
-  //   }
-  //   if (!myExpenses) {
-  //     getExpenses('1234')
-  //       .then((data) => setMyExpenses(data))
-  //       .catch(console.error);
-  //   }
-  // }, [currentUser, myExpenses]);
 
   useEffect(() => {
     if (googleUser) {

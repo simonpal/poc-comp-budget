@@ -77,13 +77,23 @@ export const barColors = [
 export const getErrorMessage = (status: number, text = "") => {
   switch (status) {
     case 204:
-      return `The server responded with empty content, ${status} (${text})`;
+      return `The server responded with empty content, ${status} ${
+        text ? `(${text})` : ""
+      }`;
     case 401:
-      return `An error occured while trying to fetch data: Unauthorized request, ${status} (${text})`;
+      return `An error occured while trying to fetch data: Unauthorized request, ${status} ${
+        text ? `(${text})` : ""
+      }`;
     case 403:
-      return `An error occured while trying to fetch data: Forbidden request, ${status} (${text})`;
+      return `An error occured while trying to fetch data: Forbidden request, ${status} ${
+        text ? `(${text})` : ""
+      }`;
+    case 404:
+      return `Resource not found: ${status} ${text ? `(${text})` : ""}`;
     case 500:
-      return `An error occured while trying to fetch data: Internal server error, ${status} (${text})`;
+      return `An error occured while trying to fetch data: Internal server error, ${status} ${
+        text ? `(${text})` : ""
+      }`;
     default:
       return "Something went wrong";
   }
