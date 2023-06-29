@@ -9,6 +9,7 @@ import { Divider } from "./Divider";
 import { Timeline } from "./Timeline";
 // import { UserImage } from './UserImage';
 import { ValueContent } from "./ValueContent";
+import { Counter } from "./Counter";
 
 type UserProfileProps = {
   user?: User;
@@ -34,19 +35,25 @@ export const UserProfile: React.FunctionComponent<UserProfileProps> = ({
         <Column lg="4" md="4" sm="4" xs="12">
           <Box backgroundColor={theme.colors.silver} spacing="m">
             <ValueHeader>Time balance</ValueHeader>
-            <ValueContent>{budget.currentTimeBalance}h</ValueContent>
+            <ValueContent>
+              <Counter from={0} to={budget.currentTimeBalance} />
+            </ValueContent>
           </Box>
         </Column>
         <Column lg="4" md="4" sm="4" xs="12">
           <Box backgroundColor={theme.colors.silver} spacing="m">
             <ValueHeader>Money balance</ValueHeader>
-            <ValueContent>{budget.currentMoneyBalance}kr</ValueContent>
+            <ValueContent>
+              <Counter from={0} to={budget.currentMoneyBalance} />
+            </ValueContent>
           </Box>
         </Column>
         <Column lg="4" md="4" sm="4" xs="12">
           <Box backgroundColor={theme.colors.silver} spacing="m">
             <ValueHeader>Hardware balance</ValueHeader>
-            <ValueContent>{budget.currentHardwareBalance}kr</ValueContent>
+            <ValueContent>
+              <Counter from={0} to={budget.currentHardwareBalance} />
+            </ValueContent>
           </Box>
         </Column>
       </Grid>

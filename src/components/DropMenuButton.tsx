@@ -3,6 +3,33 @@ import styled, { css } from "styled-components";
 
 import { Button } from "./Button";
 import { AngleDownIcon } from "./Icons/AngleDownIcon";
+import { MotionConfig, MotionProps, Variants, motion } from "framer-motion";
+
+const menu = {
+  closed: {
+    scale: 0,
+    transition: {
+      delay: 0.15,
+    },
+  },
+  open: {
+    scale: 1,
+    transition: {
+      type: "spring",
+      duration: 0.4,
+      delayChildren: 0.2,
+      staggerChildren: 0.05,
+    },
+  },
+} satisfies Variants;
+
+const item = {
+  variants: {
+    closed: { x: -16, opacity: 0 },
+    open: { x: 0, opacity: 1 },
+  },
+  transition: { opacity: { duration: 0.2 } },
+} satisfies MotionProps;
 
 type DropdownStyledProps = {
   $maxHeight: number;
@@ -50,6 +77,7 @@ const DropMenuButtonWrapper = styled.div<DropdownStyledProps>`
     margin: 0;
     width: 280px;
     z-index: 100;
+    border-radius: 0.5rem;
     li {
       width: 100%;
       display: flex;
@@ -137,44 +165,50 @@ export const DropMenuButton: React.FunctionComponent<
   }, [expanded, getElementFromTop]);
 
   return (
-    <DropMenuButtonWrapper
-      $fromRight={fromRight}
-      $maxHeight={dropMaxHeight}
-      $fromTop={fromTop}>
-      {typeof label === "string" ? (
-        <Button
-          type="button"
-          aria-haspopup="true"
-          aria-expanded={expanded}
-          aria-controls={id}
-          onClick={() => setExpanded(!expanded)}
-          ref={buttonRef}
-          {...rest}>
-          {label}
-        </Button>
-      ) : (
-        <CustomDropdownButton
-          role="button"
-          aria-haspopup="true"
-          aria-expanded={expanded}
-          aria-controls={id}
-          onClick={() => setExpanded(!expanded)}
-          ref={buttonRef}>
-          <AngleDownIcon className={`${expanded ? "expanded" : ""}`} />
-          {label}
-        </CustomDropdownButton>
-      )}
-      <ul
-        role="menu"
-        id={id}
-        aria-label={typeof label === "string" ? label : id}
-        ref={dropMenuRef}>
-        {React.Children.map(children, (child) => {
-          if (!child) return null;
-          return <li>{child}</li>;
-        })}
-        {/* {children} */}
-      </ul>
-    </DropMenuButtonWrapper>
+    <MotionConfig reducedMotion="user">
+      <DropMenuButtonWrapper
+        $fromRight={fromRight}
+        $maxHeight={dropMaxHeight}
+        $fromTop={fromTop}>
+        {typeof label === "string" ? (
+          <Button
+            type="button"
+            aria-haspopup="true"
+            aria-expanded={expanded}
+            aria-controls={id}
+            onClick={() => setExpanded(!expanded)}
+            ref={buttonRef}
+            {...rest}>
+            {label}
+          </Button>
+        ) : (
+          <CustomDropdownButton
+            role="button"
+            aria-haspopup="true"
+            aria-expanded={expanded}
+            aria-controls={id}
+            onClick={() => setExpanded(!expanded)}
+            ref={buttonRef}>
+            <AngleDownIcon className={`${expanded ? "expanded" : ""}`} />
+            {label}
+          </CustomDropdownButton>
+        )}
+        <motion.ul
+          animate={expanded ? "open" : "closed"}
+          initial="closed"
+          exit="closed"
+          variants={menu}
+          role="menu"
+          id={id}
+          aria-label={typeof label === "string" ? label : id}
+          ref={dropMenuRef}>
+          {React.Children.map(children, (child) => {
+            if (!child) return null;
+            return <motion.li {...item}>{child}</motion.li>;
+          })}
+          {/* {children} */}
+        </motion.ul>
+      </DropMenuButtonWrapper>
+    </MotionConfig>
   );
 };

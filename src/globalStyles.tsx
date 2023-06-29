@@ -47,6 +47,9 @@ export const GlobalStyles = createGlobalStyle<GlobalStyleProps>`
       background-color: ${({ theme }) =>
         theme.isDark ? "rgba(0,0,0,0.6)" : "rgba(255,255,255,0.7)"};
     }
+    &.overflow-hidden {
+      overflow: hidden;
+    }
   }
   img, picture, video, canvas, svg {
     display: block;

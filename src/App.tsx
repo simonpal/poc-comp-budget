@@ -30,9 +30,9 @@ const router = createBrowserRouter([
     errorElement: (
       <Suspense
         fallback={
-          <p>
+          <div>
             <Spinner size="md" />
-          </p>
+          </div>
         }>
         <ErrorPage />
       </Suspense>
@@ -48,9 +48,9 @@ const router = createBrowserRouter([
       <Layout>
         <Suspense
           fallback={
-            <p>
+            <div>
               <Spinner size="md" />
-            </p>
+            </div>
           }>
           <MyBudget />
         </Suspense>
@@ -64,9 +64,9 @@ const router = createBrowserRouter([
         <Layout>
           <Suspense
             fallback={
-              <p>
+              <div>
                 <Spinner size="md" />
-              </p>
+              </div>
             }>
             <Admin />
           </Suspense>
@@ -81,9 +81,9 @@ const router = createBrowserRouter([
         <Layout>
           <Suspense
             fallback={
-              <p>
+              <div>
                 <Spinner size="md" />
-              </p>
+              </div>
             }>
             <EditExpense />
           </Suspense>
@@ -98,9 +98,9 @@ const router = createBrowserRouter([
         <Layout>
           <Suspense
             fallback={
-              <p>
+              <div>
                 <Spinner size="md" />
-              </p>
+              </div>
             }>
             <AdminStats />
           </Suspense>

@@ -7,7 +7,7 @@ import { Grid } from "./Grid";
 import { Column } from "./Column";
 import { Divider } from "./Divider";
 import { getExpenseType } from "../utils/helpers";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "./Button";
 import { InlineStack } from "./InlineStack";
 import { PenIcon } from "./Icons/PenIcon";
@@ -21,11 +21,18 @@ import { useNavigate } from "react-router-dom";
 import format from "date-fns/format";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { useDeleteExpense, useIsAdmin } from "../api";
+import {
+  AnimatePresence,
+  motion,
+  useAnimation,
+  useInView,
+} from "framer-motion";
 
-const TimelineWrapper = styled.div`
+const TimelineWrapper = styled.ul`
   border-left: ${({ theme }) => `1px solid ${theme.colors.silver}`};
   margin-left: 2rem;
   margin-top: 2.5rem;
+  padding: 0;
 `;
 
 const ExpenseWrapper = styled.div`
@@ -104,6 +111,94 @@ type TimelineProps = {
   expenses: Expense[];
 };
 
+const listItem = {
+  initial: { opacity: 0, x: 30 },
+  animate: { opacity: 1, x: 0 },
+  exit: { opacity: 0, x: 30 },
+};
+
+const TimeLineItem = ({
+  exp,
+  editExpense,
+  setShowConfirmDelete,
+  setExpenseToDelete,
+}: {
+  exp: Expense;
+  editExpense: (exp: Expense) => void;
+  setShowConfirmDelete: React.Dispatch<React.SetStateAction<boolean>>;
+  setExpenseToDelete: React.Dispatch<React.SetStateAction<Expense | undefined>>;
+}) => {
+  const { isAdmin } = useIsAdmin();
+  const path = useCurrentPath();
+  const controls = useAnimation();
+  const ref = useRef<HTMLLIElement>(null);
+  const inView = useInView(ref);
+  useEffect(() => {
+    if (inView) {
+      controls.start("animate");
+    }
+  }, [controls, inView]);
+
+  return (
+    <motion.li
+      ref={ref}
+      initial="initial"
+      animate={controls}
+      exit="exit"
+      variants={listItem}>
+      <ExpenseWrapper>
+        <ExpenseIcon>{getIcon(getExpenseType(exp))}</ExpenseIcon>
+        <ExpenseContent>
+          <Grid spacing="l">
+            <Column lg="9" md="9" sm="9" xs="12">
+              <div>
+                <strong>{format(new Date(exp.date), "yyyy-MM-dd")}</strong>
+              </div>
+              <Divider spacing="s" color="transparent" />
+              <div>
+                <strong>Type: </strong> {getExpenseType(exp)}
+              </div>
+              <div>
+                <strong>Category: </strong> {exp.category}
+              </div>
+              <div>
+                <strong>Name: </strong> {exp.name}
+              </div>
+              <div>
+                <strong>Comment: </strong> {exp.comment}
+              </div>
+            </Column>
+            <Column lg="3" md="3" sm="3" xs="12" alignItems="flex-end">
+              <Sum>
+                {exp.sum} {exp.type === "time" ? "h" : "kr"}
+              </Sum>
+            </Column>
+          </Grid>
+          {isAdmin && path.includes("admin") && (
+            <ExpenseButtons>
+              <Button
+                priority="outline"
+                iconOnly
+                onClick={() => editExpense(exp)}>
+                <PenIcon />
+              </Button>
+              <Button
+                priority="outline"
+                onClick={() => {
+                  setShowConfirmDelete(true);
+                  setExpenseToDelete(exp);
+                }}
+                iconOnly>
+                <DeleteIcon />
+              </Button>
+            </ExpenseButtons>
+          )}
+        </ExpenseContent>
+      </ExpenseWrapper>
+    </motion.li>
+  );
+};
+
 const sortByDate = (a: Expense, b: Expense) => {
   return new Date(b.date).valueOf() - new Date(a.date).valueOf();
 };
@@ -121,14 +216,9 @@ export const Timeline: React.FunctionComponent<TimelineProps> = ({
 
   const sortedExpenses = expenses.sort(sortByDate);
 
-  const { isAdmin } = useIsAdmin();
-
   const { dispatch } = useAdminContext();
 
   const navigate = useNavigate();
-
-  const path = useCurrentPath();
-  console.log({ path });
 
   const allYears: number[] = useMemo(() => {
     return sortedExpenses.reduce((acc: number[], curr: Expense) => {
@@ -171,57 +261,17 @@ export const Timeline: React.FunctionComponent<TimelineProps> = ({
         ))}
       </InlineStack>
       <TimelineWrapper>
-        {filteredExpenses.map((exp) => (
-          <ExpenseWrapper key={exp.id}>
-            <ExpenseIcon>{getIcon(getExpenseType(exp))}</ExpenseIcon>
-            <ExpenseContent>
-              <Grid spacing="l">
-                <Column lg="9" md="9" sm="9" xs="12">
-                  <div>
-                    <strong>{format(new Date(exp.date), "yyyy-MM-dd")}</strong>
-                  </div>
-                  <Divider spacing="s" color="transparent" />
-                  <div>
-                    <strong>Type: </strong> {getExpenseType(exp)}
-                  </div>
-                  <div>
-                    <strong>Category: </strong> {exp.category}
-                  </div>
-                  <div>
-                    <strong>Name: </strong> {exp.name}
-                  </div>
-                  <div>
-                    <strong>Comment: </strong> {exp.comment}
-                  </div>
-                </Column>
-                <Column lg="3" md="3" sm="3" xs="12" alignItems="flex-end">
-                  <Sum>
-                    {exp.sum} {exp.type === "time" ? "h" : "kr"}
-                  </Sum>
-                </Column>
-              </Grid>
-              {isAdmin && path.includes("admin") && (
-                <ExpenseButtons>
-                  <Button
-                    priority="outline"
-                    iconOnly
-                    onClick={() => editExpense(exp)}>
-                    <PenIcon />
-                  </Button>
-                  <Button
-                    priority="outline"
-                    onClick={() => {
-                      setShowConfirmDelete(true);
-                      setExpenseToDelete(exp);
-                    }}
-                    iconOnly>
-                    <DeleteIcon />
-                  </Button>
-                </ExpenseButtons>
-              )}
-            </ExpenseContent>
-          </ExpenseWrapper>
-        ))}
+        <AnimatePresence>
+          {filteredExpenses.map((exp) => (
+            <TimeLineItem
+              key={exp.id}
+              editExpense={editExpense}
+              setExpenseToDelete={setExpenseToDelete}
+              exp={exp}
+              setShowConfirmDelete={setShowConfirmDelete}
+            />
+          ))}
+        </AnimatePresence>
       </TimelineWrapper>
       <ConfirmDialog
         visible={showConfirmDelete}

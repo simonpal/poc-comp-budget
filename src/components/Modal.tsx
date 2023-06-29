@@ -6,13 +6,14 @@ import { TimesIcon } from "./Icons/TimesIcon";
 // import Box from '../box/Box';
 import { Overlay, OverlayProps } from "./Overlay";
 import { ModalContent } from "./ModalContent";
+import { motion } from "framer-motion";
 // import { getClasses } from '../utils/helpers';
 
 type StyledModalProps = {
   $alignItems: AlignItems;
   $justifyContent: Justify;
 };
-const StyledModal = styled.div<StyledModalProps>`
+const StyledModal = styled(motion.div)<StyledModalProps>`
   max-height: 80%;
   max-width: 90vw;
   overflow: visible;
@@ -59,6 +60,27 @@ const StyledModal = styled.div<StyledModalProps>`
   }
 `;
 
+const dropIn = {
+  hidden: {
+    y: "-100vh",
+    opacity: 0,
+  },
+  visible: {
+    y: "0",
+    opacity: 1,
+    transition: {
+      duration: 0.1,
+      type: "spring",
+      damping: 25,
+      stiffness: 500,
+    },
+  },
+  exit: {
+    y: "100vh",
+    opacity: 0,
+  },
+};
+
 export interface ModalProps extends OverlayProps {
   visible: boolean;
   width?: string;
@@ -85,11 +107,10 @@ export const Modal: React.FunctionComponent<
   useEffect(() => {
     if (visible) {
       document.body.classList.add("overflow-hidden");
-    } else {
-      document.body.classList.remove("overflow-hidden");
     }
     return () => document.body.classList.remove("overflow-hidden");
   }, [visible]);
+
   if (!visible) return null;
 
   const inlineStyle = {
@@ -110,6 +131,10 @@ export const Modal: React.FunctionComponent<
           style={inlineStyle}
           $alignItems={alignItems}
           $justifyContent={justifyContent}
+          variants={dropIn}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
           {...rest}>
           <button
             className={`base-close-button`}
