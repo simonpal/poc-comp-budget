@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
 // import TabItem from '../TabItem';
@@ -129,14 +130,17 @@ export const Tabs = ({
             </li>
           ))}
       </TabHeaders>
-      {children &&
-        children.map((item: any, index: number) => (
-          <TabItem
-            key={`tabitem-${item.props.eventKey}`}
-            {...item.props}
-            visible={isActive(index)}
-          />
-        ))}
+      {children && (
+        <AnimatePresence>
+          {children.map((item: any, index: number) => (
+            <TabItem
+              key={`tabitem-${item.props.eventKey}`}
+              {...item.props}
+              visible={isActive(index)}
+            />
+          ))}
+        </AnimatePresence>
+      )}
     </div>
   );
 };
@@ -149,6 +153,11 @@ export type TabItemProps = {
   visible?: boolean;
 };
 
+const tabVariants = {
+  closed: { y: 16, opacity: 0 },
+  open: { y: 0, opacity: 1 },
+};
+
 export const TabItem = ({
   children,
   visible = false,
@@ -159,11 +168,15 @@ TabItemProps) => {
     return null;
   }
   return (
-    <div
+    <motion.div
+      animate={visible ? "open" : "closed"}
+      initial="closed"
+      exit="closed"
+      variants={tabVariants}
       role="tabpanel"
       id={`${eventKey}-content`}
       aria-labelledby={`${eventKey}-control`}>
       {children}
-    </div>
+    </motion.div>
   );
 };

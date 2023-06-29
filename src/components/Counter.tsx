@@ -21,7 +21,7 @@ export const Counter = ({ from, to }: AnimatedCounterProps) => {
 
   useEffect(() => {
     if (inView) {
-      animate(count, to, { duration: 2 });
+      animate(count, to, { duration: 1 });
     }
   }, [count, inView, to]);
 
