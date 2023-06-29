@@ -105,11 +105,11 @@ export const Modal: React.FunctionComponent<
   ...rest
 }) => {
   useEffect(() => {
-    if (visible) {
-      document.body.classList.add("overflow-hidden");
-    }
-    return () => document.body.classList.remove("overflow-hidden");
-  }, [visible]);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
 
   if (!visible) return null;
 
