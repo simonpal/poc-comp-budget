@@ -37,8 +37,12 @@ const StyledModal = styled.div<StyledModalProps>`
     width: 48px;
     height: 48px;
     font-size: 1.5rem;
+    transition: transform 0.2s ease;
     svg {
       margin: 0;
+    }
+    &:hover {
+      transform: scale(1.1);
     }
 
     @media screen and (max-width: $breakpoint-mobile-max) {
@@ -90,7 +94,7 @@ export const Modal: React.FunctionComponent<
 
   const inlineStyle = {
     ...(zIndex && { zIndex: zIndex + 1 }),
-    ...(width && { width })
+    ...(width && { width }),
   };
 
   return (
@@ -100,15 +104,13 @@ export const Modal: React.FunctionComponent<
         onClose={onClose}
         disableClick={disableClick}
         zIndex={zIndex}
-        blur={blur}
-      >
+        blur={blur}>
         <StyledModal
           className={`base-modal ${className ? ` ${className}` : ""}`}
           style={inlineStyle}
           $alignItems={alignItems}
           $justifyContent={justifyContent}
-          {...rest}
-        >
+          {...rest}>
           <button
             className={`base-close-button`}
             data-testid="close-button"
@@ -116,8 +118,7 @@ export const Modal: React.FunctionComponent<
             role="button"
             aria-label="Close"
             title="Close"
-            type="button"
-          >
+            type="button">
             <TimesIcon />
           </button>
           <ModalContent>{children}</ModalContent>

@@ -49,6 +49,7 @@ const DropMenuButtonWrapper = styled.div<DropdownStyledProps>`
     padding: 0;
     margin: 0;
     width: 280px;
+    z-index: 100;
     li {
       width: 100%;
       display: flex;
@@ -139,8 +140,7 @@ export const DropMenuButton: React.FunctionComponent<
     <DropMenuButtonWrapper
       $fromRight={fromRight}
       $maxHeight={dropMaxHeight}
-      $fromTop={fromTop}
-    >
+      $fromTop={fromTop}>
       {typeof label === "string" ? (
         <Button
           type="button"
@@ -149,8 +149,7 @@ export const DropMenuButton: React.FunctionComponent<
           aria-controls={id}
           onClick={() => setExpanded(!expanded)}
           ref={buttonRef}
-          {...rest}
-        >
+          {...rest}>
           {label}
         </Button>
       ) : (
@@ -160,8 +159,7 @@ export const DropMenuButton: React.FunctionComponent<
           aria-expanded={expanded}
           aria-controls={id}
           onClick={() => setExpanded(!expanded)}
-          ref={buttonRef}
-        >
+          ref={buttonRef}>
           <AngleDownIcon className={`${expanded ? "expanded" : ""}`} />
           {label}
         </CustomDropdownButton>
@@ -170,9 +168,8 @@ export const DropMenuButton: React.FunctionComponent<
         role="menu"
         id={id}
         aria-label={typeof label === "string" ? label : id}
-        ref={dropMenuRef}
-      >
-        {React.Children.map(children, child => {
+        ref={dropMenuRef}>
+        {React.Children.map(children, (child) => {
           if (!child) return null;
           return <li>{child}</li>;
         })}
