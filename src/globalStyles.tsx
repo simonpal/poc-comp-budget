@@ -45,7 +45,7 @@ export const GlobalStyles = createGlobalStyle<GlobalStyleProps>`
     &.has-bg #root {
       backdrop-filter: blur(12px);
       background-color: ${({ theme }) =>
-        theme.isDark ? "rgba(0,0,0,0.5)" : "rgba(255,255,255,0.7)"};
+        theme.isDark ? "rgba(0,0,0,0.6)" : "rgba(255,255,255,0.7)"};
     }
   }
   img, picture, video, canvas, svg {
