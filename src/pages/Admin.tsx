@@ -26,6 +26,7 @@ import styled from "styled-components";
 import { Spinner } from "../components/Spinner";
 import { ErrorBox } from "../components/ErrorBox";
 import { Box } from "../components/Box";
+import { StatsIcon } from "../components/Icons/StatsIcon";
 
 const NoUser = styled.div`
   padding: var(--spacing-xl);
@@ -98,7 +99,7 @@ const Admin = () => {
     <div>
       <Box alignItems="flex-end">
         <Button priority="outline" fullWidth onClick={() => navigate("stats")}>
-          Show statistics
+          Show statistics <StatsIcon />
         </Button>
       </Box>
       <Divider spacing="l" />
