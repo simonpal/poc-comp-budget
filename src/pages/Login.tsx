@@ -19,9 +19,9 @@ const LoginWrapper = styled.div`
   justify-content: center;
   img {
     max-width: 200px;
-    transition: transform 0.2s ease;
+    transition: transform 0.5s ease;
     &:hover {
-      transform: scale(1.05);
+      transform: rotate(360deg) scale(1.05);
       transform-origin: center center;
     }
   }

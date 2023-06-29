@@ -10,7 +10,6 @@ import { getExpenseType } from "../utils/helpers";
 import { useMemo, useState } from "react";
 import { Button } from "./Button";
 import { InlineStack } from "./InlineStack";
-import { useUserContext } from "../utils/UserContext";
 import { PenIcon } from "./Icons/PenIcon";
 import { DeleteIcon } from "./Icons/DeleteIcon";
 import {
@@ -21,7 +20,7 @@ import { useCurrentPath } from "../utils/customHooks";
 import { useNavigate } from "react-router-dom";
 import format from "date-fns/format";
 import { ConfirmDialog } from "./ConfirmDialog";
-import { useDeleteExpense } from "../api";
+import { useDeleteExpense, useIsAdmin } from "../api";
 
 const TimelineWrapper = styled.div`
   border-left: ${({ theme }) => `1px solid ${theme.colors.silver}`};
@@ -122,9 +121,7 @@ export const Timeline: React.FunctionComponent<TimelineProps> = ({
 
   const sortedExpenses = expenses.sort(sortByDate);
 
-  const {
-    state: { isAdmin },
-  } = useUserContext();
+  const { isAdmin } = useIsAdmin();
 
   const { dispatch } = useAdminContext();
 

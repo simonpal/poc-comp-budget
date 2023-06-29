@@ -36,6 +36,7 @@ export const UpdateUser = () => {
 
   const { budget, isLoading: isLoadingBudget } = useGetBudgets(
     user?.userId ?? "",
+    true,
     {
       enabled: typeof user !== "undefined",
     }

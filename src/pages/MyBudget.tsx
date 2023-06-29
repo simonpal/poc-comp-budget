@@ -18,7 +18,7 @@ const MyBudget = () => {
     state: { googleUser },
   } = useUserContext();
 
-  const { budget } = useGetBudgets(googleUser?.sub ?? "", {
+  const { budget } = useGetBudgets(googleUser?.sub ?? "", false, {
     enabled: typeof googleUser?.sub !== "undefined",
   });
   const { expenses } = useGetExpenses(googleUser?.sub ?? "", {

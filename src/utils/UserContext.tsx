@@ -1,6 +1,5 @@
 import React, {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -9,7 +8,6 @@ import React, {
 import jwt_decode from "jwt-decode";
 import { CookieSettings, GoogleUser } from "../types";
 import { useCookie } from "./customHooks";
-import { checkIsAdmin } from "../api";
 import {
   SETTINGS_COOKIE,
   SETTINGS_COOKIE_OPTIONS,
@@ -20,7 +18,7 @@ import {
 export enum UserContextActionTypes {
   // SetLoggedInUser = "SET_LOGGED_IN_USER",
   // SetLoggedInProfile = 'SET_LOGGED_IN_PROFILE',
-  SetIsAdmin = "SET_IS_ADMIN",
+  // SetIsAdmin = "SET_IS_ADMIN",
   ResetUser = "RESET_USER",
   SetGoogleUser = "SET_GOOGLE_USER",
   SetStoredSettings = "SET_STORED_SETTINGS",
@@ -32,7 +30,7 @@ type UserContextPayload = {
   // [UserContextActionTypes.SetLoggedInProfile]:
   //   | { profile: GoogleProfile }
   //   | undefined;
-  [UserContextActionTypes.SetIsAdmin]: boolean;
+  // [UserContextActionTypes.SetIsAdmin]: boolean;
   [UserContextActionTypes.ResetUser]: boolean;
   [UserContextActionTypes.SetGoogleUser]: GoogleUser;
   [UserContextActionTypes.SetStoredSettings]: CookieSettings;
@@ -61,8 +59,8 @@ const reducer = (state: UserContext, action: UserContextActions) => {
     //   return { ...state, loggedInUser: action.payload };
     // case UserContextActionTypes.SetLoggedInProfile:
     //   return { ...state, loggedInProfile: action.payload };
-    case UserContextActionTypes.SetIsAdmin:
-      return { ...state, isAdmin: action.payload };
+    // case UserContextActionTypes.SetIsAdmin:
+    //   return { ...state, isAdmin: action.payload };
     case UserContextActionTypes.SetGoogleUser:
       return { ...state, googleUser: action.payload };
     case UserContextActionTypes.SetStoredSettings:
@@ -82,7 +80,7 @@ const reducer = (state: UserContext, action: UserContextActions) => {
 interface UserContext {
   // loggedInUser: any;
   // loggedInProfile: any;
-  isAdmin: boolean;
+  // isAdmin: boolean;
   googleUser: GoogleUser | undefined;
   storedSettings: CookieSettings | undefined;
 }
@@ -94,7 +92,7 @@ const UserContext = createContext<{
   state: {
     // loggedInUser: undefined,
     // loggedInProfile: undefined,
-    isAdmin: false,
+    // isAdmin: false,
     googleUser: undefined,
     storedSettings: undefined,
   },
@@ -108,7 +106,7 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, {
     // loggedInUser: undefined,
     // loggedInProfile: undefined,
-    isAdmin: false,
+    // isAdmin: false,
     googleUser: undefined,
     storedSettings: undefined,
   });
@@ -129,21 +127,21 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
     return undefined;
   }, [cookieSettings]);
 
-  const isUserAdmin = useCallback(async () => {
-    if (state.googleUser && token) {
-      checkIsAdmin().then((res: boolean) => {
-        dispatch({
-          type: UserContextActionTypes.SetIsAdmin,
-          payload: res,
-        });
-      });
-    } else {
-      return false;
-    }
-  }, [token, state.googleUser]);
+  // const isUserAdmin = useCallback(async () => {
+  //   if (token) {
+  //     checkIsAdmin().then((res: boolean) => {
+  //       dispatch({
+  //         type: UserContextActionTypes.SetIsAdmin,
+  //         payload: res,
+  //       });
+  //     });
+  //   } else {
+  //     return false;
+  //   }
+  // }, [token]);
 
   useEffect(() => {
-    isUserAdmin();
+    // isUserAdmin();
     if (typeof token !== undefined && token.length > 0 && !state.googleUser) {
       const user: any = jwt_decode(token);
       const { name, picture, exp, email, sub } = user;
@@ -152,7 +150,7 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
         payload: { name, picture, exp, email, sub },
       });
     }
-  }, [token, isUserAdmin, state.googleUser]);
+  }, [token, state.googleUser]);
 
   useEffect(() => {
     if (!parsedSettings || typeof parsedSettings?.darkTheme === "undefined") {

@@ -12,11 +12,15 @@ import { Grid } from "../components/Grid";
 // import { users } from '../mockData';
 import { UserCard } from "../components/UserCard";
 import { Modal } from "../components/Modal";
-import { useGetAllUsers, useGetBudgets, useGetExpenses } from "../api";
+import {
+  useGetAllUsers,
+  useGetBudgets,
+  useGetExpenses,
+  useIsAdmin,
+} from "../api";
 import { UserProfile } from "../components/UserProfile";
 import { Button } from "../components/Button";
 import { useNavigate } from "react-router-dom";
-import { useUserContext } from "../utils/UserContext";
 import { ComboBox } from "../components/ComboBox";
 import styled from "styled-components";
 import { Spinner } from "../components/Spinner";
@@ -40,9 +44,7 @@ const Admin = () => {
     dispatch,
   } = useAdminContext();
 
-  const {
-    state: { isAdmin },
-  } = useUserContext();
+  const { isAdmin, isLoading: adminLoading } = useIsAdmin();
 
   const {
     users,
@@ -53,7 +55,7 @@ const Admin = () => {
   const { expenses } = useGetExpenses(user?.userId || "", {
     enabled: typeof user !== "undefined",
   });
-  const { budget } = useGetBudgets(user?.userId || "", {
+  const { budget } = useGetBudgets(user?.userId || "", true, {
     enabled: typeof user !== "undefined",
   });
 
@@ -88,10 +90,10 @@ const Admin = () => {
   }, [expenses, dispatch]);
 
   useEffect(() => {
-    if (!isAdmin) {
+    if (!isAdmin && !adminLoading) {
       navigate("/mybudget");
     }
-  }, [isAdmin, navigate]);
+  }, [isAdmin, adminLoading, navigate]);
   return (
     <div>
       <Box alignItems="flex-end">
