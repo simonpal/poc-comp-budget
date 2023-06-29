@@ -279,6 +279,7 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
         </Box>
       </form>
       <Modal
+        blur
         visible={showAddCategory}
         onClose={() => setShowAddCategory(false)}>
         <h2>Add a new category</h2>

@@ -164,6 +164,7 @@ const Admin = () => {
         <NoUser>Please select a user.</NoUser>
       )}
       <Modal
+        blur
         onClose={() =>
           dispatch({
             type: AdminContextActionTypes.ToggleUserModal,
