@@ -54,6 +54,9 @@ const CheckboxWrapper = styled(FormControl)`
       color: var(--form-control-disabled);
       cursor: not-allowed;
     }
+    &:invalid {
+      --form-control-color: red;
+    }
   }
 `;
 

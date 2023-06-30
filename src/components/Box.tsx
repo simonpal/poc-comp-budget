@@ -1,7 +1,7 @@
-import React, { forwardRef } from 'react';
-import styled, { css } from 'styled-components';
+import React, { forwardRef } from "react";
+import styled, { css } from "styled-components";
 
-import { AlignItems, Direction, Justify, Spacings } from '../types';
+import { AlignItems, Direction, Justify, Spacings } from "../types";
 // import { getClasses, getShortSpacing } from '../utils/helpers';
 
 type StyledBoxProps = {
@@ -19,13 +19,13 @@ type StyledBoxProps = {
 
 const StyledBox = styled.div<StyledBoxProps>`
   --box-background: transparent;
-  --box-color: #000;
+  --box-color: ${({ theme }) => theme.colors.text};
   background-color: var(--box-background);
   color: var(--box-color);
   position: relative;
   display: flex;
   max-width: 100%;
-  width: ${({ $width }) => $width ?? '100%'};
+  width: ${({ $width }) => $width ?? "100%"};
   flex-direction: ${({ $flexDirection }) => $flexDirection};
   justify-content: ${({ $justifyContent }) => $justifyContent};
   align-items: ${({ $alignItems }) => $alignItems};
@@ -93,19 +93,19 @@ export const Box = forwardRef<
       leftSpacing,
       rightSpacing,
       spacing,
-      alignItems = 'flex-start',
-      justifyContent = 'flex-start',
+      alignItems = "flex-start",
+      justifyContent = "flex-start",
       zIndex,
       backgroundColor,
-      flexDirection = 'column',
+      flexDirection = "column",
       className,
       ...rest
     },
     ref?: React.Ref<HTMLDivElement>
   ) => {
     const inlineStyle = {
-      ...(backgroundColor && { ['--box-background']: backgroundColor }),
-      ...(color && { ['--box-color']: color }),
+      ...(backgroundColor && { ["--box-background"]: backgroundColor }),
+      ...(color && { ["--box-color"]: color }),
     } as any;
     return (
       <StyledBox
@@ -120,7 +120,7 @@ export const Box = forwardRef<
         $rightSpacing={rightSpacing}
         $flexDirection={flexDirection}
         ref={ref}
-        className={`base-box ${className ? ` ${className}` : ''}`}
+        className={`base-box ${className ? ` ${className}` : ""}`}
         style={inlineStyle}
         {...rest}
       />

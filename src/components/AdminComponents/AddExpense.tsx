@@ -110,6 +110,7 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
+
     formData.forEach((value, property: string) => {
       console.log(value, property);
 
@@ -128,15 +129,20 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
     event.preventDefault();
     const postBody: formDataType = {};
     const formData = new FormData(event.currentTarget as HTMLFormElement);
-    formData.forEach((value, property: string) => {
-      if (typeof postBody[property] !== "undefined") {
-        postBody[property] = formData.getAll(property);
-      } else {
-        postBody[property] = value;
-      }
-    });
-    console.log(postBody);
-    addCategory(postBody as Category);
+    const chk = formData.getAll("categoryType");
+    if (chk.length === 0) {
+      toast.error("Please select at least one category type");
+    } else {
+      formData.forEach((value, property: string) => {
+        if (typeof postBody[property] !== "undefined") {
+          postBody[property] = formData.getAll(property);
+        } else {
+          postBody[property] = value;
+        }
+      });
+      console.log(postBody);
+      addCategory(postBody as Category);
+    }
   };
   // useEffect(() => {
   //   if (expense) {
@@ -299,6 +305,9 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
         <form onSubmit={onSubmitCategoryHandler}>
           <TextField label="Category name" name="categoryName" fullWidth />
           <Divider spacing="s" color="transparent" />
+          <Box bottomSpacing="xs">
+            <Label>Category belongs to type *</Label>
+          </Box>
           <InlineStack spacing="l">
             <Checkbox
               id="time-cat"

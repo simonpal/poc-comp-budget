@@ -20,6 +20,7 @@ import { useIsAdmin } from "../api";
 
 const PageWrapper = styled.div`
   width: 1024px;
+  min-height: 100vh;
   max-width: 100%;
   margin: 0 auto;
   border-left: ${({ theme }) => `1px solid ${theme.colors.silver}`};

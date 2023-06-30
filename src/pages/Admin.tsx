@@ -27,6 +27,7 @@ import { Spinner } from "../components/Spinner";
 import { ErrorBox } from "../components/ErrorBox";
 import { Box } from "../components/Box";
 import { StatsIcon } from "../components/Icons/StatsIcon";
+import { UserIcon } from "../components/Icons/UserIcon";
 
 const NoUser = styled.div`
   padding: var(--spacing-xl);
@@ -37,6 +38,9 @@ const NoUser = styled.div`
   color: #888;
   font-weight: bold;
   font-size: 2rem;
+  svg {
+    font-size: 5rem;
+  }
 `;
 
 const Admin = () => {
@@ -161,7 +165,10 @@ const Admin = () => {
         </TabItem> */}
         </Tabs>
       ) : (
-        <NoUser>Please select a user.</NoUser>
+        <NoUser>
+          <UserIcon />
+          <div>Please select a user.</div>
+        </NoUser>
       )}
       <Modal
         id="user-profile-modal"
