@@ -1,21 +1,22 @@
 // import React, { useEffect } from 'react';
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import compLogo from '../assets/comp-logo.png';
-import { googleLogout } from '@react-oauth/google';
-import { Grid } from './Grid';
-import { Column } from './Column';
-import { Button } from './Button';
-import { UserContextActionTypes, useUserContext } from '../utils/UserContext';
-import { Link, useNavigate } from 'react-router-dom';
-import { UserImage } from './UserImage';
-import { useCookie, useIsLoggedInUser } from '../utils/customHooks';
-import { useEffect } from 'react';
-import { DropMenuButton } from './DropMenuButton';
-import { ToggleSwitch } from './ToggleSwitch';
-import { Label } from './FormControl/Label';
-import { TOKEN_COOKIE } from '../utils/constants';
-import addDays from 'date-fns/addDays';
+import compLogo from "../assets/comp-logo.png";
+import { googleLogout } from "@react-oauth/google";
+import { Grid } from "./Grid";
+import { Column } from "./Column";
+import { Button } from "./Button";
+import { UserContextActionTypes, useUserContext } from "../utils/UserContext";
+import { Link, useNavigate } from "react-router-dom";
+import { UserImage } from "./UserImage";
+import { useCookie, useIsLoggedInUser } from "../utils/customHooks";
+import { useEffect } from "react";
+import { DropMenuButton } from "./DropMenuButton";
+import { ToggleSwitch } from "./ToggleSwitch";
+import { Label } from "./FormControl/Label";
+import { TOKEN_COOKIE } from "../utils/constants";
+import addDays from "date-fns/addDays";
+import { useIsAdmin } from "../api";
 
 const PageWrapper = styled.div`
   width: 1024px;
@@ -102,15 +103,17 @@ type LayoutProps = {
 
 export const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
   const {
-    state: { isAdmin, googleUser, storedSettings },
+    state: { googleUser, storedSettings },
     dispatch,
   } = useUserContext();
+
+  const { isAdmin } = useIsAdmin();
 
   const isLoggedIn = useIsLoggedInUser();
   // const { preferedTheme, switchTheme } = usePreferedTheme();
 
   // const [cookieSettings, setCookieSettings] = useCookie(SETTINGS_COOKIE, '');
-  const [_, updateItem] = useCookie(TOKEN_COOKIE, '');
+  const [, updateItem] = useCookie(TOKEN_COOKIE, "");
 
   // const [, setValue] = useSessionStorage('cb-token', undefined);
   // const settings: CookieSettings = useMemo(() => {
@@ -151,17 +154,17 @@ export const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
 
   const logOut = () => {
     googleLogout();
-    updateItem('', { expires: addDays(new Date(), -1) });
+    updateItem("", { expires: addDays(new Date(), -1) });
     dispatch({
       type: UserContextActionTypes.ResetUser,
       payload: true,
     });
-    navigate('/login');
+    navigate("/login");
   };
 
   useEffect(() => {
     if (!isLoggedIn) {
-      navigate('/login');
+      navigate("/login");
     }
   }, [isLoggedIn, navigate]);
 
@@ -192,8 +195,7 @@ export const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
                         alt={googleUser.name}
                       />
                     </UserButton>
-                  }
-                >
+                  }>
                   <ListSwitch>
                     <Label htmlFor="is-darkmode">Darkmode</Label>
                     <ToggleSwitch
@@ -206,8 +208,7 @@ export const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
                   {isAdmin && (
                     <Button
                       priority="tertiary"
-                      onClick={() => navigate('/admin')}
-                    >
+                      onClick={() => navigate("/admin")}>
                       Admin
                     </Button>
                   )}

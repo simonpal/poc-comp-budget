@@ -6,13 +6,14 @@ import { TimesIcon } from "./Icons/TimesIcon";
 // import Box from '../box/Box';
 import { Overlay, OverlayProps } from "./Overlay";
 import { ModalContent } from "./ModalContent";
+import { AnimatePresence, Variants, motion } from "framer-motion";
 // import { getClasses } from '../utils/helpers';
 
 type StyledModalProps = {
   $alignItems: AlignItems;
   $justifyContent: Justify;
 };
-const StyledModal = styled.div<StyledModalProps>`
+const StyledModal = styled(motion.div)<StyledModalProps>`
   max-height: 80%;
   max-width: 90vw;
   overflow: visible;
@@ -37,8 +38,12 @@ const StyledModal = styled.div<StyledModalProps>`
     width: 48px;
     height: 48px;
     font-size: 1.5rem;
+    transition: transform 0.2s ease;
     svg {
       margin: 0;
+    }
+    &:hover {
+      transform: scale(1.1);
     }
 
     @media screen and (max-width: $breakpoint-mobile-max) {
@@ -55,11 +60,39 @@ const StyledModal = styled.div<StyledModalProps>`
   }
 `;
 
+const dropIn = {
+  hidden: {
+    y: "-100vh",
+    opacity: 0,
+  },
+  visible: {
+    y: "0",
+    opacity: 1,
+    transition: {
+      duration: 0.1,
+      type: "spring",
+      damping: 25,
+      stiffness: 500,
+    },
+  },
+  exit: {
+    y: "100vh",
+    opacity: 0,
+    // transition: {
+    //   duration: 0.1,
+    //   type: "spring",
+    //   damping: 25,
+    //   stiffness: 500,
+    // },
+  },
+} satisfies Variants;
+
 export interface ModalProps extends OverlayProps {
   visible: boolean;
   width?: string;
   alignItems?: AlignItems;
   justifyContent?: Justify;
+  id: string;
   onClose: () => void;
 }
 
@@ -74,55 +107,63 @@ export const Modal: React.FunctionComponent<
   disableClick = false,
   alignItems = "flex-start",
   justifyContent = "flex-start",
+  id,
   blur,
   className,
   ...rest
 }) => {
-  useEffect(() => {
-    if (visible) {
-      document.body.classList.add("overflow-hidden");
-    } else {
-      document.body.classList.remove("overflow-hidden");
-    }
-    return () => document.body.classList.remove("overflow-hidden");
-  }, [visible]);
-  if (!visible) return null;
+  // if (!visible) return null;
 
   const inlineStyle = {
     ...(zIndex && { zIndex: zIndex + 1 }),
-    ...(width && { width })
+    ...(width && { width }),
   };
 
+  useEffect(() => {
+    if (visible) {
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [visible]);
   return (
-    <React.Fragment>
+    <AnimatePresence>
       <Overlay
+        key={`overlay-${id}`}
         visible={visible}
         onClose={onClose}
         disableClick={disableClick}
         zIndex={zIndex}
-        blur={blur}
-      >
-        <StyledModal
-          className={`base-modal ${className ? ` ${className}` : ""}`}
-          style={inlineStyle}
-          $alignItems={alignItems}
-          $justifyContent={justifyContent}
-          {...rest}
-        >
-          <button
-            className={`base-close-button`}
-            data-testid="close-button"
-            onClick={onClose}
-            role="button"
-            aria-label="Close"
-            title="Close"
-            type="button"
-          >
-            <TimesIcon />
-          </button>
-          <ModalContent>{children}</ModalContent>
-        </StyledModal>
+        blur={blur}>
+        <AnimatePresence>
+          {visible && (
+            <StyledModal
+              key={`md-${id}`}
+              className={`base-modal ${className ? ` ${className}` : ""}`}
+              style={inlineStyle}
+              $alignItems={alignItems}
+              $justifyContent={justifyContent}
+              variants={dropIn}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              {...rest}>
+              <button
+                className={`base-close-button`}
+                data-testid="close-button"
+                onClick={onClose}
+                role="button"
+                aria-label="Close"
+                title="Close"
+                type="button">
+                <TimesIcon />
+              </button>
+              <ModalContent>{children}</ModalContent>
+            </StyledModal>
+          )}
+        </AnimatePresence>
       </Overlay>
-    </React.Fragment>
+    </AnimatePresence>
   );
 };

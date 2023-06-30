@@ -1,7 +1,12 @@
 import { Suspense, useCallback, useEffect, useMemo } from "react";
 import { Divider } from "../components/Divider";
 import { Expense } from "../types";
-import { useGetAllExpenses, useGetAllUsers, useGetCategories } from "../api";
+import {
+  useGetAllExpenses,
+  useGetAllUsers,
+  useGetCategories,
+  useIsAdmin,
+} from "../api";
 import { barColors } from "../utils/helpers";
 import { Grid } from "../components/Grid";
 import { Column } from "../components/Column";
@@ -13,7 +18,6 @@ import { ValueContent } from "../components/ValueContent";
 import { Button } from "../components/Button";
 import { ArrowLeftIcon } from "../components/Icons/ArrowLeftIcon";
 import { useNavigate } from "react-router-dom";
-import { useUserContext } from "../utils/UserContext";
 import React from "react";
 import { Spinner } from "../components/Spinner";
 
@@ -48,9 +52,7 @@ const AdminStats = () => {
 
   const theme = useTheme() as Theme;
 
-  const {
-    state: { isAdmin },
-  } = useUserContext();
+  const { isAdmin, isLoading: adminLoading } = useIsAdmin();
   const navigate = useNavigate();
 
   const timeExpenses = useMemo(() => {
@@ -122,10 +124,10 @@ const AdminStats = () => {
   }, [categories, getCategoryByExpenseType, moneyExpenses]);
 
   useEffect(() => {
-    if (!isAdmin) {
+    if (!isAdmin && !adminLoading) {
       navigate("/mybudget");
     }
-  }, [isAdmin, navigate]);
+  }, [isAdmin, adminLoading, navigate]);
 
   if (loadingCategories || loadingUsers || loadingExpenses) {
     return <Spinner size="md" />;

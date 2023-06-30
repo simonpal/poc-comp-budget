@@ -1,14 +1,14 @@
-import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import React from "react";
+import styled, { keyframes } from "styled-components";
 
-type Sizes = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
 const sizes = {
-  xs: '0.75rem',
-  sm: '1rem',
-  md: '1.25rem',
-  lg: '2rem',
-  xl: '2.5rem',
-  xxl: '4rem',
+  xs: "0.75rem",
+  sm: "1rem",
+  md: "1.25rem",
+  lg: "2rem",
+  xl: "2.5rem",
+  xxl: "4rem",
 };
 
 const spin = keyframes`
@@ -27,8 +27,8 @@ const StyledSpinner = styled.div<SpinnerProps>`
 
   > div,
   > div:after {
-    width: ${({ size }) => `${sizes[size ?? 'sm']}`};
-    height: ${({ size }) => `${sizes[size ?? 'sm']}`};
+    width: ${({ size }) => `${sizes[size ?? "sm"]}`};
+    height: ${({ size }) => `${sizes[size ?? "sm"]}`};
   }
   > div {
     margin: 0 auto;
@@ -55,18 +55,17 @@ export type SpinnerProps = {
 
 export const Spinner: React.FunctionComponent<
   SpinnerProps & React.HTMLAttributes<HTMLDivElement>
-> = ({ color, size = 'sm', borderWidth, className, ...rest }) => {
+> = ({ color, size = "sm", borderWidth, className, ...rest }) => {
   const inlineStyle = {
-    ...(color && { ['--spinner-color']: color }),
-    ...(borderWidth && { ['--spinner-width']: borderWidth }),
-  } as any;
+    ...(color && { ["--spinner-color"]: color }),
+    ...(borderWidth && { ["--spinner-width"]: borderWidth }),
+  } as React.CSSProperties;
 
   return (
     <StyledSpinner
       size={size}
-      className={`${className ? ` ${className}` : ''}`}
-      {...rest}
-    >
+      className={`${className ? ` ${className}` : ""}`}
+      {...rest}>
       <div style={inlineStyle} />
     </StyledSpinner>
   );

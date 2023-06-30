@@ -12,16 +12,21 @@ import { Grid } from "../components/Grid";
 // import { users } from '../mockData';
 import { UserCard } from "../components/UserCard";
 import { Modal } from "../components/Modal";
-import { useGetAllUsers, useGetBudgets, useGetExpenses } from "../api";
+import {
+  useGetAllUsers,
+  useGetBudgets,
+  useGetExpenses,
+  useIsAdmin,
+} from "../api";
 import { UserProfile } from "../components/UserProfile";
 import { Button } from "../components/Button";
 import { useNavigate } from "react-router-dom";
-import { useUserContext } from "../utils/UserContext";
 import { ComboBox } from "../components/ComboBox";
 import styled from "styled-components";
 import { Spinner } from "../components/Spinner";
 import { ErrorBox } from "../components/ErrorBox";
 import { Box } from "../components/Box";
+import { StatsIcon } from "../components/Icons/StatsIcon";
 
 const NoUser = styled.div`
   padding: var(--spacing-xl);
@@ -40,9 +45,7 @@ const Admin = () => {
     dispatch,
   } = useAdminContext();
 
-  const {
-    state: { isAdmin },
-  } = useUserContext();
+  const { isAdmin, isLoading: adminLoading } = useIsAdmin();
 
   const {
     users,
@@ -53,7 +56,7 @@ const Admin = () => {
   const { expenses } = useGetExpenses(user?.userId || "", {
     enabled: typeof user !== "undefined",
   });
-  const { budget } = useGetBudgets(user?.userId || "", {
+  const { budget } = useGetBudgets(user?.userId || "", false, {
     enabled: typeof user !== "undefined",
   });
 
@@ -88,15 +91,15 @@ const Admin = () => {
   }, [expenses, dispatch]);
 
   useEffect(() => {
-    if (!isAdmin) {
+    if (!isAdmin && !adminLoading) {
       navigate("/mybudget");
     }
-  }, [isAdmin, navigate]);
+  }, [isAdmin, adminLoading, navigate]);
   return (
     <div>
       <Box alignItems="flex-end">
         <Button priority="outline" fullWidth onClick={() => navigate("stats")}>
-          Show statistics
+          Show statistics <StatsIcon />
         </Button>
       </Box>
       <Divider spacing="l" />
@@ -161,6 +164,8 @@ const Admin = () => {
         <NoUser>Please select a user.</NoUser>
       )}
       <Modal
+        id="user-profile-modal"
+        blur
         onClose={() =>
           dispatch({
             type: AdminContextActionTypes.ToggleUserModal,

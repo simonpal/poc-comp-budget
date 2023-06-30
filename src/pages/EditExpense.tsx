@@ -4,13 +4,11 @@ import { useAdminContext } from "../components/AdminComponents/AdminContext";
 import { Divider } from "../components/Divider";
 import { Button } from "../components/Button";
 import { useNavigate } from "react-router-dom";
-import { useUserContext } from "../utils/UserContext";
 import { ArrowLeftIcon } from "../components/Icons/ArrowLeftIcon";
+import { useIsAdmin } from "../api";
 
 const EditExpense = () => {
-  const {
-    state: { isAdmin },
-  } = useUserContext();
+  const { isAdmin, isLoading: adminLoading } = useIsAdmin();
 
   const {
     state: { selectedExpense },
@@ -19,10 +17,10 @@ const EditExpense = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isAdmin) {
+    if (!isAdmin && !adminLoading) {
       navigate("/mybudget");
     }
-  }, [isAdmin, navigate]);
+  }, [isAdmin, adminLoading, navigate]);
   return (
     <div>
       <Button priority="outline" iconLeft onClick={() => navigate(-1)}>

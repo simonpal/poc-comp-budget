@@ -12,13 +12,14 @@ import { ValueContent } from "../components/ValueContent";
 import { InfoBox } from "../components/InfoBox";
 import { useUserContext } from "../utils/UserContext";
 import { useEffect } from "react";
+import { Counter } from "../components/Counter";
 
 const MyBudget = () => {
   const {
     state: { googleUser },
   } = useUserContext();
 
-  const { budget } = useGetBudgets(googleUser?.sub ?? "", {
+  const { budget } = useGetBudgets(googleUser?.sub ?? "", false, {
     enabled: typeof googleUser?.sub !== "undefined",
   });
   const { expenses } = useGetExpenses(googleUser?.sub ?? "", {
@@ -61,19 +62,25 @@ const MyBudget = () => {
         <Column lg="4" md="4" sm="4" xs="12">
           <Box backgroundColor={theme.colors.silver} spacing="m">
             <ValueHeader>Time balance</ValueHeader>
-            <ValueContent>{budget?.currentTimeBalance}h</ValueContent>
+            <ValueContent>
+              <Counter from={0} to={budget?.currentTimeBalance} />
+            </ValueContent>
           </Box>
         </Column>
         <Column lg="4" md="4" sm="4" xs="12">
           <Box backgroundColor={theme.colors.silver} spacing="m">
             <ValueHeader>Money balance</ValueHeader>
-            <ValueContent>{budget.currentMoneyBalance}kr</ValueContent>
+            <ValueContent>
+              <Counter from={0} to={budget?.currentMoneyBalance} />
+            </ValueContent>
           </Box>
         </Column>
         <Column lg="4" md="4" sm="4" xs="12">
           <Box backgroundColor={theme.colors.silver} spacing="m">
             <ValueHeader>Hardware balance</ValueHeader>
-            <ValueContent>{budget.currentHardwareBalance}kr</ValueContent>
+            <ValueContent>
+              <Counter from={0} to={budget?.currentHardwareBalance} />
+            </ValueContent>
           </Box>
         </Column>
       </Grid>

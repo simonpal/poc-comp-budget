@@ -15,10 +15,18 @@ export const ConfirmDialog: React.FunctionComponent<ConfirmDialogProps> = ({
   title,
   description,
   onClose,
-  ...rest
+  width,
+  id,
+  visible,
 }) => {
   return (
-    <Modal onClose={onClose} {...rest}>
+    <Modal
+      id={id}
+      blur
+      onClose={onClose}
+      visible={visible}
+      width={width}
+      disableClick>
       <h3>{title}</h3>
       <Divider spacing="l" />
       {/* <ModalContent>{description}</ModalContent> */}

@@ -13,13 +13,13 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useAdminContext } from "./components/AdminComponents/AdminContext";
 import { getCookie } from "./utils/customHooks";
 import { TOKEN_COOKIE } from "./utils/constants";
-import { useUserContext } from "./utils/UserContext";
+// import { useUserContext } from "./utils/UserContext";
 
 // const authenticateUrl = import.meta.env.VITE_GOOGLE_AUTH_URL;
 export const leetImgUrl = "https://i.1337co.de/wallofleet";
 const baseUrl = import.meta.env.VITE_API_URL;
 const adminUrl = `${baseUrl}/adm`;
-const userUrl = `${baseUrl}/users`;
+// const userUrl = `${baseUrl}/users`;
 const categoryUrl = `${baseUrl}/categories`;
 const expensesUrl = `${baseUrl}/expenses`;
 // console.log(baseUrl);
@@ -117,25 +117,22 @@ export const useGetUser = (id: string) => {
   return { users, isLoading, isFetching, isError };
 };
 
-export const updateApiUser = (user: User) => {
-  return apiFetch(`${userUrl}`, {
-    method: "PUT",
-    body: JSON.stringify(user),
-  });
-};
-
-export const getApiIsAdmin = (id: string) => {
-  return apiFetch(`${userUrl}?id=${id}`);
-};
+// export const updateApiUser = (user: User) => {
+//   return apiFetch(`${userUrl}`, {
+//     method: "PUT",
+//     body: JSON.stringify(user),
+//   });
+// };
 
 /*
   Budgets
 */
 
-export const useGetBudgets = (id: string, queryOptions?: any) => {
-  const {
-    state: { isAdmin },
-  } = useUserContext();
+export const useGetBudgets = (
+  id: string,
+  isAdmin: boolean,
+  queryOptions?: any
+) => {
   const {
     data: budget,
     isFetching,
@@ -330,12 +327,30 @@ export const useDeleteExpense = (mutationOptions?: any) => {
   return mutation;
 };
 
+export const useIsAdmin = () => {
+  const {
+    data: isAdmin,
+    isFetching,
+    isLoading,
+    isError,
+  } = useQuery(
+    ["isadmin"],
+    () => apiFetch<User | User[]>(`${adminUrl}/isAdmin`),
+    {
+      staleTime: Infinity,
+      onError(error) {
+        toast.error(
+          `Could not fetch if user is admin. ${(error as Error)?.message}`
+        );
+      },
+    }
+  );
+
+  return { isAdmin, isLoading, isFetching, isError };
+};
+
 export const checkIsAdmin = (): Promise<boolean> =>
   apiFetch(`${adminUrl}/isAdmin`);
-
-/*
-  End - Real api
-*/
 
 export const getGoogleProfile = (token: string) =>
   fetch(`https://www.googleapis.com/oauth2/v3/userinfo`, {
