@@ -298,6 +298,7 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
         <Divider spacing="l" />
         <form onSubmit={onSubmitCategoryHandler}>
           <TextField label="Category name" name="categoryName" fullWidth />
+          <Divider spacing="s" color="transparent" />
           <InlineStack spacing="l">
             <Checkbox
               id="time-cat"

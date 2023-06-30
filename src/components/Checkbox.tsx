@@ -5,7 +5,7 @@ import { FormControl } from "./FormControl/FormControl";
 import { Label } from "./FormControl/Label";
 
 const CheckboxWrapper = styled(FormControl)`
-  --form-control-color: #0000ff;
+  --form-control-color: ${({ theme }) => theme.colors.primary};
   --form-control-disabled: #555;
   align-items: center;
   input[type="checkbox"] {
@@ -44,7 +44,8 @@ const CheckboxWrapper = styled(FormControl)`
       transform: scale(1);
     }
     &:focus {
-      outline: max(2px, 0.15em) solid #0000ff;
+      outline: ${({ theme }) =>
+        `max(2px, 0.15em) solid ${theme.colors.primary}`};
       outline-offset: max(2px, 0.15em);
     }
     &:disabled {
