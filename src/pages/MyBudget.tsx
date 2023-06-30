@@ -1,6 +1,5 @@
 import { leetImgUrl, useGetBudgets, useGetExpenses } from "../api";
 import { Box } from "../components/Box";
-import { Spinner } from "../components/Spinner";
 import { Grid } from "../components/Grid";
 import { Column } from "../components/Column";
 import { useTheme } from "styled-components";
@@ -13,6 +12,7 @@ import { InfoBox } from "../components/InfoBox";
 import { useUserContext } from "../utils/UserContext";
 import { useEffect } from "react";
 import { Counter } from "../components/Counter";
+import { LoadingMessage } from "../components/LoadingMessage";
 
 const MyBudget = () => {
   const {
@@ -46,7 +46,7 @@ const MyBudget = () => {
   if (!budget || !expenses) {
     return (
       <Box spacing="l" alignItems="center" justifyContent="center">
-        <Spinner size="md" />
+        <LoadingMessage message="Loading user..." />
       </Box>
     );
   }
