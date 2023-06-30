@@ -29,7 +29,7 @@ type UserCardProps = {
 
 export const UserCard: React.FunctionComponent<UserCardProps> = ({ user }) => {
   const { dispatch } = useAdminContext();
-  const { budget } = useGetBudgets(user.userId, true);
+  const { budget } = useGetBudgets(user.userId, false);
   return (
     <StyledCard>
       <h3>Current user</h3>

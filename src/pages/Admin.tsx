@@ -56,7 +56,7 @@ const Admin = () => {
   const { expenses } = useGetExpenses(user?.userId || "", {
     enabled: typeof user !== "undefined",
   });
-  const { budget } = useGetBudgets(user?.userId || "", true, {
+  const { budget } = useGetBudgets(user?.userId || "", false, {
     enabled: typeof user !== "undefined",
   });
 
