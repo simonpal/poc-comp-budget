@@ -9,7 +9,6 @@ import {
 import { Divider } from "../components/Divider";
 import { Column } from "../components/Column";
 import { Grid } from "../components/Grid";
-// import { users } from '../mockData';
 import { UserCard } from "../components/UserCard";
 import { Modal } from "../components/Modal";
 import {
@@ -64,11 +63,7 @@ const Admin = () => {
     enabled: typeof user !== "undefined",
   });
 
-  // const [showModal, setShowModal] = useState(false);
-
   const navigate = useNavigate();
-
-  // console.log(user);
 
   const switchUser = useCallback(
     (id: string) => {
@@ -122,30 +117,6 @@ const Admin = () => {
               handleChange={(val) => switchUser(val?.id || "")}
             />
           )}
-          {/* <FormControl fullWidth>
-            <Label>Select user</Label>
-            <Dropdown
-              options={users.map((user) => ({
-                key: user.id,
-                value: user.id,
-                text: user.name,
-              }))}
-              placeholder="Select user"
-              handleChange={(val) => switchUser(val?.value || '')}
-              search
-            />
-          </FormControl> */}
-          {/* <Select
-            label="Select user"
-            onChange={(e) => switchUser(e.currentTarget.value)}
-          >
-            <option value="-1">- Select user -</option>
-            {users.map((user) => (
-              <option key={user.id} value={user.id}>
-                {user.name}
-              </option>
-            ))}
-          </Select> */}
         </Column>
         <Column lg="6" md="6" sm="6" xs="12">
           {user && <UserCard user={user} />}
@@ -160,9 +131,6 @@ const Admin = () => {
           <TabItem eventKey="updateuser" title="Update user">
             <UpdateUser />
           </TabItem>
-          {/* <TabItem eventKey="adduser" title="Add user">
-          <UpdateUser />
-        </TabItem> */}
         </Tabs>
       ) : (
         <NoUser>
