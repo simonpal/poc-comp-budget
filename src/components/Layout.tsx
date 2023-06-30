@@ -113,7 +113,7 @@ export const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
   // const { preferedTheme, switchTheme } = usePreferedTheme();
 
   // const [cookieSettings, setCookieSettings] = useCookie(SETTINGS_COOKIE, '');
-  const [_, updateItem] = useCookie(TOKEN_COOKIE, "");
+  const [, updateItem] = useCookie(TOKEN_COOKIE, "");
 
   // const [, setValue] = useSessionStorage('cb-token', undefined);
   // const settings: CookieSettings = useMemo(() => {
