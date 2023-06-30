@@ -22,11 +22,11 @@ import { Button } from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import { ComboBox } from "../components/ComboBox";
 import styled from "styled-components";
-import { Spinner } from "../components/Spinner";
 import { ErrorBox } from "../components/ErrorBox";
 import { Box } from "../components/Box";
 import { StatsIcon } from "../components/Icons/StatsIcon";
 import { UserIcon } from "../components/Icons/UserIcon";
+import { LoadingMessage } from "../components/LoadingMessage";
 
 const NoUser = styled.div`
   padding: var(--spacing-xl);
@@ -104,7 +104,7 @@ const Admin = () => {
       <Divider spacing="l" />
       <Grid spacing="l">
         <Column lg="6" md="6" sm="6" xs="12">
-          {loadingUsers && <Spinner size="sm" />}
+          {loadingUsers && <LoadingMessage message="Loading users" />}
           {errorFetchingUsers && <ErrorBox>Error getting users.</ErrorBox>}
           {users && Array.isArray(users) && (
             <ComboBox

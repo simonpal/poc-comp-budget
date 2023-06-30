@@ -19,7 +19,6 @@ import {
   // useCreateExpense,
   useGetCategories,
 } from "../../api";
-import { Spinner } from "../Spinner";
 import { Modal } from "../Modal";
 import { ComboBox } from "../ComboBox";
 import { Textarea } from "../Textarea";
@@ -35,6 +34,7 @@ import { useNavigate } from "react-router-dom";
 import { getFormValue } from "../../utils/helpers";
 import { InlineStack } from "../InlineStack";
 import { Checkbox } from "../Checkbox";
+import { LoadingMessage } from "../LoadingMessage";
 // import toast from 'react-hot-toast';
 
 const expenseTypes = ["time", "money"];
@@ -276,7 +276,7 @@ export const AddExpense: React.FunctionComponent<AddExpenseType> = ({
                 </Column>
               </Grid>
             ) : (
-              <Spinner size="sm" />
+              <LoadingMessage message="Loading categories" />
             )}
           </Column>
         </Grid>
