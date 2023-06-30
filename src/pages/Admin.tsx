@@ -164,6 +164,7 @@ const Admin = () => {
         <NoUser>Please select a user.</NoUser>
       )}
       <Modal
+        id="user-profile-modal"
         blur
         onClose={() =>
           dispatch({

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 import { AlignItems, Justify } from "../types";
@@ -6,7 +6,7 @@ import { TimesIcon } from "./Icons/TimesIcon";
 // import Box from '../box/Box';
 import { Overlay, OverlayProps } from "./Overlay";
 import { ModalContent } from "./ModalContent";
-import { motion } from "framer-motion";
+import { AnimatePresence, Variants, motion } from "framer-motion";
 // import { getClasses } from '../utils/helpers';
 
 type StyledModalProps = {
@@ -78,14 +78,21 @@ const dropIn = {
   exit: {
     y: "100vh",
     opacity: 0,
+    // transition: {
+    //   duration: 0.1,
+    //   type: "spring",
+    //   damping: 25,
+    //   stiffness: 500,
+    // },
   },
-};
+} satisfies Variants;
 
 export interface ModalProps extends OverlayProps {
   visible: boolean;
   width?: string;
   alignItems?: AlignItems;
   justifyContent?: Justify;
+  id: string;
   onClose: () => void;
 }
 
@@ -100,57 +107,63 @@ export const Modal: React.FunctionComponent<
   disableClick = false,
   alignItems = "flex-start",
   justifyContent = "flex-start",
+  id,
   blur,
   className,
   ...rest
 }) => {
-  // useEffect(() => {
-  //   if (visible) {
-  //     document.body.style.overflow = "hidden";
-  //   }
-  //   return () => {
-  //     document.body.style.overflow = "unset";
-  //   };
-  // }, [visible]);
-
-  if (!visible) return null;
+  // if (!visible) return null;
 
   const inlineStyle = {
     ...(zIndex && { zIndex: zIndex + 1 }),
     ...(width && { width }),
   };
 
+  useEffect(() => {
+    if (visible) {
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [visible]);
   return (
-    <React.Fragment>
+    <AnimatePresence>
       <Overlay
+        key={`overlay-${id}`}
         visible={visible}
         onClose={onClose}
         disableClick={disableClick}
         zIndex={zIndex}
         blur={blur}>
-        <StyledModal
-          className={`base-modal ${className ? ` ${className}` : ""}`}
-          style={inlineStyle}
-          $alignItems={alignItems}
-          $justifyContent={justifyContent}
-          variants={dropIn}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          {...rest}>
-          <button
-            className={`base-close-button`}
-            data-testid="close-button"
-            onClick={onClose}
-            role="button"
-            aria-label="Close"
-            title="Close"
-            type="button">
-            <TimesIcon />
-          </button>
-          <ModalContent>{children}</ModalContent>
-        </StyledModal>
+        <AnimatePresence>
+          {visible && (
+            <StyledModal
+              key={`md-${id}`}
+              className={`base-modal ${className ? ` ${className}` : ""}`}
+              style={inlineStyle}
+              $alignItems={alignItems}
+              $justifyContent={justifyContent}
+              variants={dropIn}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              {...rest}>
+              <button
+                className={`base-close-button`}
+                data-testid="close-button"
+                onClick={onClose}
+                role="button"
+                aria-label="Close"
+                title="Close"
+                type="button">
+                <TimesIcon />
+              </button>
+              <ModalContent>{children}</ModalContent>
+            </StyledModal>
+          )}
+        </AnimatePresence>
       </Overlay>
-    </React.Fragment>
+    </AnimatePresence>
   );
 };

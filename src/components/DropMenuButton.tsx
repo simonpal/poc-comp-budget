@@ -3,7 +3,13 @@ import styled, { css } from "styled-components";
 
 import { Button } from "./Button";
 import { AngleDownIcon } from "./Icons/AngleDownIcon";
-import { MotionConfig, MotionProps, Variants, motion } from "framer-motion";
+import {
+  AnimatePresence,
+  MotionConfig,
+  MotionProps,
+  Variants,
+  motion,
+} from "framer-motion";
 
 const menu = {
   closed: {
@@ -58,11 +64,8 @@ const CustomDropdownButton = styled.div`
 const DropMenuButtonWrapper = styled.div<DropdownStyledProps>`
   position: relative;
 
-  [aria-expanded="true"] + [role="menu"] {
-    display: flex;
-  }
   [role="menu"] {
-    display: none;
+    /* display: none; */
     position: absolute;
     box-shadow: 0 3px 6px 0px rgba(0, 0, 0, 0.16);
     max-height: ${({ $maxHeight }) => `${$maxHeight}px`};
@@ -193,21 +196,24 @@ export const DropMenuButton: React.FunctionComponent<
             {label}
           </CustomDropdownButton>
         )}
-        <motion.ul
-          animate={expanded ? "open" : "closed"}
-          initial="closed"
-          exit="closed"
-          variants={menu}
-          role="menu"
-          id={id}
-          aria-label={typeof label === "string" ? label : id}
-          ref={dropMenuRef}>
-          {React.Children.map(children, (child) => {
-            if (!child) return null;
-            return <motion.li {...item}>{child}</motion.li>;
-          })}
-          {/* {children} */}
-        </motion.ul>
+        <AnimatePresence>
+          <motion.ul
+            key={`list-${id}`}
+            animate={expanded ? "open" : "closed"}
+            initial="closed"
+            exit="closed"
+            variants={menu}
+            role="menu"
+            id={id}
+            aria-label={typeof label === "string" ? label : id}
+            ref={dropMenuRef}>
+            {React.Children.map(children, (child) => {
+              if (!child) return null;
+              return <motion.li {...item}>{child}</motion.li>;
+            })}
+            {/* {children} */}
+          </motion.ul>
+        </AnimatePresence>
       </DropMenuButtonWrapper>
     </MotionConfig>
   );

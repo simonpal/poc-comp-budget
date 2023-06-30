@@ -274,6 +274,7 @@ export const Timeline: React.FunctionComponent<TimelineProps> = ({
         </AnimatePresence>
       </TimelineWrapper>
       <ConfirmDialog
+        id="confirm-delete-dialog"
         visible={showConfirmDelete}
         onClose={() => setShowConfirmDelete(false)}
         onConfirm={() => {
